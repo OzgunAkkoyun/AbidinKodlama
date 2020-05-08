@@ -39,17 +39,15 @@ public class MapGenerator : MonoBehaviour {
     string holderName = "Generated Map";
     private Transform mapHolder;
     private System.Random prng;
+
     void Awake() {
-        //FindObjectOfType<Spawner> ().OnNewWave += OnNewWave;
         GenerateMap();
     }
 
-	void OnNewWave(int waveNumber) {
-		mapIndex = waveNumber - 1;
-		GenerateMap ();
-	}
 
-	public void GenerateMap() {
+	public void GenerateMap()
+	{
+	    Timer timer = new Timer();
 		currentMap = maps[mapIndex];
 		tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];
 		prng = new System.Random (currentMap.seed);
@@ -69,12 +67,51 @@ public class MapGenerator : MonoBehaviour {
 	    SpawnObstacle(prng);
 
 	    CreateStartandTargetPoints();
+        CreateMapLines();
 
 	    SpawnVehicle();
-
+        timer.Finish(true);
+	    //Debug.Log( GetDistance(new Coord(0, 0), new Coord(1, 1)) );
 	    //CreateNavmeshMask();
 
 	}
+
+    public void CreateMapLines()
+    {
+        //Close all sides Left Right
+        for (int i = -1; i <= currentMap.mapSize.x+1; i += currentMap.mapSize.x+1 )
+        {
+            for (int j = -1; j < currentMap.mapSize.y+1; j++)
+            {
+                Vector3 tilePosition = CoordToPosition(i, j);
+                Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90)) as Transform;
+                newTile.localScale = Vector3.one * (1 - outlinePercent) * tileSize;
+                newTile.parent = mapHolder;
+
+                float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
+                Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], tilePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
+                newObstacle.parent = mapHolder;
+                newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
+            }
+        }
+
+        //Close all sides Top Bottom
+        for (int j = -1; j <= currentMap.mapSize.y+1; j += currentMap.mapSize.y+1 )
+        {
+            for (int i = 0; i < currentMap.mapSize.x; i++)
+            {
+                Vector3 tilePosition = CoordToPosition(i, j);
+                Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90)) as Transform;
+                newTile.localScale = Vector3.one * (1 - outlinePercent) * tileSize;
+                newTile.parent = mapHolder;
+
+                float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
+                Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], tilePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
+                newObstacle.parent = mapHolder;
+                newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
+            }
+        }
+    }
 
     void SpawnVehicle()
     {
@@ -86,6 +123,8 @@ public class MapGenerator : MonoBehaviour {
         var rnd = UnityEngine.Random.Range(0, allOpenCoords.Count);
         return new Coord(allOpenCoords[rnd].x,allOpenCoords[rnd].y);
     }
+
+    private float GetDistance(Coord point1, Coord point2) => Vector3.Distance(CoordToPosition(point1.x,point1.y), CoordToPosition(point2.x,point2.y))/tileSize;
 
     private void SetStartandTargetPoint()
     {
@@ -100,8 +139,8 @@ public class MapGenerator : MonoBehaviour {
         var start = currentMap.startPoint;
         var target = currentMap.targetPoint;
 
-        tileMap[start.x,start.y].gameObject.GetComponent<MeshRenderer>().material.color=Color.blue;
-        tileMap[target.x,target.y].gameObject.GetComponent<MeshRenderer>().material.color=Color.red;
+        tileMap[start.x, start.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+        tileMap[target.x, target.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
 
     }
 
@@ -113,8 +152,6 @@ public class MapGenerator : MonoBehaviour {
         int obstacleCount = (int)(currentMap.mapSize.x * currentMap.mapSize.y * currentMap.obstaclePercent);
         int currentObstacleCount = 0;
         allOpenCoords = new List<Coord>(allTileCoords);
-
-     
 
         for (int i = 0; i < obstacleCount; i++)
         {
@@ -132,36 +169,7 @@ public class MapGenerator : MonoBehaviour {
                 currentObstacleCount--;
             }
         }
-
-        //Close all sides Left Right
-        for (int i = 0; i < currentMap.mapSize.x; i += currentMap.mapSize.x - 1)
-        {
-            for (int j = 0; j < currentMap.mapSize.y; j++)
-            {
-                Coord randomCoord = new Coord(i, j);
-                if (!obstacleMap[i, j])
-                {
-                    obstacleMap[i, j] = true;
-                    currentObstacleCount++;
-                    ObstacleInstantiate(randomCoord, prng);
-                }
-            }
-        }
-        //Close all sides Top Bottom
-        for (int j = 0; j < currentMap.mapSize.y; j += currentMap.mapSize.y - 1)
-        {
-            for (int i = 0; i < currentMap.mapSize.y; i++)
-            {
-                Coord randomCoord = new Coord(i, j);
-                if (!obstacleMap[i, j])
-                {
-                    obstacleMap[i, j] = true;
-                    currentObstacleCount++;
-                    ObstacleInstantiate(randomCoord, prng);
-                }
-            }
-        }
-
+       
         shuffledOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray(allOpenCoords.ToArray(), currentMap.seed));
     }
 
@@ -329,5 +337,27 @@ public class MapGenerator : MonoBehaviour {
 		
 		public Coord mapCentre => new Coord(mapSize.x/2,mapSize.y/2);
 			
+    }
+
+    public class Timer
+    {
+        private float StartTime;
+        public float Duration;
+
+        public Timer()
+        {
+            StartTime = Time.realtimeSinceStartup;
+        }
+
+        public void Finish(bool log)
+        {
+            var endTime = Time.realtimeSinceStartup;
+            Duration = endTime - StartTime;
+
+            if (log)
+            {
+                Debug.Log($"Calculations took {TimeSpan.FromSeconds(Duration).ToString("g")}");
+            }
+        }
     }
 }
