@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 664fa4d4a349ca742901a48db5137a9b
+guid: 4913a79fd53dc694b9c680e540b5786c
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -26,6 +26,135 @@ TextureImporter:
   - first:
       213: 5409186969389619567
     second: CodeInputs_7
+  - first:
+      213: -3320120997840083046
+    second: CodeInputs_8
+  - first:
+      213: -4931802258500839117
+    second: CodeInputs_9
+  - first:
+      213: -2220535871846734215
+    second: CodeInputs_10
+  - first:
+      213: -6044260699741918325
+    second: CodeInputs_11
+  - first:
+      213: 5148857938599249773
+    second: CodeInputs_12
+  - first:
+      213: -2361645486408096393
+    second: CodeInputs_13
+  - first:
+      213: -4984591798945851555
+    second: CodeInputs_14
+  - first:
+      213: -7972462184443305517
+    second: CodeInputs_15
+  - first:
+      213: 3894673355584068637
+    second: CodeInputs_16
+  - first:
+      213: 1032085292455562782
+    second: CodeInputs_17
+  - first:
+      213: 1720066031755371845
+    second: CodeInputs_18
+  - first:
+      213: -5871501379952285476
+    second: CodeInputs_19
+  - first:
+      213: 6946396585859173336
+    second: CodeInputs_20
+  - first:
+      213: -3823604687060546396
+    second: CodeInputs_21
+  - first:
+      213: -5730884393260215245
+    second: CodeInputs_22
+  - first:
+      213: 2749927874995771316
+    second: CodeInputs_23
+  - first:
+      213: -3996146091038431606
+    second: CodeInputs_24
+  - first:
+      213: 115373301137278229
+    second: CodeInputs_25
+  - first:
+      213: -5494642105652828716
+    second: CodeInputs_26
+  - first:
+      213: 936864628203420248
+    second: CodeInputs_27
+  - first:
+      213: -4051358880968505613
+    second: CodeInputs_28
+  - first:
+      213: 7081692753980173661
+    second: CodeInputs_29
+  - first:
+      213: 552103569688506253
+    second: CodeInputs_30
+  - first:
+      213: -7036960043248273184
+    second: CodeInputs_31
+  - first:
+      213: -2505224172212636262
+    second: CodeInputs_32
+  - first:
+      213: 7637503925121905557
+    second: CodeInputs_33
+  - first:
+      213: -6047832977583684924
+    second: CodeInputs_34
+  - first:
+      213: 4547865933754510680
+    second: CodeInputs_35
+  - first:
+      213: -515846209536242016
+    second: CodeInputs_36
+  - first:
+      213: -193054427374860959
+    second: CodeInputs_37
+  - first:
+      213: -3036453738209415838
+    second: CodeInputs_38
+  - first:
+      213: -7637333838230512848
+    second: CodeInputs_39
+  - first:
+      213: -5581756387889571116
+    second: CodeInputs_40
+  - first:
+      213: 4985507139469939561
+    second: CodeInputs_41
+  - first:
+      213: -4673312150660051134
+    second: CodeInputs_42
+  - first:
+      213: 2612881207451969380
+    second: CodeInputs_43
+  - first:
+      213: 1563156159654252686
+    second: CodeInputs_44
+  - first:
+      213: -6654726709376652821
+    second: CodeInputs_45
+  - first:
+      213: -1169799567921082681
+    second: CodeInputs_46
+  - first:
+      213: -3459892699492574500
+    second: CodeInputs_47
+  - first:
+      213: -241140660266297134
+    second: CodeInputs_48
+  - first:
+      213: -2060668913166296525
+    second: CodeInputs_49
+  - first:
+      213: -7044498562994602699
+    second: CodeInputs_50
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -84,7 +213,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 256
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -96,7 +225,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 256
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -108,7 +237,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
-    maxTextureSize: 256
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -125,10 +254,10 @@ TextureImporter:
       name: CodeInputs_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 1540
-        width: 1230
-        height: 529
+        x: 2783
+        y: 2085
+        width: 34
+        height: 6
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -136,7 +265,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2cf2f381a1402404d82a8f6fa4a0c667
+      spriteID: 9004e2f31d1d68048bd3b803a654a568
       internalID: 1120274522970353744
       vertices: []
       indices: 
@@ -146,10 +275,10 @@ TextureImporter:
       name: CodeInputs_1
       rect:
         serializedVersion: 2
-        x: 1359
-        y: 1602
-        width: 1229
-        height: 464
+        x: 2827
+        y: 2087
+        width: 4
+        height: 6
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,7 +286,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 606016b05da71724dac35bb77f3b1ff5
+      spriteID: 7338a0b967c036b45be204c7d9073dbc
       internalID: 5858401176851242847
       vertices: []
       indices: 
@@ -167,10 +296,10 @@ TextureImporter:
       name: CodeInputs_2
       rect:
         serializedVersion: 2
-        x: 2590
-        y: 1599
-        width: 1229
-        height: 500
+        x: 2842
+        y: 2085
+        width: 32
+        height: 6
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,7 +307,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dbc5eab9a735b6e4392513c73bc2e697
+      spriteID: 21b7d7f59cdbdf34495b09b2910b3bfe
       internalID: 4146925548489262285
       vertices: []
       indices: 
@@ -188,10 +317,10 @@ TextureImporter:
       name: CodeInputs_3
       rect:
         serializedVersion: 2
-        x: 38
-        y: 1024
-        width: 1230
-        height: 421
+        x: 2597
+        y: 1616
+        width: 1208
+        height: 468
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,7 +328,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a9320b42dd0c9f4b8bb8d12d0f02cc2
+      spriteID: d0d1cba9e4804d44eb96a52de7e9e06b
       internalID: 7398951477294214519
       vertices: []
       indices: 
@@ -209,10 +338,10 @@ TextureImporter:
       name: CodeInputs_4
       rect:
         serializedVersion: 2
-        x: 1329
-        y: 1046
-        width: 1230
-        height: 416
+        x: 2751
+        y: 2077
+        width: 30
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -220,7 +349,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8d91cb7ee5a8434489756f5d10ba815f
+      spriteID: 16b6181cfeaf7b041a208b11da4bcb71
       internalID: 1922694680584472908
       vertices: []
       indices: 
@@ -230,10 +359,10 @@ TextureImporter:
       name: CodeInputs_5
       rect:
         serializedVersion: 2
-        x: 2620
-        y: 1039
-        width: 1230
-        height: 408
+        x: 2880
+        y: 2081
+        width: 15
+        height: 6
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -241,7 +370,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 78f614ba362536940812159578ce688f
+      spriteID: 31218e4d209348040bf19e2d1b7420f9
       internalID: -1062313602745108891
       vertices: []
       indices: 
@@ -251,10 +380,10 @@ TextureImporter:
       name: CodeInputs_6
       rect:
         serializedVersion: 2
-        x: 41
-        y: 493
-        width: 1227
-        height: 454
+        x: 239
+        y: 2052
+        width: 40
+        height: 5
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -262,7 +391,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e0a7cedc17acda24ea094a658afbf4ee
+      spriteID: 9db559d37158f5c4a8394fc8df349884
       internalID: 7229105889890840095
       vertices: []
       indices: 
@@ -272,10 +401,10 @@ TextureImporter:
       name: CodeInputs_7
       rect:
         serializedVersion: 2
-        x: 1390
-        y: 538
-        width: 1229
-        height: 409
+        x: 283
+        y: 2053
+        width: 64
+        height: 7
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -283,8 +412,911 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6a7dbebed551d72468eb66ecad45d030
+      spriteID: 825f34cec2d14014e8cb15792e0d6e7b
       internalID: 5409186969389619567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_8
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 1561
+        width: 1214
+        height: 492
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7ba335fbca79524aa0911f25931da76
+      internalID: -3320120997840083046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_9
+      rect:
+        serializedVersion: 2
+        x: 1372
+        y: 1622
+        width: 1197
+        height: 425
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54ea7993b30a2ce4bb788aadcf4ab685
+      internalID: -4931802258500839117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_10
+      rect:
+        serializedVersion: 2
+        x: 1542
+        y: 2045
+        width: 94
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aeec95ae01916c94981308dfba756054
+      internalID: -2220535871846734215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_11
+      rect:
+        serializedVersion: 2
+        x: 1638
+        y: 2041
+        width: 34
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3eb99e5bf29a05547953c16f2b915cb5
+      internalID: -6044260699741918325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_12
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 1979
+        width: 13
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55f2dd94d18439d41a62ecb2a1a025c9
+      internalID: 5148857938599249773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_13
+      rect:
+        serializedVersion: 2
+        x: 2569
+        y: 1639
+        width: 5
+        height: 347
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa47bdea9d246614694ee05dd6be6cec
+      internalID: -2361645486408096393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_14
+      rect:
+        serializedVersion: 2
+        x: 2595
+        y: 1684
+        width: 11
+        height: 346
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5d5ac2895da94a48a9fad192c70cdf0
+      internalID: -4984591798945851555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_15
+      rect:
+        serializedVersion: 2
+        x: 1365
+        y: 1629
+        width: 9
+        height: 349
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51497bba1888e0d43bc1d5b98ef9e160
+      internalID: -7972462184443305517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_16
+      rect:
+        serializedVersion: 2
+        x: 1386
+        y: 1616
+        width: 11
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec2991cba8ad2a84ab03b118f9f3270e
+      internalID: 3894673355584068637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_17
+      rect:
+        serializedVersion: 2
+        x: 2540
+        y: 1616
+        width: 17
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 875071cdb24ead34cb8112900eaaeca3
+      internalID: 1032085292455562782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_18
+      rect:
+        serializedVersion: 2
+        x: 2783
+        y: 1612
+        width: 30
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72249c94d3c31dd4f907abf20bbaa253
+      internalID: 1720066031755371845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_19
+      rect:
+        serializedVersion: 2
+        x: 2819
+        y: 1610
+        width: 25
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8bc86e2e2411744c8facfb4a822c179
+      internalID: -5871501379952285476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_20
+      rect:
+        serializedVersion: 2
+        x: 2848
+        y: 1612
+        width: 30
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eee2841a6937be24caeba805c5eb1d82
+      internalID: 6946396585859173336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_21
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 1555
+        width: 10
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ece1fbf936ffda649b27a33795d159e6
+      internalID: -3823604687060546396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_22
+      rect:
+        serializedVersion: 2
+        x: 1265
+        y: 1555
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ccdaa4ba64fbd8343b6d685edea07101
+      internalID: -5730884393260215245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_23
+      rect:
+        serializedVersion: 2
+        x: 1365
+        y: 1445
+        width: 110
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e01365c84b262844846561b93880468
+      internalID: 2749927874995771316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_24
+      rect:
+        serializedVersion: 2
+        x: 1673
+        y: 1445
+        width: 844
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7671e466babe104fa0d5ab96d705583
+      internalID: -3996146091038431606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_25
+      rect:
+        serializedVersion: 2
+        x: 1337
+        y: 1058
+        width: 1209
+        height: 385
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 568d972e590f83e4ba510162184d32e1
+      internalID: 115373301137278229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_26
+      rect:
+        serializedVersion: 2
+        x: 1356
+        y: 1441
+        width: 7
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 529b281bb2e9e6042adbc666ab368f46
+      internalID: -5494642105652828716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_27
+      rect:
+        serializedVersion: 2
+        x: 2520
+        y: 1437
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c786b49b99afd0345bf2720728acba29
+      internalID: 936864628203420248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_28
+      rect:
+        serializedVersion: 2
+        x: 2645
+        y: 1434
+        width: 20
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2cf8f6dd396c0d46b9221f8d2afd29d
+      internalID: -4051358880968505613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_29
+      rect:
+        serializedVersion: 2
+        x: 2760
+        y: 1437
+        width: 6
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3842a1e330f36aa4490ddc3f4c6e9d5a
+      internalID: 7081692753980173661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_30
+      rect:
+        serializedVersion: 2
+        x: 2958
+        y: 1437
+        width: 11
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09301539794ce8541adcac5430bc1219
+      internalID: 552103569688506253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_31
+      rect:
+        serializedVersion: 2
+        x: 3803
+        y: 1436
+        width: 15
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67b2bcab244dbc24c8d104ec0123ade8
+      internalID: -7036960043248273184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_32
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 1044
+        width: 1204
+        height: 390
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb400271cb587d643adf4c24eabfebbc
+      internalID: -2505224172212636262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_33
+      rect:
+        serializedVersion: 2
+        x: 2631
+        y: 1055
+        width: 1204
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 858cc2adb92f9194692965d454a785d9
+      internalID: 7637503925121905557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_34
+      rect:
+        serializedVersion: 2
+        x: 2908
+        y: 1426
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 356c79c9edb8b5246a5677d5a71f9c05
+      internalID: -6047832977583684924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_35
+      rect:
+        serializedVersion: 2
+        x: 1257
+        y: 1063
+        width: 4
+        height: 344
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04644e5cb7a11fb41aec4a3b7ffed2ac
+      internalID: 4547865933754510680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_36
+      rect:
+        serializedVersion: 2
+        x: 2627
+        y: 1079
+        width: 4
+        height: 332
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c436908e9be45143a36312796d7fe8c
+      internalID: -515846209536242016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_37
+      rect:
+        serializedVersion: 2
+        x: 1365
+        y: 1054
+        width: 100
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd735ae63844b6b43b8e9087f448d6fb
+      internalID: -193054427374860959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_38
+      rect:
+        serializedVersion: 2
+        x: 1674
+        y: 1054
+        width: 858
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4def2ad835249224fa0b15ac2d2ffb4c
+      internalID: -3036453738209415838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_39
+      rect:
+        serializedVersion: 2
+        x: 2645
+        y: 1048
+        width: 1175
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46d17236c2779a64d8779a8c95ce5e0c
+      internalID: -7637333838230512848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_40
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 1039
+        width: 125
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09ca9272e3e137a40b8c7b1935d1f371
+      internalID: -5581756387889571116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_41
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 1039
+        width: 863
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ff9b7081962e694cadd1ff3edc121c1
+      internalID: 4985507139469939561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_42
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 509
+        width: 1197
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2dcbe547c55d2de4ebf0e3a0b5f79aa8
+      internalID: -4673312150660051134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_43
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 932
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c53d95797cc8ca445a930e5e5c36dae5
+      internalID: 2612881207451969380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_44
+      rect:
+        serializedVersion: 2
+        x: 1238
+        y: 932
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3bc5034c57e76541a44923695d36a16
+      internalID: 1563156159654252686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_45
+      rect:
+        serializedVersion: 2
+        x: 1417
+        y: 936
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb905c1e075588543aa772b45240072e
+      internalID: -6654726709376652821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_46
+      rect:
+        serializedVersion: 2
+        x: 1422
+        y: 938
+        width: 1161
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 270cd45263a883b448f9ed80f056c767
+      internalID: -1169799567921082681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_47
+      rect:
+        serializedVersion: 2
+        x: 2584
+        y: 936
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df8ba39cbf32c5046867c292c14f1fd1
+      internalID: -3459892699492574500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_48
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 564
+        width: 10
+        height: 363
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 550b19cb3b6c96b4e9103cefc249f0b8
+      internalID: -241140660266297134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_49
+      rect:
+        serializedVersion: 2
+        x: 1399
+        y: 556
+        width: 1202
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9029ff302c94344080dc823cadfac91
+      internalID: -2060668913166296525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CodeInputs_50
+      rect:
+        serializedVersion: 2
+        x: 2601
+        y: 572
+        width: 6
+        height: 349
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5370a76d7d6b8aa4e9404b9786eeccda
+      internalID: -7044498562994602699
       vertices: []
       indices: 
       edges: []
@@ -292,7 +1324,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: dc2a8d0c278e84f42a67697edfe6586c
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 

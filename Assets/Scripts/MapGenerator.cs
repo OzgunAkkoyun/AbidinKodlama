@@ -2,7 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.Networking;
 using Random = System.Random;
+using SimpleJSON;
+
+[Serializable]
+public class Data
+{
+    public int index;
+    public float r1;
+    public float r2;
+    public float r3;
+}
+
 
 public class MapGenerator : MonoBehaviour {
 	
@@ -28,31 +40,99 @@ public class MapGenerator : MonoBehaviour {
 	public float tileSize;
 	List<Coord> allTileCoords;
     List<Coord> allOpenCoords;
+    List<Coord> allObstacleCoord = new List<Coord>();
 
     Queue<Coord> shuffledTileCoords;
 	Queue<Coord> shuffledOpenTileCoords;
 
-	Transform[,] tileMap;
-	
-	Map currentMap;
+    public List<Coord> Path = new List<Coord>();
+    public int expectedPathLength;
+    public int PathLength => Path.Count;
+
+    Transform[,] tileMap;
+	[HideInInspector]
+	public Map currentMap;
 
     string holderName = "Generated Map";
     private Transform mapHolder;
     private System.Random prng;
 
+    //Connection variables
+
+    private string url = "http://localhost:8080/UnityTest/getRatios.php";
+
     void Awake() {
-        GenerateMap();
+
+        currentMap = maps[mapIndex];
+        //StartCoroutine(GetConnection());
     }
 
+    IEnumerator GetConnection()
+    {
 
+        WWW www = new WWW(url);
+        yield return www;
+
+        if (www.error != null)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            //List<Data> data = new List<Data>();
+            Debug.Log(www.text);
+
+            var N = JSON.Parse(www.text);
+            Debug.Log(N[0]["r1"]);
+            //var data = new data();
+            // Or retrieve results as binary data
+            
+        }
+
+    }
+    public void GenerateMapFromLoad(Coord _mapSize,int _seed,Coord _startPoint,Coord _targetPoint,List<Coord> _Path)
+    {
+        Debug.Log("Load");
+        Debug.Log(_Path);
+        tileMap = new Transform[_mapSize.x, _mapSize.y];
+        currentMap.seed = _seed;
+        prng = new System.Random(currentMap.seed);
+        mapHolder = new GameObject(holderName).transform;
+        GenerateAllTiles();
+        if (transform.Find(holderName))
+        {
+            DestroyImmediate(transform.Find(holderName).gameObject);
+        }
+        mapHolder.parent = transform;
+
+        SpawnAllTiles();
+
+        SpawnObstacle(prng);
+
+        CreateMapLines();
+
+        currentMap.startPoint = _startPoint;
+        Path = _Path;
+        currentMap.targetPoint = Path[Path.Count - 1];
+
+        var start = currentMap.startPoint;
+        var target = Path[Path.Count - 1];
+
+        tileMap[start.x, start.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+        tileMap[target.x, target.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+        SpawnVehicle();
+    }
 	public void GenerateMap()
 	{
 	    Timer timer = new Timer();
-		currentMap = maps[mapIndex];
-		tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];
-		prng = new System.Random (currentMap.seed);
+		
+        tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];
 
-	    mapHolder = new GameObject(holderName).transform;
+        currentMap.seed = UnityEngine.Random.Range(0,200);
+        prng = new System.Random (currentMap.seed);
+
+
+        mapHolder = new GameObject(holderName).transform;
         GenerateAllTiles();
 
 		// Create map holder object
@@ -66,15 +146,117 @@ public class MapGenerator : MonoBehaviour {
 
 	    SpawnObstacle(prng);
 
-	    CreateStartandTargetPoints();
+	    
         CreateMapLines();
 
+	    CreateStartandTargetPoints();
 	    SpawnVehicle();
-        timer.Finish(true);
-	    //Debug.Log( GetDistance(new Coord(0, 0), new Coord(1, 1)) );
-	    //CreateNavmeshMask();
+        timer.Finish(false);
 
-	}
+        //CreateNavmeshMask();
+
+    }
+
+    public void CreatePath()
+    {
+        Path.Add(new Coord(currentMap.startPoint.x,currentMap.startPoint.y));
+        var currentPathIndex = 0;
+
+        while (currentPathIndex < expectedPathLength)
+        {
+            var currentCell = Path[currentPathIndex];
+            var neighbours = GetAvailableNeighbours(currentCell);
+          
+            if (SelectNextCell(neighbours, out Coord selectedNeighbour))
+            {
+                
+                Path.Add(selectedNeighbour);
+                currentPathIndex++;
+            }
+            else
+            {
+                OneStepBackinList(currentCell, ref currentPathIndex);
+            }
+
+        }
+    }
+
+    private void OneStepBackinList(Coord currentCell, ref int currentPathIndex)
+    {
+        Path.RemoveAt(currentPathIndex);
+        currentPathIndex--;
+        Path[currentPathIndex].UnavaliableNeighbours.Add(new Coord(currentCell.x,currentCell.y));
+    }
+
+    private bool SelectNextCell(List<Coord> neighbours, out Coord selectedNeighbour)
+    {
+        if (neighbours.Count > 0)
+        {
+            var rnd = UnityEngine.Random.Range(0, neighbours.Count);
+            selectedNeighbour = neighbours[rnd];
+            return true;
+        }
+        else
+        {
+            selectedNeighbour = new Coord();
+            return false;
+        }
+
+    }
+    private List<Coord> GetAvailableNeighbours(Coord cell)
+    {
+        var neighbours = cell.GetNeighbours();
+        List<Coord> availableCells = new List<Coord>();
+        foreach (var neighbour in neighbours)
+        {
+            if (IsCellOnPath(neighbour))
+            {
+                //Log("Cell On Path");
+            }
+            else
+            {
+                if (CellinBounds(neighbour))
+                {
+                    if (CellUnavaliableNeighboursGet(neighbour, cell))
+                    {
+                        //Log("Cell UnavaliableNeighbours");
+                    }
+                    else
+                    {
+                        availableCells.Add(neighbour);
+                    }
+                }
+            }
+        }
+        return availableCells;
+    }
+
+    public bool CellinBounds(Coord neighbours)
+    {
+        if (neighbours.x < 0 || neighbours.x >= currentMap.mapSize.x || neighbours.y < 0 || neighbours.y >= currentMap.mapSize.y)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+        
+    }
+
+    public bool IsCellOnPath(Coord neighbours) => Path.Contains(neighbours);
+
+    public bool CellUnavaliableNeighboursGet(Coord neighbours, Coord cell)
+    {
+        if (allObstacleCoord.Contains(neighbours) || cell.UnavaliableNeighbours.Contains(neighbours))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public void CreateMapLines()
     {
@@ -115,7 +297,7 @@ public class MapGenerator : MonoBehaviour {
 
     void SpawnVehicle()
     {
-        vehiclePrefab.transform.position = new Vector3(currentMap.startPoint.x, 1, currentMap.startPoint.y)*tileSize;
+        vehiclePrefab.transform.position = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y)*tileSize;
     }
 
     private Coord GetRandomOpenCoord()
@@ -126,21 +308,18 @@ public class MapGenerator : MonoBehaviour {
 
     private float GetDistance(Coord point1, Coord point2) => Vector3.Distance(CoordToPosition(point1.x,point1.y), CoordToPosition(point2.x,point2.y))/tileSize;
 
-    private void SetStartandTargetPoint()
+   private void CreateStartandTargetPoints()
     {
         currentMap.startPoint = GetRandomOpenCoord();
-        currentMap.targetPoint = GetRandomOpenCoord();
-    }
-
-    private void CreateStartandTargetPoints()
-    {
-        SetStartandTargetPoint();
+        CreatePath();
+        currentMap.targetPoint = Path[Path.Count - 1];
 
         var start = currentMap.startPoint;
-        var target = currentMap.targetPoint;
+        var target = Path[Path.Count-1];
 
         tileMap[start.x, start.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
         tileMap[target.x, target.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+        
 
     }
 
@@ -188,6 +367,7 @@ public class MapGenerator : MonoBehaviour {
         obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour, currentMap.backgroundColour, colourPercent);
         obstacleRenderer.sharedMaterial = obstacleMaterial;
 
+        allObstacleCoord.Add(randomCoord);
         allOpenCoords.Remove(randomCoord);
     }
 
@@ -302,14 +482,33 @@ public class MapGenerator : MonoBehaviour {
 	}
 	
 	[System.Serializable]
-	public struct Coord {
+	public struct Coord:IEquatable<Coord>{
+
 		public int x;
 		public int y;
-		
-		public Coord(int _x, int _y) {
+	    public List<Coord> UnavaliableNeighbours;
+
+        public List<Coord> GetNeighbours()
+	    {
+	        return new List<Coord>
+	        {
+	            new Coord(x - 1, y),
+	            new Coord(x + 1, y),
+	            new Coord(x, y - 1),
+	            new Coord(x, y + 1)
+	        };
+	    }
+
+	    public bool Equals(Coord other)
+	    {
+	        return x == other.x && y==other.y;
+	    }
+
+        public Coord(int _x, int _y) {
 			x = _x;
 			y = _y;
-		}
+            UnavaliableNeighbours = new List<Coord>();
+        }
 		
 		public static bool operator ==(Coord c1, Coord c2) {
 			return c1.x == c2.x && c1.y == c2.y;
@@ -334,9 +533,9 @@ public class MapGenerator : MonoBehaviour {
 		public Color backgroundColour;
 	    public Coord startPoint;
 	    public Coord targetPoint;
-		
-		public Coord mapCentre => new Coord(mapSize.x/2,mapSize.y/2);
-			
+
+        public Coord mapCentre => new Coord(mapSize.x/2,mapSize.y/2);
+
     }
 
     public class Timer

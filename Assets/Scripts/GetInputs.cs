@@ -39,14 +39,13 @@ public class GetInputs : MonoBehaviour
 
     void ShowKeys(int keyRotate)
     {
-        Debug.Log("key");
-        //var panel = GameObject.Find("CodePanel/Scroll");
-        //var codeInput = Instantiate(codeInputObject, codeInputObject.transform.position, Quaternion.identity);
-        //codeInputsObjects.Add(codeInput);
-        //codeInput.transform.localScale = new Vector3(1,1,1);
-        //codeInput.transform.parent = panel.transform;
-        //var arrow = codeInput.transform.Find("Image");
-        //arrow.gameObject.transform.Rotate(new Vector3(0,0, keyRotate));
-        //GameObject.Find("CodePanel").GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 0);
+        var panel = GameObject.Find("CodePanel/Scroll");
+        var codeInput = Instantiate(codeInputObject, codeInputObject.transform.position, Quaternion.identity);
+        codeInputsObjects.Add(codeInput);
+        codeInput.transform.localScale = new Vector3(1, 1, 1);
+        codeInput.transform.parent = panel.transform;
+        var arrow = codeInput.transform.Find("Image");
+        arrow.gameObject.transform.Rotate(new Vector3(0, 0, keyRotate));
+        GameObject.Find("CodePanel").GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 0);
     }
 }
