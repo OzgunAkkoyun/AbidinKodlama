@@ -32,6 +32,8 @@ public class UIHandler : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         map = FindObjectOfType<MapGenerator>();
         minimapTexture = minimap.transform.Find("MiniMapGraphics/Texture").gameObject;
+        pipBoy = minimap.transform.Find("MiniMapGraphics").gameObject;
+        Debug.Log(pipBoy);
         MiniMapSizeSet();
         miniMapCamera.transform.position = new Vector3( map.currentMap.mapSize.x-1, miniMapCamera.transform.position.y, map.currentMap.mapSize.y-1);
         miniMapCamera.orthographicSize = miniMapCamera.transform.position.x + 4;
@@ -52,7 +54,7 @@ public class UIHandler : MonoBehaviour
 
     void MiniMapSizeSet()
     {
-        pipBoy = minimap.transform.Find("MiniMapGraphics").gameObject;
+        
 
         pipBoy.GetComponent<RectTransform>().sizeDelta = new Vector2(screenH, screenH);
         RatiosForMiniMap();

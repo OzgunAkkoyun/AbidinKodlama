@@ -13,6 +13,11 @@ public class GetInputs : MonoBehaviour
 
     void Update()
     {
+        GetKeys();
+    }
+
+    public void GetKeys()
+    {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             inputs.Add(KeyCode.UpArrow);
@@ -37,7 +42,7 @@ public class GetInputs : MonoBehaviour
         }
     }
 
-    void ShowKeys(int keyRotate)
+    public void ShowKeys(int keyRotate)
     {
         var panel = GameObject.Find("CodePanel/Scroll");
         var codeInput = Instantiate(codeInputObject, codeInputObject.transform.position, Quaternion.identity);

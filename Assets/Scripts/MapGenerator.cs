@@ -92,8 +92,6 @@ public class MapGenerator : MonoBehaviour {
     }
     public void GenerateMapFromLoad(Coord _mapSize,int _seed,Coord _startPoint,Coord _targetPoint,List<Coord> _Path)
     {
-        Debug.Log("Load");
-        Debug.Log(_Path);
         tileMap = new Transform[_mapSize.x, _mapSize.y];
         currentMap.seed = _seed;
         prng = new System.Random(currentMap.seed);

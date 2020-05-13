@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 {
     CharacterMovement character;
     MapGenerator map;
+    LoadGameData load;
     private UIHandler uh;
     private GetInputs inputs;
     public bool is3DStarted = false;
@@ -51,16 +52,25 @@ public class GameManager : MonoBehaviour
         uh = FindObjectOfType<UIHandler>();
         map = FindObjectOfType<MapGenerator>();
         inputs= FindObjectOfType<GetInputs>();
+        load= FindObjectOfType<LoadGameData>();
 
         winStreak = PlayerPrefs.GetInt("winStreak");
         lastMapSize = PlayerPrefs.GetInt("lastMapSize");
         playerScore = PlayerPrefs.GetInt("playerScore");
-        var a = PlayerPrefs.GetString("playerDatas");
-        //gameData = PlayerPrefs.GetString("gameData");
-        //Debug.Log(a);
-        //SetMapAttributes();
+        var gameDataString = PlayerPrefs.GetString("playerDatas");
+        gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
 
-        
+        var isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
+
+        if(isGameOrLoad == 0) //its mean gameScreen
+        {
+            SetMapAttributes();
+        }
+        else // its mean loading a previous game
+        {
+            load.LoadGenerateMap();
+        }
+
     }
 
     void SetMapAttributes()
@@ -75,28 +85,26 @@ public class GameManager : MonoBehaviour
         map.expectedPathLength = playerScore + 1;
         //PlayerPrefs.DeleteAll();
         map.GenerateMap();
-        //if (gameData=="")
-        //{
-
-        //}
-        //if (winStreak==3)
-        //{
-        //    map.currentMap.mapSize = new MapGenerator.Coord(setMapSize, setMapSize);
-        //}
+    
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
-            is3DStarted = true;
-            uh.StartCoroutine("MiniMapSetStartPosition");
-            uh.StartCoroutine("CameraSmothMovingToTargetPosition");
-            Invoke("ExecuteAnimation", 1.5f);
-            
+            GameAnimationStart();
         }
     }
+
+    public void GameAnimationStart()
+    {
+        is3DStarted = true;
+        uh.StartCoroutine("MiniMapSetStartPosition");
+        uh.StartCoroutine("CameraSmothMovingToTargetPosition");
+        Invoke("ExecuteAnimation", 1.5f);
+    }
+
 
     void ExecuteAnimation()
     {

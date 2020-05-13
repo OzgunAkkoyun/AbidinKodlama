@@ -2097,7 +2097,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &140383812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2598,6 +2598,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 201267291}
   m_Mesh: {fileID: 1082492732806125982, guid: 9c049b246bf5d80478973a3849f16594, type: 3}
+--- !u!1 &203902709
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 203902711}
+  - component: {fileID: 203902710}
+  m_Layer: 0
+  m_Name: LoadGame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &203902710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203902709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d58a3dd9ffcf34544b01216b20e233c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameDataString: 
+  gameDatas: []
+--- !u!4 &203902711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203902709}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1080, y: 857, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &220583568
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,7 +5563,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496516852}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -5958,6 +6003,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   is3DStarted: 0
+  winStreak: 0
+  lastMapSize: 5
+  playerScore: 0
+  gameDatas: []
 --- !u!4 &538906879
 Transform:
   m_ObjectHideFlags: 0
@@ -13631,6 +13680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minimap: {fileID: 4827462813625564987}
+  gameOverPanel: {fileID: 140383811}
   miniMapCamera: {fileID: 1774015900}
   mainCamera: {fileID: 963194225}
   cameraTarget: {fileID: 591049149}
