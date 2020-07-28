@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static MapGenerator;
@@ -30,27 +29,27 @@ public class CharacterMovement : MonoBehaviour
         var isPlayerReachedTarget = false;
         for (int i = 0; i < getInputs.inputs.Count; i++)
         {
-            if (getInputs.inputs[i] == KeyCode.LeftArrow)
+            if (getInputs.inputs[i] == GetInputs.code.Left)
             {
                 inputVector.x -= scaleFactor;
             }
-            else if (getInputs.inputs[i] == KeyCode.RightArrow)
+            else if (getInputs.inputs[i] == GetInputs.code.Right)
             {
                 inputVector.x += scaleFactor;
             }
-            else if (getInputs.inputs[i] == KeyCode.UpArrow)
+            else if (getInputs.inputs[i] == GetInputs.code.Forward)
             {
                 inputVector.z += scaleFactor;
             }
-            else if (getInputs.inputs[i] == KeyCode.DownArrow)
+            else if (getInputs.inputs[i] == GetInputs.code.Backward)
             {
                 inputVector.z -= scaleFactor;
             }
 
             //Code Inputs coloring
-            getInputs.codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
+            uh.codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
             if (i != 0)
-                getInputs.codeInputsObjects[i - 1].GetComponent<Image>().color = Color.white;
+                uh.codeInputsObjects[i - 1].GetComponent<Image>().color = Color.white;
 
             if (isAnimStarted) yield break; // exit function
             isAnimStarted = true;
@@ -74,9 +73,10 @@ public class CharacterMovement : MonoBehaviour
             isAnimStarted = false;
 
             var currentCoord = new Coord((int)(transform.position.x / mapGenerate.tileSize), (int)(transform.position.z / mapGenerate.tileSize));
+
             if (mapGenerate.Path.Contains(currentCoord))
             {
-                Debug.Log("inPath");
+                //Debug.Log("inPath");
             }
             else
             {
@@ -86,22 +86,13 @@ public class CharacterMovement : MonoBehaviour
 
             if (mapGenerate.currentMap.targetPoint.x * scaleFactor == transform.position.x && mapGenerate.currentMap.targetPoint.y * scaleFactor == transform.position.z)
             {
-                Debug.Log("Character reached to target");
                 isPlayerReachedTarget = true;
                 //winEffect.Play();
             }
         }
-        
-        if (isPlayerReachedTarget)
-        {
-            uh.OpenGameOverPanel(true);
-            gm.GameOverStatSet(true);
-        }
-        else
-        {
-            uh.OpenGameOverPanel(false);
-            gm.GameOverStatSet(false);
-        }
+
+        uh.OpenGameOverPanel(isPlayerReachedTarget);
+        gm.GameOverStatSet(isPlayerReachedTarget);
 
     }
 }

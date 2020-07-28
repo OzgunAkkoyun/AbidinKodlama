@@ -1,14 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 using static MapGenerator;
 using System;
-
-// TODO :
-
-// MapSize
-// expectedPathLength
 
 [Serializable]
 public class SavedGameData
@@ -16,12 +10,13 @@ public class SavedGameData
     public MapGenerator.Coord mapSize;
     public int seed;
     public float obstaclePercentages;
-    public List<KeyCode> keyCodes;
+    public List<GetInputs.code> keyCodes;
     public MapGenerator.Coord startCoord;
     public MapGenerator.Coord targetCoord;
     public List<Coord> Path;
+    public int scenarioIndex;
 
-    public SavedGameData(MapGenerator.Coord mapSize, int seed, float obstaclePercentages, List<KeyCode> keyCodes, MapGenerator.Coord startCoord, MapGenerator.Coord targetCoord, List<Coord> Path)
+    public SavedGameData(MapGenerator.Coord mapSize, int seed, float obstaclePercentages, List<GetInputs.code> keyCodes, MapGenerator.Coord startCoord, MapGenerator.Coord targetCoord, List<Coord> Path,int scenarioIndex)
     {
         this.mapSize = mapSize;
         this.seed = seed;
@@ -30,47 +25,98 @@ public class SavedGameData
         this.startCoord = startCoord;
         this.targetCoord = targetCoord;
         this.Path = Path;
+        this.scenarioIndex = scenarioIndex;
+    }
+}
+
+public class SavedPlayerData
+{
+    public int succesedLevelCount;
+    public int failededLevelCount;
+    public int whichScenario;
+    public int lastMapSize;
+    public int winStreak;
+    public int score;
+    public bool showedOpeningVideo;
+
+    public SavedPlayerData(int succesedLevelCount, int failededLevelCount, int whichScenario, int lastMapSize, int winStreak, int score, bool showedOpeningVideo)
+    {
+        this.succesedLevelCount = succesedLevelCount;
+        this.failededLevelCount = failededLevelCount;
+        this.whichScenario = whichScenario;
+        this.lastMapSize = lastMapSize;
+        this.winStreak = winStreak;
+        this.score = score;
+        this.showedOpeningVideo = showedOpeningVideo;
     }
 }
 
 public class GameManager : MonoBehaviour
 {
-    CharacterMovement character;
-    MapGenerator map;
-    LoadGameData load;
-    private UIHandler uh;
-    private GetInputs inputs;
+    public CharacterMovement character;
+    public MapGenerator map;
+    public LoadGameData load;
+    public UIHandler uh;
+    public GetInputs inputs;
     public bool is3DStarted = false;
-    public int winStreak;
     public int lastMapSize = 5;
-    public int playerScore = 0;
-    public List<SavedGameData> gameDatas =new List<SavedGameData>();
+    public List<SavedGameData> gameDatas = new List<SavedGameData>();
+    public SavedPlayerData playerDatas;
+
+    public int isGameOrLoad;
+    public int scenarioIndex;
 
     void Start()
     {
         character = FindObjectOfType<CharacterMovement>();
         uh = FindObjectOfType<UIHandler>();
         map = FindObjectOfType<MapGenerator>();
-        inputs= FindObjectOfType<GetInputs>();
-        load= FindObjectOfType<LoadGameData>();
+        inputs = FindObjectOfType<GetInputs>();
+        load = FindObjectOfType<LoadGameData>();
 
-        winStreak = PlayerPrefs.GetInt("winStreak");
         lastMapSize = PlayerPrefs.GetInt("lastMapSize");
-        playerScore = PlayerPrefs.GetInt("playerScore");
-        var gameDataString = PlayerPrefs.GetString("playerDatas");
-        gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
+        var gameDataString = PlayerPrefs.GetString("gameDatas");
+        var playerDataString = PlayerPrefs.GetString("playerDatas");
 
-        var isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
+        if (gameDataString != "")
+        {
+            gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
+            scenarioIndex = gameDatas[gameDatas.Count - 1].scenarioIndex;
+        }
+        else
+        {
+            scenarioIndex = 1;
+        }
 
-        if(isGameOrLoad == 0) //its mean gameScreen
+        if (playerDataString != "")
+        {
+            playerDatas = JsonUtility.FromJson<SavedPlayerData>(playerDataString);
+        }
+        else
+        {
+            playerDatas = new SavedPlayerData(0,0,1,5,0,0,false);
+        }
+        Debug.Log(playerDatas.showedOpeningVideo);
+        if (!playerDatas.showedOpeningVideo)
+        {
+            uh.ShowVideo(playerDatas.whichScenario + "-" + playerDatas.lastMapSize);
+        }
+        else
+        {
+            uh.videoPanel.SetActive(false);
+        }
+
+        isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
+        //PlayerPrefs.DeleteAll();
+
+        if (isGameOrLoad == 0) //its mean gameScreen
         {
             SetMapAttributes();
         }
-        else // its mean loading a previous game
+        else // its mean loading one of the previous games or Restart game
         {
-            load.LoadGenerateMap();
+            load.LoadGenerateMap(isGameOrLoad);
         }
-
     }
 
     void SetMapAttributes()
@@ -82,13 +128,11 @@ public class GameManager : MonoBehaviour
         }
 
         map.currentMap.mapSize = new Coord(lastMapSize, lastMapSize);
-        map.expectedPathLength = playerScore + 1;
-        //PlayerPrefs.DeleteAll();
+        map.expectedPathLength = playerDatas.score + 2;
+
         map.GenerateMap();
-    
     }
 
-    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
@@ -100,11 +144,11 @@ public class GameManager : MonoBehaviour
     public void GameAnimationStart()
     {
         is3DStarted = true;
+        ShowInputsCode.Instance.ShowCodesString();
         uh.StartCoroutine("MiniMapSetStartPosition");
-        uh.StartCoroutine("CameraSmothMovingToTargetPosition");
+        uh.StartCoroutine("CameraSmoothMovingToTargetPosition");
         Invoke("ExecuteAnimation", 1.5f);
     }
-
 
     void ExecuteAnimation()
     {
@@ -113,39 +157,54 @@ public class GameManager : MonoBehaviour
 
     public void GameOverStatSet(bool isSuccess)
     {
-        if (isSuccess)
+        if (isGameOrLoad == 0 || isGameOrLoad == 2)
         {
-            winStreak++;
-            playerScore++;
-
-            if (winStreak == 3)
+            if (isSuccess)
             {
-                if (lastMapSize != 9)
+                playerDatas.winStreak++;
+                playerDatas.score++;
+                playerDatas.succesedLevelCount++;
+
+                if (playerDatas.winStreak == 3)
                 {
-                    lastMapSize += 2;
-                    PlayerPrefs.SetInt("lastMapSize", lastMapSize);
+                    playerDatas.winStreak = 0;
+                    playerDatas.showedOpeningVideo = false;
+                    uh.ShowVideo(scenarioIndex+"-"+lastMapSize+"-end");
+
+                    if (lastMapSize != 9)
+                    {
+                        lastMapSize += 2;
+                        playerDatas.lastMapSize = lastMapSize;
+                        PlayerPrefs.SetInt("lastMapSize", lastMapSize);
+                    }
+
                 }
-                
             }
+            else
+            {
+                playerDatas.winStreak = 0;
+                playerDatas.score = playerDatas.score > 0 ? (playerDatas.score - 1) : 0;
+            }
+            
+            GameSave();
+            PlayerDataSave();
         }
-        else
-        {
-            winStreak = 0;
-            playerScore = playerScore > 0 ? (playerScore-1) : 0;
-        }
-
-        PlayerPrefs.SetInt("winStreak", winStreak);
-        PlayerPrefs.SetInt("playerScore", playerScore);
-
-        GameSave();
     }
 
+   
     public void GameSave()
     {
         var current = map.currentMap;
-        gameDatas.Add( new SavedGameData(current.mapSize,current.seed,current.obstaclePercent, inputs.inputs,current.startPoint,current.targetPoint,map.Path) );
+        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, inputs.inputs,
+            current.startPoint, current.targetPoint, map.Path,scenarioIndex));
 
         string gameDataString = JsonHelper.ToJson<SavedGameData>(gameDatas, true);
-        PlayerPrefs.SetString("playerDatas", gameDataString);
+        PlayerPrefs.SetString("gameDatas", gameDataString);
+    }
+
+    public void PlayerDataSave()
+    {
+        string playerDataString = JsonUtility.ToJson(playerDatas);
+        PlayerPrefs.SetString("playerDatas", playerDataString);
     }
 }

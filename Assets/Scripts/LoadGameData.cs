@@ -1,64 +1,55 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class LoadGameData : MonoBehaviour
 {
     GameManager gm;
-    MapGenerator map;
-    GetInputs inputs;
-    public string gameDataString;
+    
+    private string gameDataString;
     
     public List<SavedGameData> gameDatas = new List<SavedGameData>();
 
     void Start()
     {
         gm = FindObjectOfType<GameManager>();
-        map = FindObjectOfType<MapGenerator>();
-        inputs = FindObjectOfType<GetInputs>();
-        gameDataString = PlayerPrefs.GetString("playerDatas");
-
-        gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
         
-        //LoadGenerateMap();
+        gameDataString = PlayerPrefs.GetString("gameDatas");
+        if(gameDataString != "")
+            gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
     }
 
-    public void LoadGenerateMap()
+    public void LoadGenerateMap(int isGameOrLoad)
     {
+        if (gameDatas.Count == 0)
+            return;
         var gameData = gameDatas[gameDatas.Count-1];
-        map.GenerateMapFromLoad(gameData.mapSize, gameData.seed, gameData.startCoord, gameData.targetCoord, gameData.Path);
-
-        inputs.inputs = gameData.keyCodes;
-
-        for (int i = 0; i < inputs.inputs.Count; i++)
+        gm.map.GenerateMapFromLoad(gameData.mapSize, gameData.seed, gameData.startCoord, gameData.targetCoord, gameData.Path);
+        if (isGameOrLoad == 1)
         {
-            if (inputs.inputs[i]==KeyCode.UpArrow)
-            {
+            gm.inputs.inputs = gameData.keyCodes;
 
-                inputs.ShowKeys(90);
-            }
-            else if (inputs.inputs[i] == KeyCode.LeftArrow)
+            for (int i = 0; i < gm.inputs.inputs.Count; i++)
             {
-                inputs.ShowKeys(180);
+                if (gm.inputs.inputs[i] == GetInputs.code.Forward)
+                {
+                    gm.uh.ShowKeys(90);
+                }
+                else if (gm.inputs.inputs[i] == GetInputs.code.Left)
+                {
+                    gm.uh.ShowKeys(180);
+                }
+                else if (gm.inputs.inputs[i] == GetInputs.code.Right)
+                {
+                    gm.uh.ShowKeys(0);
+                }
+                else if (gm.inputs.inputs[i] == GetInputs.code.Backward)
+                {
+                    gm.uh.ShowKeys(-90);
+                }
             }
-            else if (inputs.inputs[i] == KeyCode.RightArrow)
-            {
-                inputs.ShowKeys(0);
-
-            }
-            else if (inputs.inputs[i] == KeyCode.DownArrow)
-            {
-                inputs.ShowKeys(-90);
-
-            }
+            Invoke("GameStart", 1);
         }
-        Invoke("GameStart", 1);
-        
-        //get inputs
-        // character movement
-        // set inputs to do panel
-        // ui handler map diminish
-        //
+       
     }
 
     void GameStart()

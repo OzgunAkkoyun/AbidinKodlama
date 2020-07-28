@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
-using UnityEngine.Networking;
 using Random = System.Random;
-using SimpleJSON;
 
 [Serializable]
 public class Data
@@ -57,41 +54,17 @@ public class MapGenerator : MonoBehaviour {
     private Transform mapHolder;
     private System.Random prng;
 
-    //Connection variables
-
-    private string url = "http://localhost:8080/UnityTest/getRatios.php";
+    public GameObject[] home;
+    public List<GameObject> obstacleGameObject;
 
     void Awake() {
 
         currentMap = maps[mapIndex];
-        //StartCoroutine(GetConnection());
     }
 
-    IEnumerator GetConnection()
-    {
-
-        WWW www = new WWW(url);
-        yield return www;
-
-        if (www.error != null)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            //List<Data> data = new List<Data>();
-            Debug.Log(www.text);
-
-            var N = JSON.Parse(www.text);
-            Debug.Log(N[0]["r1"]);
-            //var data = new data();
-            // Or retrieve results as binary data
-            
-        }
-
-    }
     public void GenerateMapFromLoad(Coord _mapSize,int _seed,Coord _startPoint,Coord _targetPoint,List<Coord> _Path)
     {
+        currentMap.mapSize = _mapSize;
         tileMap = new Transform[_mapSize.x, _mapSize.y];
         currentMap.seed = _seed;
         prng = new System.Random(currentMap.seed);
@@ -116,9 +89,8 @@ public class MapGenerator : MonoBehaviour {
         var start = currentMap.startPoint;
         var target = Path[Path.Count - 1];
 
-        tileMap[start.x, start.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
-        tileMap[target.x, target.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
         SpawnVehicle();
+        SpawnHouses();
     }
 	public void GenerateMap()
 	{
@@ -128,7 +100,6 @@ public class MapGenerator : MonoBehaviour {
 
         currentMap.seed = UnityEngine.Random.Range(0,200);
         prng = new System.Random (currentMap.seed);
-
 
         mapHolder = new GameObject(holderName).transform;
         GenerateAllTiles();
@@ -144,17 +115,23 @@ public class MapGenerator : MonoBehaviour {
 
 	    SpawnObstacle(prng);
 
-	    
         CreateMapLines();
 
 	    CreateStartandTargetPoints();
 	    SpawnVehicle();
+        SpawnHouses();
         timer.Finish(false);
-
-        //CreateNavmeshMask();
-
     }
 
+    public void SpawnHouses()
+    {
+        var startHome = Instantiate(home[0], new Vector3((float)currentMap.startPoint.x * tileSize, 1f, (float)currentMap.startPoint.y * tileSize), Quaternion.identity);
+        var targetHome = Instantiate(home[1], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
+
+        startHome.transform.LookAt(new Vector3(Path[1].x * tileSize, 1, Path[1].y * tileSize));
+
+        targetHome.transform.LookAt(new Vector3(Path[PathLength-2].x*tileSize, 1, Path[PathLength - 2].y*tileSize));
+    }
     public void CreatePath()
     {
         Path.Add(new Coord(currentMap.startPoint.x,currentMap.startPoint.y));
@@ -199,7 +176,6 @@ public class MapGenerator : MonoBehaviour {
             selectedNeighbour = new Coord();
             return false;
         }
-
     }
     private List<Coord> GetAvailableNeighbours(Coord cell)
     {
@@ -315,10 +291,8 @@ public class MapGenerator : MonoBehaviour {
         var start = currentMap.startPoint;
         var target = Path[Path.Count-1];
 
-        tileMap[start.x, start.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
-        tileMap[target.x, target.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-        
-
+        //tileMap[start.x, start.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+        //tileMap[target.x, target.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
     }
 
     private void SpawnObstacle(Random prng)
@@ -365,6 +339,7 @@ public class MapGenerator : MonoBehaviour {
         obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour, currentMap.backgroundColour, colourPercent);
         obstacleRenderer.sharedMaterial = obstacleMaterial;
 
+        obstacleGameObject.Add(newObstacle.gameObject);
         allObstacleCoord.Add(randomCoord);
         allOpenCoords.Remove(randomCoord);
     }
@@ -498,9 +473,9 @@ public class MapGenerator : MonoBehaviour {
 	    }
 
 	    public bool Equals(Coord other)
-	    {
-	        return x == other.x && y==other.y;
-	    }
+        {
+            return x == other.x && y == other.y;
+        }
 
         public Coord(int _x, int _y) {
 			x = _x;
@@ -533,7 +508,6 @@ public class MapGenerator : MonoBehaviour {
 	    public Coord targetPoint;
 
         public Coord mapCentre => new Coord(mapSize.x/2,mapSize.y/2);
-
     }
 
     public class Timer
