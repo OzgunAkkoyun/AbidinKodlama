@@ -52,7 +52,6 @@ public class CharacterMovement : MonoBehaviour
                 inputVector.z -= scaleFactor;
             }
 
-           
             //Code Inputs coloring
             uh.codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
             if (i != 0)

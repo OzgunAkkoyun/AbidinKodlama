@@ -20,10 +20,12 @@ public class LoadGameData : MonoBehaviour
 
     public void LoadGenerateMap(int isGameOrLoad)
     {
-        if (gameDatas.Count == 0)
+        gm = FindObjectOfType<GameManager>();
+        if (gm.gameDatas.Count == 0)
             return;
-        var gameData = gameDatas[gameDatas.Count-1];
-        gm.map.GenerateMapFromLoad(gameData.mapSize, gameData.seed, gameData.startCoord, gameData.targetCoord, gameData.Path);
+        var gameData = gm.gameDatas[gm.gameDatas.Count-1];
+        
+        gm.map.GameStartForLoad(gameData.mapSize, gameData.seed, gameData.startCoord, gameData.targetCoord, gameData.Path);
         if (isGameOrLoad == 1)
         {
             gm.inputs.inputs = gameData.keyCodes;

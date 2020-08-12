@@ -20,7 +20,7 @@ public class UIHandler : MonoBehaviour
     public GameObject videoPanel;
     public GameObject codeStringPanel;
     private GameObject video;
-    public VideoContainer allVideos;
+    public AllVideos allVideos;
 
     public Camera miniMapCamera;
     public GameObject mainCamera;
@@ -42,7 +42,7 @@ public class UIHandler : MonoBehaviour
     private float screenW;
     private float screenH;
 
-    private void Start()
+    private void Awake()
     {
         codePaneleWidth = Mathf.Abs(codePanel.transform.position.x);
         gm = FindObjectOfType<GameManager>();
@@ -58,11 +58,13 @@ public class UIHandler : MonoBehaviour
 
     public void ShowVideo(string videoName)
     {
-        if (Array.Find(allVideos.videos, element => element.name == videoName).video == null)
+        gm = FindObjectOfType<GameManager>();
+       
+        if (Array.Find(allVideos.senarioVideos[gm.playerDatas.whichScenario - 1].videos, element => element.name == videoName).video == null)
             return;
         videoPanel.SetActive(true);
         video = videoPanel.transform.Find("VideoPlayer").gameObject;
-        video.GetComponent<VideoPlayer>().clip = Array.Find(allVideos.videos, element => element.name == videoName).video;
+        video.GetComponent<VideoPlayer>().clip = Array.Find(allVideos.senarioVideos[gm.playerDatas.whichScenario - 1].videos, element => element.name == videoName).video;
         video.GetComponent<VideoPlayer>().loopPointReached += CloseVideo;
     }
 
@@ -250,10 +252,5 @@ public class UIHandler : MonoBehaviour
     public void HomeButton()
     {
         SceneManager.LoadScene(0);
-    }
-
-    public void SoundButton()
-    {
-
     }
 }

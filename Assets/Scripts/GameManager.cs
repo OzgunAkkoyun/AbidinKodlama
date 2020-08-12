@@ -67,9 +67,9 @@ public class GameManager : MonoBehaviour
     public int isGameOrLoad;
     public int scenarioIndex;
 
-    void Start()
+    void Awake()
     {
-        character = FindObjectOfType<CharacterMovement>();
+        
         uh = FindObjectOfType<UIHandler>();
         map = FindObjectOfType<MapGenerator>();
         inputs = FindObjectOfType<GetInputs>();
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
         lastMapSize = PlayerPrefs.GetInt("lastMapSize");
         var gameDataString = PlayerPrefs.GetString("gameDatas");
         var playerDataString = PlayerPrefs.GetString("playerDatas");
-        //PlayerPrefs.DeleteAll();
+       // PlayerPrefs.DeleteAll();
         if (gameDataString != "")
         {
             gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
@@ -98,7 +98,6 @@ public class GameManager : MonoBehaviour
         {
             playerDatas = new SavedPlayerData(0,0,1,5,0,0,false);
         }
-
         if (!playerDatas.showedOpeningVideo)
         {
             uh.ShowVideo(playerDatas.whichScenario + "-" + playerDatas.lastMapSize);
@@ -110,7 +109,7 @@ public class GameManager : MonoBehaviour
         }
 
         isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
-
+        
         if (isGameOrLoad == 0) //its mean gameScreen
         {
             SetMapAttributes();
@@ -132,7 +131,7 @@ public class GameManager : MonoBehaviour
         map.currentMap.mapSize = new Coord(lastMapSize, lastMapSize);
         map.expectedPathLength = playerDatas.score + 2;
 
-        map.GenerateMap();
+        map.GameStart();
     }
 
     void Update()
@@ -154,6 +153,7 @@ public class GameManager : MonoBehaviour
 
     void ExecuteAnimation()
     {
+        character = FindObjectOfType<CharacterMovement>();
         character.StartCoroutine("ExecuteAnimation");
     }
 
@@ -179,6 +179,12 @@ public class GameManager : MonoBehaviour
                         lastMapSize += 2;
                         playerDatas.lastMapSize = lastMapSize;
                         PlayerPrefs.SetInt("lastMapSize", lastMapSize);
+                    }
+                    else//New Senario
+                    {
+                        playerDatas.whichScenario++;
+                        playerDatas.lastMapSize = 5;
+                        playerDatas.score = 0;
                     }
                 }
             }

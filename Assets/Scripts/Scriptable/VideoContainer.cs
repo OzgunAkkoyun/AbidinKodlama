@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-[CreateAssetMenu(menuName = "Abidin/Video", order = 1)]
+[CreateAssetMenu(menuName = "Abidin/Videos/Video", order = 1)]
 public class VideoContainer : ScriptableObject
 {
     [Serializable]

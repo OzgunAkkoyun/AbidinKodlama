@@ -21,12 +21,13 @@ public class MapGenerator : MonoBehaviour {
 
     [Space(15f)]
     [Header("Game Prefabs")]
+    public ALLSpawnObjects allSpawnObjects;
     public Transform tilePrefab;
-	public Transform[] obstaclePrefab;
-    public Transform mapFloor;
-	public Transform navmeshFloor;
-	public Transform navmeshMaskPrefab;
+    public Transform[] obstaclePrefab;
+    public Transform navmeshFloor;
+    public Transform navmeshMaskPrefab;
     public GameObject vehiclePrefab;
+    public Transform mapFloor;
 
     [Space(40f)]
     public Vector2 maxMapSize;
@@ -57,9 +58,41 @@ public class MapGenerator : MonoBehaviour {
     public GameObject[] home;
     public List<GameObject> obstacleGameObject;
 
-    void Awake() {
+    private GameManager gm;
 
+    void Awake()
+    {
+        
+       
+    }
+
+    public void VariableAssign()
+    {
+        gm = FindObjectOfType<GameManager>();
         currentMap = maps[mapIndex];
+        var senarioObjects = allSpawnObjects.allSpawnObjects[gm.playerDatas.whichScenario - 1];
+
+        tilePrefab = senarioObjects.tileGameObject.transform;
+        obstaclePrefab = new Transform[senarioObjects.environmentGameObjects.Length];
+        for (int i = 0; i < senarioObjects.environmentGameObjects.Length; i++)
+        {
+            obstaclePrefab[i] = senarioObjects.environmentGameObjects[i].transform;
+        }
+
+        vehiclePrefab = senarioObjects.vehicleGameObject;
+        home[0] = senarioObjects.startGameObject;
+        home[1] = senarioObjects.targetGameObject;
+    }
+    public void GameStart()
+    {
+        VariableAssign();
+        GenerateMap();
+    }
+
+    public void GameStartForLoad(Coord _mapSize, int _seed, Coord _startPoint, Coord _targetPoint, List<Coord> _Path)
+    {
+        VariableAssign();
+        GenerateMapFromLoad(_mapSize, _seed, _startPoint, _targetPoint, _Path);
     }
 
     public void GenerateMapFromLoad(Coord _mapSize,int _seed,Coord _startPoint,Coord _targetPoint,List<Coord> _Path)
@@ -153,8 +186,20 @@ public class MapGenerator : MonoBehaviour {
                 OneStepBackinList(currentCell, ref currentPathIndex);
             }
         }
+
+        //SetPathDirections();
     }
 
+    //private void SetPathDirections()
+    //{
+    //    for (int i = 0; i < Path.Count; i++)
+    //    {
+    //        if (i == 0)
+    //        {
+    //            Path[i].direction = Coord.directions.Empty;
+    //        }
+    //    }
+    //}
     private void OneStepBackinList(Coord currentCell, ref int currentPathIndex)
     {
         Path.RemoveAt(currentPathIndex);
@@ -270,7 +315,12 @@ public class MapGenerator : MonoBehaviour {
 
     void SpawnVehicle()
     {
-        vehiclePrefab.transform.position = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y)*tileSize;
+        var vehiclePos = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y) * tileSize;
+       
+        vehiclePrefab = Instantiate(vehiclePrefab, vehiclePos,Quaternion.identity);
+        gm.uh.mainCamera = vehiclePrefab.transform.Find("Main Camera").gameObject;
+        gm.uh.cameraTarget = vehiclePrefab.transform.Find("CameraTarget");
+        //vehiclePrefab.transform.position = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y)*tileSize;
     }
 
     private Coord GetRandomOpenCoord()
@@ -462,6 +512,17 @@ public class MapGenerator : MonoBehaviour {
         public int y;
         public List<Coord> UnavaliableNeighbours;
 
+        //public enum directions
+        //{
+        //    Left,
+        //    Right,
+        //    Forward,
+        //    Backward,
+        //    Empty
+        //};
+
+        //public directions direction;
+
         public List<Coord> GetNeighbours()
         {
             return new List<Coord>
@@ -483,6 +544,7 @@ public class MapGenerator : MonoBehaviour {
             x = _x;
             y = _y;
             UnavaliableNeighbours = new List<Coord>();
+            //direction = directions.Empty;
         }
 
         public static bool operator ==(Coord c1, Coord c2)
