@@ -127,24 +127,24 @@ public class MapGenerator : MonoBehaviour {
     {
         var startHome = Instantiate(home[0], new Vector3((float)currentMap.startPoint.x * tileSize, 1f, (float)currentMap.startPoint.y * tileSize), Quaternion.identity);
         var targetHome = Instantiate(home[1], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
-
+        targetHome.name = "Target";
         startHome.transform.LookAt(new Vector3(Path[1].x * tileSize, 1, Path[1].y * tileSize));
 
         targetHome.transform.LookAt(new Vector3(Path[PathLength-2].x*tileSize, 1, Path[PathLength - 2].y*tileSize));
     }
     public void CreatePath()
     {
-        Path.Add(new Coord(currentMap.startPoint.x,currentMap.startPoint.y));
+        Path.Clear();
         var currentPathIndex = 0;
-
+        Path.Add(new Coord(currentMap.startPoint.x,currentMap.startPoint.y));
+        
         while (currentPathIndex < expectedPathLength)
         {
             var currentCell = Path[currentPathIndex];
             var neighbours = GetAvailableNeighbours(currentCell);
-          
+            
             if (SelectNextCell(neighbours, out Coord selectedNeighbour))
             {
-                
                 Path.Add(selectedNeighbour);
                 currentPathIndex++;
             }
@@ -152,7 +152,6 @@ public class MapGenerator : MonoBehaviour {
             {
                 OneStepBackinList(currentCell, ref currentPathIndex);
             }
-
         }
     }
 
@@ -429,7 +428,7 @@ public class MapGenerator : MonoBehaviour {
 		return targetAccessibleTileCount == accessibleTileCount;
 	}
 	
-	Vector3 CoordToPosition(int x, int y) {
+	public Vector3 CoordToPosition(int x, int y) {
 		//return new Vector3 (-currentMap.mapSize.x / 2f + 0.5f + x, 0, -currentMap.mapSize.y / 2f + 0.5f + y) * tileSize;
 		return new Vector3 (x , 0, y) * tileSize;
 	}
@@ -448,52 +447,56 @@ public class MapGenerator : MonoBehaviour {
 		return randomCoord;
 	}
 
-	public Transform GetRandomOpenTile() {
-		Coord randomCoord = shuffledOpenTileCoords.Dequeue ();
-		shuffledOpenTileCoords.Enqueue (randomCoord);
-		return tileMap[randomCoord.x,randomCoord.y];
-	}
-	
-	[System.Serializable]
-	public struct Coord:IEquatable<Coord>{
+    public Transform GetRandomOpenTile()
+    {
+        Coord randomCoord = shuffledOpenTileCoords.Dequeue();
+        shuffledOpenTileCoords.Enqueue(randomCoord);
+        return tileMap[randomCoord.x, randomCoord.y];
+    }
 
-		public int x;
-		public int y;
-	    public List<Coord> UnavaliableNeighbours;
+    [System.Serializable]
+    public struct Coord : IEquatable<Coord>
+    {
+
+        public int x;
+        public int y;
+        public List<Coord> UnavaliableNeighbours;
 
         public List<Coord> GetNeighbours()
-	    {
-	        return new List<Coord>
-	        {
-	            new Coord(x - 1, y),
-	            new Coord(x + 1, y),
-	            new Coord(x, y - 1),
-	            new Coord(x, y + 1)
-	        };
-	    }
+        {
+            return new List<Coord>
+            {
+                new Coord(x - 1, y),
+                new Coord(x + 1, y),
+                new Coord(x, y - 1),
+                new Coord(x, y + 1)
+            };
+        }
 
-	    public bool Equals(Coord other)
+        public bool Equals(Coord other)
         {
             return x == other.x && y == other.y;
         }
 
-        public Coord(int _x, int _y) {
-			x = _x;
-			y = _y;
+        public Coord(int _x, int _y)
+        {
+            x = _x;
+            y = _y;
             UnavaliableNeighbours = new List<Coord>();
         }
-		
-		public static bool operator ==(Coord c1, Coord c2) {
-			return c1.x == c2.x && c1.y == c2.y;
-		}
-		
-		public static bool operator !=(Coord c1, Coord c2) {
-			return !(c1 == c2);
-		}
-		
-	}
-	
-	[System.Serializable]
+
+        public static bool operator ==(Coord c1, Coord c2)
+        {
+            return c1.x == c2.x && c1.y == c2.y;
+        }
+
+        public static bool operator !=(Coord c1, Coord c2)
+        {
+            return !(c1 == c2);
+        }
+    }
+
+    [System.Serializable]
 	public class Map {
 		
 		public Coord mapSize;

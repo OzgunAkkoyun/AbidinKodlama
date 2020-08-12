@@ -15,7 +15,7 @@ public class UIHandler : MonoBehaviour
     private MapGenerator map;
     public GameObject minimap;
     private GameObject minimapTexture;
-    private GameObject pipBoy;
+    private GameObject miniMapGraphics;
     public GameObject gameOverPanel;
     public GameObject videoPanel;
     public GameObject codeStringPanel;
@@ -39,8 +39,8 @@ public class UIHandler : MonoBehaviour
 
     public TextMeshProUGUI codeString;
 
-    private float screenW = Screen.width;
-    private float screenH = Screen.height;
+    private float screenW;
+    private float screenH;
 
     private void Start()
     {
@@ -48,12 +48,9 @@ public class UIHandler : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         map = FindObjectOfType<MapGenerator>();
         minimapTexture = minimap.transform.Find("MiniMapGraphics/Texture").gameObject;
-        pipBoy = minimap.transform.Find("MiniMapGraphics").gameObject;
-
-        
-
-        //allVideos.videos.Find(v => v.name == "1-1");
-
+        miniMapGraphics = minimap.transform.Find("MiniMapGraphics").gameObject;
+        screenW = Screen.width;
+        screenH = Screen.height;
         MiniMapSizeSet();
         miniMapCamera.transform.position = new Vector3( map.currentMap.mapSize.x-1, miniMapCamera.transform.position.y, map.currentMap.mapSize.y-1);
         miniMapCamera.orthographicSize = miniMapCamera.transform.position.x + 4;
@@ -61,6 +58,8 @@ public class UIHandler : MonoBehaviour
 
     public void ShowVideo(string videoName)
     {
+        if (Array.Find(allVideos.videos, element => element.name == videoName).video == null)
+            return;
         videoPanel.SetActive(true);
         video = videoPanel.transform.Find("VideoPlayer").gameObject;
         video.GetComponent<VideoPlayer>().clip = Array.Find(allVideos.videos, element => element.name == videoName).video;
@@ -70,6 +69,7 @@ public class UIHandler : MonoBehaviour
     public void CloseVideo(VideoPlayer vp)
     {
         StartCoroutine("VideoFadeOut");
+        gm.sc.Play("Theme");
         gm.playerDatas.showedOpeningVideo = true;
         gm.PlayerDataSave();
     }
@@ -85,7 +85,7 @@ public class UIHandler : MonoBehaviour
             float alphaDiff = Mathf.Abs(curColor.a - targetAlpha);
             //curColor.a = Mathf.Lerp(curColor.a, targetAlpha, 5 * Time.deltaTime);
             curColor.a -= 1.1f * Time.deltaTime;
-            Debug.Log(curColor.a);
+
             videoRawImage.GetComponent<RawImage>().color = curColor;
 
             yield return new WaitForSeconds(0);
@@ -111,13 +111,13 @@ public class UIHandler : MonoBehaviour
 
     void MiniMapSizeSet()
     {
-        pipBoy.GetComponent<RectTransform>().sizeDelta = new Vector2(screenH - 150, screenH - 150);
+        miniMapGraphics.GetComponent<RectTransform>().sizeDelta = new Vector2(screenW - 100, screenH );
         RatiosForMiniMap();
     }
 
     void RatiosForMiniMap()
     {
-        var textureSize = (float)(pipBoy.GetComponent<RectTransform>().sizeDelta.y - pipBoy.GetComponent<RectTransform>().sizeDelta.y * 0.3);
+        var textureSize = (float) (miniMapGraphics.GetComponent<RectTransform>().sizeDelta.y - miniMapGraphics.GetComponent<RectTransform>().sizeDelta.y * 0.2);
         minimapTexture.GetComponent<RectTransform>().sizeDelta = new Vector2(textureSize, textureSize);
     }
 
@@ -139,7 +139,7 @@ public class UIHandler : MonoBehaviour
             t += Time.deltaTime / 10;
             minimap.GetComponent<RectTransform>().sizeDelta = Vector2.Lerp(minimap.GetComponent<RectTransform>().sizeDelta, new Vector2(300, 300), t);
             minimap.transform.GetChild(0).localScale = Vector2.Lerp(minimap.transform.GetChild(0).localScale, new Vector3(1, 1, 1), t * 2);
-            pipBoy.GetComponent<RectTransform>().sizeDelta = new Vector2(
+            miniMapGraphics.GetComponent<RectTransform>().sizeDelta = new Vector2(
                 (minimap.GetComponent<RectTransform>().sizeDelta.y - 20 - 1 * 30),
                 (minimap.GetComponent<RectTransform>().sizeDelta.y - 20 - 1 * 30));
             RatiosForMiniMap();
@@ -147,7 +147,6 @@ public class UIHandler : MonoBehaviour
                 yield break;
             yield return new WaitForSeconds(0f);
         }
-
     }
 
     public IEnumerator MiniMapSizeChange()
@@ -156,14 +155,12 @@ public class UIHandler : MonoBehaviour
         {
             if (!mapZoomed)
             {
-                minimap.transform.localScale = minimap.transform.localScale +
-                                               new Vector3(mapSizeMultiplier, mapSizeMultiplier, mapSizeMultiplier);
+                minimap.transform.localScale = minimap.transform.localScale + new Vector3(mapSizeMultiplier, mapSizeMultiplier, mapSizeMultiplier);
                 yield return new WaitForSeconds(0f);
             }
             else
             {
-                minimap.transform.localScale = minimap.transform.localScale -
-                                               new Vector3(mapSizeMultiplier, mapSizeMultiplier, mapSizeMultiplier);
+                minimap.transform.localScale = minimap.transform.localScale - new Vector3(mapSizeMultiplier, mapSizeMultiplier, mapSizeMultiplier);
                 yield return new WaitForSeconds(0f);
             }
         }
@@ -248,5 +245,15 @@ public class UIHandler : MonoBehaviour
         {
             gameOverText.GetComponent<TextMeshProUGUI>().text = "Başarısız!";
         }
+    }
+
+    public void HomeButton()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void SoundButton()
+    {
+
     }
 }

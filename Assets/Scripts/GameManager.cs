@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     public LoadGameData load;
     public UIHandler uh;
     public GetInputs inputs;
+    public SoundController sc;
     public bool is3DStarted = false;
     public int lastMapSize = 5;
     public List<SavedGameData> gameDatas = new List<SavedGameData>();
@@ -73,11 +74,12 @@ public class GameManager : MonoBehaviour
         map = FindObjectOfType<MapGenerator>();
         inputs = FindObjectOfType<GetInputs>();
         load = FindObjectOfType<LoadGameData>();
-
+        sc = FindObjectOfType<SoundController>();
+       
         lastMapSize = PlayerPrefs.GetInt("lastMapSize");
         var gameDataString = PlayerPrefs.GetString("gameDatas");
         var playerDataString = PlayerPrefs.GetString("playerDatas");
-
+        //PlayerPrefs.DeleteAll();
         if (gameDataString != "")
         {
             gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
@@ -96,7 +98,7 @@ public class GameManager : MonoBehaviour
         {
             playerDatas = new SavedPlayerData(0,0,1,5,0,0,false);
         }
-        Debug.Log(playerDatas.showedOpeningVideo);
+
         if (!playerDatas.showedOpeningVideo)
         {
             uh.ShowVideo(playerDatas.whichScenario + "-" + playerDatas.lastMapSize);
@@ -104,10 +106,10 @@ public class GameManager : MonoBehaviour
         else
         {
             uh.videoPanel.SetActive(false);
+            sc.Play("Theme");
         }
 
         isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
-        //PlayerPrefs.DeleteAll();
 
         if (isGameOrLoad == 0) //its mean gameScreen
         {
@@ -169,6 +171,7 @@ public class GameManager : MonoBehaviour
                 {
                     playerDatas.winStreak = 0;
                     playerDatas.showedOpeningVideo = false;
+                    sc.Pause("Theme");
                     uh.ShowVideo(scenarioIndex+"-"+lastMapSize+"-end");
 
                     if (lastMapSize != 9)
@@ -177,26 +180,24 @@ public class GameManager : MonoBehaviour
                         playerDatas.lastMapSize = lastMapSize;
                         PlayerPrefs.SetInt("lastMapSize", lastMapSize);
                     }
-
                 }
             }
             else
             {
                 playerDatas.winStreak = 0;
+                playerDatas.failededLevelCount++;
                 playerDatas.score = playerDatas.score > 0 ? (playerDatas.score - 1) : 0;
             }
             
-            GameSave();
+            GameDataSave();
             PlayerDataSave();
         }
     }
 
-   
-    public void GameSave()
+    public void GameDataSave()
     {
         var current = map.currentMap;
-        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, inputs.inputs,
-            current.startPoint, current.targetPoint, map.Path,scenarioIndex));
+        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, inputs.inputs, current.startPoint, current.targetPoint, map.Path,scenarioIndex));
 
         string gameDataString = JsonHelper.ToJson<SavedGameData>(gameDatas, true);
         PlayerPrefs.SetString("gameDatas", gameDataString);
