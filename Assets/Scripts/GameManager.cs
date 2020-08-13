@@ -121,7 +121,6 @@ public class GameManager : MonoBehaviour
 
     void SetMapAttributes()
     {
-        Debug.Log(playerDatas.lastMapSize);
         if (playerDatas.lastMapSize == 0)
         {
             playerDatas.lastMapSize = 5;

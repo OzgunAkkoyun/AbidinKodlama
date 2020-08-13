@@ -127,7 +127,6 @@ public class MapGenerator : MonoBehaviour {
 	public void GenerateMap()
 	{
 	    Timer timer = new Timer();
-		Debug.Log("MapGenarator" +gm.playerDatas.lastMapSize);
         tileMap = new Transform[gm.playerDatas.lastMapSize, gm.playerDatas.lastMapSize];
 
         currentMap.seed = UnityEngine.Random.Range(0,200);
@@ -187,6 +186,97 @@ public class MapGenerator : MonoBehaviour {
         }
 
         //SetPathDirections();
+    }
+
+    public enum forLoopDirections {Left,Right,Up,Down }
+
+    public List<forLoopDirections> directions = new List<forLoopDirections>();
+
+    public int xSize => Mathf.Max(left, right);
+    public int ySize => Mathf.Max(up, down);
+    public int left;
+    public int right;
+    public int up;
+    public int down;
+    public void CreatePathWithForLoop()
+    {
+        Path.Clear();
+        var currentPathIndex = 0;
+        Path.Add(new Coord(currentMap.startPoint.x, currentMap.startPoint.y));
+
+        FindXDirection();
+        FindYDirection();
+
+        CreateMapWithDirections(ref currentPathIndex);
+
+        for (int i = 0; i < Path.Count; i++)
+        {
+            var index = allObstacleCoord.FindIndex(v => (v.x == Path[i].x) && (v.y == Path[i].y));
+            if (index>=0)
+            {
+                DestroyImmediate(obstacleGameObject[index]);
+            }
+        }
+    }
+
+    private void CreateMapWithDirections(ref int currentPathIndex)
+    {
+        var xLenght = UnityEngine.Random.Range(2, xSize);
+        var yLenght = UnityEngine.Random.Range(2, ySize);
+        if (directions[0] == forLoopDirections.Left)
+        {
+            for (int i = 0; i < xLenght; i++)
+            {
+                Path.Add(Path[currentPathIndex].GetNeighbours()[0]);
+                currentPathIndex++;
+            }
+        }
+        else if (directions[0] == forLoopDirections.Right)
+        {
+            for (int i = 0; i < xLenght; i++)
+            {
+                Path.Add(Path[currentPathIndex].GetNeighbours()[1]);
+                currentPathIndex++;
+            }
+        }
+        if(directions[1] == forLoopDirections.Down)
+        {
+            for (int i = 0; i < yLenght; i++)
+            {
+                Path.Add(Path[currentPathIndex].GetNeighbours()[2]);
+                currentPathIndex++;
+            }
+        }
+        else if (directions[1] == forLoopDirections.Up)
+        {
+            for (int i = 0; i < yLenght; i++)
+            {
+                Path.Add(Path[currentPathIndex].GetNeighbours()[3]);
+                currentPathIndex++;
+            }
+        }
+    }
+
+    private void FindXDirection()
+    {
+        left = Mathf.Abs(currentMap.startPoint.x);
+        right = Mathf.Abs(currentMap.mapSize.x - currentMap.startPoint.x - 1);
+
+        if (left >= right)
+            directions.Add(forLoopDirections.Left);
+        else
+            directions.Add(forLoopDirections.Right);
+    }
+
+    private void FindYDirection()
+    {
+        up = Mathf.Abs(currentMap.mapSize.y - currentMap.startPoint.y - 1);
+        down = Mathf.Abs(currentMap.startPoint.y);
+
+        if (up >= down)
+            directions.Add(forLoopDirections.Up);
+        else
+            directions.Add(forLoopDirections.Down);
     }
 
     //private void SetPathDirections()
@@ -333,7 +423,8 @@ public class MapGenerator : MonoBehaviour {
    private void CreateStartandTargetPoints()
     {
         currentMap.startPoint = GetRandomOpenCoord();
-        CreatePath();
+        //CreatePath();
+        CreatePathWithForLoop();
         currentMap.targetPoint = Path[Path.Count - 1];
 
         var start = currentMap.startPoint;
