@@ -69,7 +69,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        
         uh = FindObjectOfType<UIHandler>();
         map = FindObjectOfType<MapGenerator>();
         inputs = FindObjectOfType<GetInputs>();
@@ -79,7 +78,7 @@ public class GameManager : MonoBehaviour
         lastMapSize = PlayerPrefs.GetInt("lastMapSize");
         var gameDataString = PlayerPrefs.GetString("gameDatas");
         var playerDataString = PlayerPrefs.GetString("playerDatas");
-       // PlayerPrefs.DeleteAll();
+        //PlayerPrefs.DeleteAll();
         if (gameDataString != "")
         {
             gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
@@ -122,13 +121,13 @@ public class GameManager : MonoBehaviour
 
     void SetMapAttributes()
     {
-        if (lastMapSize == 0)
+        Debug.Log(playerDatas.lastMapSize);
+        if (playerDatas.lastMapSize == 0)
         {
-            lastMapSize = 5;
+            playerDatas.lastMapSize = 5;
             PlayerPrefs.SetInt("lastMapSize", lastMapSize);
         }
-
-        map.currentMap.mapSize = new Coord(lastMapSize, lastMapSize);
+        map.currentMap.mapSize = new Coord(playerDatas.lastMapSize, playerDatas.lastMapSize);
         map.expectedPathLength = playerDatas.score + 2;
 
         map.GameStart();
@@ -211,6 +210,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDataSave()
     {
+        Debug.Log(playerDatas.lastMapSize);
         string playerDataString = JsonUtility.ToJson(playerDatas);
         PlayerPrefs.SetString("playerDatas", playerDataString);
     }

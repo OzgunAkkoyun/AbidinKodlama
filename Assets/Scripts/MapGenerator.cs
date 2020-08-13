@@ -60,7 +60,7 @@ public class MapGenerator : MonoBehaviour {
 
     private GameManager gm;
 
-    void Awake()
+    void Start()
     {
         
        
@@ -71,7 +71,6 @@ public class MapGenerator : MonoBehaviour {
         gm = FindObjectOfType<GameManager>();
         currentMap = maps[mapIndex];
         var senarioObjects = allSpawnObjects.allSpawnObjects[gm.playerDatas.whichScenario - 1];
-
         tilePrefab = senarioObjects.tileGameObject.transform;
         obstaclePrefab = new Transform[senarioObjects.environmentGameObjects.Length];
         for (int i = 0; i < senarioObjects.environmentGameObjects.Length; i++)
@@ -128,8 +127,8 @@ public class MapGenerator : MonoBehaviour {
 	public void GenerateMap()
 	{
 	    Timer timer = new Timer();
-		
-        tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];
+		Debug.Log("MapGenarator" +gm.playerDatas.lastMapSize);
+        tileMap = new Transform[gm.playerDatas.lastMapSize, gm.playerDatas.lastMapSize];
 
         currentMap.seed = UnityEngine.Random.Range(0,200);
         prng = new System.Random (currentMap.seed);
@@ -559,9 +558,9 @@ public class MapGenerator : MonoBehaviour {
     }
 
     [System.Serializable]
-	public class Map {
-		
-		public Coord mapSize;
+	public class Map
+    {
+        public Coord mapSize;
 		[Range(0,1)]
 		public float obstaclePercent;
 		public int seed;

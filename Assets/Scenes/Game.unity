@@ -5437,8 +5437,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maps:
   - mapSize:
-      x: 9
-      y: 9
+      x: 7
+      y: 7
       UnavaliableNeighbours: []
     obstaclePercent: 1
     seed: 3
