@@ -22,6 +22,8 @@ public class UIHandler : MonoBehaviour
     private GameObject video;
     public AllVideos allVideos;
 
+    public TMP_InputField forInput;
+
     public Camera miniMapCamera;
     public GameObject mainCamera;
     public Transform cameraTarget;
@@ -51,15 +53,17 @@ public class UIHandler : MonoBehaviour
         miniMapGraphics = minimap.transform.Find("MiniMapGraphics").gameObject;
         screenW = Screen.width;
         screenH = Screen.height;
+        forInput.gameObject.SetActive(false);
         MiniMapSizeSet();
         miniMapCamera.transform.position = new Vector3( map.currentMap.mapSize.x-1, miniMapCamera.transform.position.y, map.currentMap.mapSize.y-1);
         miniMapCamera.orthographicSize = miniMapCamera.transform.position.x + 4;
     }
 
+    #region Video
     public void ShowVideo(string videoName)
     {
         gm = FindObjectOfType<GameManager>();
-       
+
         if (Array.Find(allVideos.senarioVideos[gm.playerDatas.whichScenario - 1].videos, element => element.name == videoName).video == null)
             return;
         videoPanel.SetActive(true);
@@ -75,7 +79,6 @@ public class UIHandler : MonoBehaviour
         gm.playerDatas.showedOpeningVideo = true;
         gm.PlayerDataSave();
     }
-
     IEnumerator VideoFadeOut()
     {
         var videoRawImage = videoPanel.transform.Find("RawImage");
@@ -92,22 +95,11 @@ public class UIHandler : MonoBehaviour
 
             yield return new WaitForSeconds(0);
         }
-        
+
         videoPanel.SetActive(false);
     }
 
-    public IEnumerator CameraSmoothMovingToTargetPosition()
-    {
-        float t = 0;
-        while (Vector3.Distance(mainCamera.transform.position, cameraTarget.position) > 0.1f)
-        {
-            t += Time.deltaTime / 30;
-            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, cameraTarget.position, t);
-            mainCamera.transform.rotation = Quaternion.Slerp(mainCamera.transform.rotation, cameraTarget.rotation, t);
-
-            yield return new WaitForSeconds(0f);
-        }
-    }
+    #endregion
 
     #region MiniMap
 
@@ -226,6 +218,18 @@ public class UIHandler : MonoBehaviour
 
     #endregion
 
+    public IEnumerator CameraSmoothMovingToTargetPosition()
+    {
+        float t = 0;
+        while (Vector3.Distance(mainCamera.transform.position, cameraTarget.position) > 0.1f)
+        {
+            t += Time.deltaTime / 30;
+            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, cameraTarget.position, t);
+            mainCamera.transform.rotation = Quaternion.Slerp(mainCamera.transform.rotation, cameraTarget.rotation, t);
+
+            yield return new WaitForSeconds(0f);
+        }
+    }
     public void RestartOrNewGame(int isGameOrLoad)
     {
         PlayerPrefs.SetInt("isGameOrLoad",isGameOrLoad);

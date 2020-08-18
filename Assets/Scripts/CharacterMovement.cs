@@ -26,7 +26,6 @@ public class CharacterMovement : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         inputVector = transform.position;
         anim = GetComponent<Animator>();
-        
     }
 
     IEnumerator ExecuteAnimation()
@@ -111,10 +110,6 @@ public class CharacterMovement : MonoBehaviour
         {
             EndGame();
         }
-
-        //EndGame();
-        //uh.OpenGameOverPanel(isPlayerReachedTarget);
-        //gm.GameOverStatSet(isPlayerReachedTarget);
     }
 
     void WindTurbineAnimationPlay()
@@ -122,8 +117,10 @@ public class CharacterMovement : MonoBehaviour
         anim.SetBool("animationStart", false);
         gm.sc.Play("Sparkle");
         WindTurbine = GameObject.Find("Target");
+
         WindTurbine.transform.Find("Fx_Smoke").gameObject.SetActive(false);
         WindTurbine.transform.Find("Fx_Sparkle").gameObject.SetActive(true);
+
         var sparkleDuration = WindTurbine.transform.Find("Fx_Sparkle").GetChild(0).GetComponent<ParticleSystem>().main.duration;
         WindTurbine.GetComponent<Animator>().SetBool("playAnim",true);
         Invoke("EndGame",sparkleDuration);

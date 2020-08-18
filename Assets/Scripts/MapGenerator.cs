@@ -188,6 +188,7 @@ public class MapGenerator : MonoBehaviour {
         //SetPathDirections();
     }
 
+    //For Loop variables
     public enum forLoopDirections {Left,Right,Up,Down }
 
     public List<forLoopDirections> directions = new List<forLoopDirections>();
@@ -212,7 +213,7 @@ public class MapGenerator : MonoBehaviour {
         for (int i = 0; i < Path.Count; i++)
         {
             var index = allObstacleCoord.FindIndex(v => (v.x == Path[i].x) && (v.y == Path[i].y));
-            if (index>=0)
+            if (index >= 0)
             {
                 DestroyImmediate(obstacleGameObject[index]);
             }
@@ -402,16 +403,6 @@ public class MapGenerator : MonoBehaviour {
         }
     }
 
-    void SpawnVehicle()
-    {
-        var vehiclePos = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y) * tileSize;
-       
-        vehiclePrefab = Instantiate(vehiclePrefab, vehiclePos,Quaternion.identity);
-        gm.uh.mainCamera = vehiclePrefab.transform.Find("Main Camera").gameObject;
-        gm.uh.cameraTarget = vehiclePrefab.transform.Find("CameraTarget");
-        //vehiclePrefab.transform.position = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y)*tileSize;
-    }
-
     private Coord GetRandomOpenCoord()
     {
         var rnd = UnityEngine.Random.Range(0, allOpenCoords.Count);
@@ -432,6 +423,17 @@ public class MapGenerator : MonoBehaviour {
 
         //tileMap[start.x, start.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
         //tileMap[target.x, target.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+    }
+
+    #region Spawners
+    void SpawnVehicle()
+    {
+        var vehiclePos = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y) * tileSize;
+
+        vehiclePrefab = Instantiate(vehiclePrefab, vehiclePos, Quaternion.identity);
+        gm.uh.mainCamera = vehiclePrefab.transform.Find("Main Camera").gameObject;
+        gm.uh.cameraTarget = vehiclePrefab.transform.Find("CameraTarget");
+        //vehiclePrefab.transform.position = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y)*tileSize;
     }
 
     private void SpawnObstacle(Random prng)
@@ -459,16 +461,16 @@ public class MapGenerator : MonoBehaviour {
                 currentObstacleCount--;
             }
         }
-       
+
         shuffledOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray(allOpenCoords.ToArray(), currentMap.seed));
     }
 
-    public void ObstacleInstantiate(Coord randomCoord,Random prng)
+    public void ObstacleInstantiate(Coord randomCoord, Random prng)
     {
         float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
         Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
 
-        Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0,obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
+        Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
         newObstacle.parent = mapHolder;
         newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
 
@@ -512,6 +514,8 @@ public class MapGenerator : MonoBehaviour {
         }
         shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(allTileCoords.ToArray(), currentMap.seed));
     }
+
+    #endregion
 
     public void CreateNavmeshMask()
     {
@@ -597,7 +601,6 @@ public class MapGenerator : MonoBehaviour {
     [System.Serializable]
     public struct Coord : IEquatable<Coord>
     {
-
         public int x;
         public int y;
         public List<Coord> UnavaliableNeighbours;

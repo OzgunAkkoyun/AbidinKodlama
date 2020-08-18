@@ -139,7 +139,6 @@ public class GameManager : MonoBehaviour
             GameAnimationStart();
         }
     }
-
     public void GameAnimationStart()
     {
         is3DStarted = true;
@@ -209,7 +208,6 @@ public class GameManager : MonoBehaviour
 
     public void PlayerDataSave()
     {
-        Debug.Log(playerDatas.lastMapSize);
         string playerDataString = JsonUtility.ToJson(playerDatas);
         PlayerPrefs.SetString("playerDatas", playerDataString);
     }
