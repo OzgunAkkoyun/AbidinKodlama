@@ -12,6 +12,7 @@ using UnityEngine.Video;
 public class UIHandler : MonoBehaviour
 {
     private GameManager gm;
+    public GetInputs GetInputs;
     private MapGenerator map;
     public GameObject minimap;
     private GameObject minimapTexture;
@@ -37,14 +38,15 @@ public class UIHandler : MonoBehaviour
 
     [HideInInspector]
     public List<GameObject> codeInputsObjects = new List<GameObject>();
-    public GameObject codeInputObject;
+    public GameObject codeMoveObject;
+    public GameObject codeForObject;
 
     public TextMeshProUGUI codeString;
 
     private float screenW;
     private float screenH;
 
-    private void Awake()
+    void Awake()
     {
         codePaneleWidth = Mathf.Abs(codePanel.transform.position.x);
         gm = FindObjectOfType<GameManager>();
@@ -59,16 +61,38 @@ public class UIHandler : MonoBehaviour
         miniMapCamera.orthographicSize = miniMapCamera.transform.position.x + 4;
     }
 
+    void Start()
+    {
+       gm.commander.OnNewCommand.AddListener(OnNewCommand);
+    }
+
+    void OnDestroy()
+    {
+        gm.commander.OnNewCommand.RemoveListener(OnNewCommand);
+    }
+
+    private void OnNewCommand()
+    {
+        var newCommand = gm.commander.commands.Last();
+        
+        ShowCommand(newCommand);
+    }
+
     #region Video
     public void ShowVideo(string videoName)
     {
         gm = FindObjectOfType<GameManager>();
 
-        if (Array.Find(allVideos.senarioVideos[gm.playerDatas.whichScenario - 1].videos, element => element.name == videoName).video == null)
+        var pickedVideo = allVideos.GetVideo(gm.playerDatas.whichScenario, videoName);
+
+        //var pickedVideo = Array.Find(allVideos.senarioVideos[gm.playerDatas.whichScenario - 1].videos,
+        //    element => element.name == videoName).video;
+
+        if (pickedVideo == null)
             return;
         videoPanel.SetActive(true);
         video = videoPanel.transform.Find("VideoPlayer").gameObject;
-        video.GetComponent<VideoPlayer>().clip = Array.Find(allVideos.senarioVideos[gm.playerDatas.whichScenario - 1].videos, element => element.name == videoName).video;
+        video.GetComponent<VideoPlayer>().clip = pickedVideo;
         video.GetComponent<VideoPlayer>().loopPointReached += CloseVideo;
     }
 
@@ -204,16 +228,79 @@ public class UIHandler : MonoBehaviour
         codePanelOpened = !codePanelOpened;
     }
 
-    public void ShowKeys(int keyRotate)
+    public void ShowCommand(Command command)
     {
+        Debug.Log(command);
+        var type = command.GetType();
+
+        if (type == typeof(MoveCommand))
+        {
+            var moveCommand = (MoveCommand)command;
+            ShowKey(moveCommand.direction);
+        }
+        else if(type == typeof(ForCommand))
+        {
+            var forCommand = (ForCommand) command;
+            ShowKeyForLoop(forCommand.direction,forCommand.loopCount);
+        }
+    }
+    private void ShowKeyForLoop(Direction direction,int loopCount)
+    {
+        Debug.Log("for");
+        int keyRotate = SetDirectionRotate(direction);
+
         var panel = GameObject.Find("CodePanel/Scroll");
-        var codeInput = Instantiate(codeInputObject, codeInputObject.transform.position, Quaternion.identity);
+
+        var codeInputFor = Instantiate(codeForObject, codeForObject.transform.position, Quaternion.identity);
+
+        var codeInput = Instantiate(codeMoveObject, codeMoveObject.transform.position, Quaternion.identity);
+        codeInput.transform.parent = codeInputFor.transform.Find("CodeInputArea").transform;
+
+        codeInputFor.transform.Find("LoopCountText").gameObject.GetComponent<TextMeshProUGUI>().text = loopCount.ToString();
+        codeInput.transform.localScale = new Vector3(1, 1, 1);
+
+        codeInputsObjects.Add(codeInputFor);
+        codeInputFor.transform.localScale = new Vector3(1, 1, 1);
+        codeInputFor.transform.parent = panel.transform;
+
+        var arrow = codeInput.transform.Find("Image");
+        arrow.gameObject.transform.Rotate(new Vector3(0, 0, keyRotate));
+        GameObject.Find("CodePanel").GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 0);
+    }
+    private void ShowKey(Direction direction)
+    {
+        int keyRotate = SetDirectionRotate(direction);
+
+        var panel = GameObject.Find("CodePanel/Scroll");
+        var codeInput = Instantiate(codeMoveObject, codeMoveObject.transform.position, Quaternion.identity);
+
         codeInputsObjects.Add(codeInput);
         codeInput.transform.localScale = new Vector3(1, 1, 1);
         codeInput.transform.parent = panel.transform;
         var arrow = codeInput.transform.Find("Image");
         arrow.gameObject.transform.Rotate(new Vector3(0, 0, keyRotate));
         GameObject.Find("CodePanel").GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 0);
+    }
+
+    private int SetDirectionRotate(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Left:
+                return 180;
+                break;
+            case Direction.Right:
+                return 0;
+                break;
+            case Direction.Forward:
+                return 90;
+                break;
+            case Direction.Backward:
+                return 270;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+        }
     }
 
     #endregion

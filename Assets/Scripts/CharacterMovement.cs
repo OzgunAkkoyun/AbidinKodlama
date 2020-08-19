@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using static MapGenerator;
@@ -12,7 +13,11 @@ public class CharacterMovement : MonoBehaviour
     UIHandler uh;
     GameManager gm;
 
+    [NonSerialized]
+    public bool isGameFinished;
+
     public float animationSpeed = 1f;
+    public float scaleFactor = 1f;
     
     Vector3 inputVector;
     private Animator anim;
@@ -26,89 +31,97 @@ public class CharacterMovement : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
         inputVector = transform.position;
         anim = GetComponent<Animator>();
+        scaleFactor = mapGenerate.tileSize;
     }
 
-    IEnumerator ExecuteAnimation()
+    public IEnumerator ApplyMoveCommand(Direction moveCommand, bool isLastCommand)
     {
-        var scaleFactor = mapGenerate.tileSize;
-        
-        for (int i = 0; i < getInputs.inputs.Count; i++)
+        DirectionToVector(moveCommand);
+
+        //Code Inputs coloring
+        //uh.codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
+        //if (i != 0)
+        //    uh.codeInputsObjects[i - 1].GetComponent<Image>().color = Color.white;
+
+        yield return StartCoroutine(PlayMoveAnimation(isLastCommand));
+
+        CheckIfReachedTarget();
+    }
+    public IEnumerator ApplyForCommand(Direction command, bool isLastCommand)
+    {
+        DirectionToVector(command);
+        yield return StartCoroutine(PlayMoveAnimation(isLastCommand));
+
+        CheckIfReachedTarget();
+    }
+
+    private void CheckIfReachedTarget()
+    {
+        var currentCoord = new Coord((int)(transform.position.x / mapGenerate.tileSize), (int)(transform.position.z / mapGenerate.tileSize));
+
+        if (mapGenerate.Path.Contains(currentCoord))
         {
-            if (getInputs.inputs[i] == GetInputs.code.Left)
-            {
-                inputVector.x -= scaleFactor;
-            }
-            else if (getInputs.inputs[i] == GetInputs.code.Right)
-            {
-                inputVector.x += scaleFactor;
-            }
-            else if (getInputs.inputs[i] == GetInputs.code.Forward)
-            {
-                inputVector.z += scaleFactor;
-            }
-            else if (getInputs.inputs[i] == GetInputs.code.Backward)
-            {
-                inputVector.z -= scaleFactor;
-            }
-
-            //Code Inputs coloring
-            uh.codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
-            if (i != 0)
-                uh.codeInputsObjects[i - 1].GetComponent<Image>().color = Color.white;
-
-            if (isAnimStarted) yield break; // exit function
-            isAnimStarted = true;
-
-            var relativePos = new Vector3(inputVector.x, transform.position.y, inputVector.z) - transform.position;
-            var targetRotation = Quaternion.LookRotation(relativePos);
-
-            for (float t = 0f; t < 1f; t += Time.deltaTime * animationSpeed)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation , t);
-                yield return null;
-            }
-
-            if (i != getInputs.inputs.Count - 1)
-            {
-                for (float t = 0f; t < 1f; t += Time.deltaTime * animationSpeed)
-                {
-                    transform.position = Vector3.Lerp(transform.position, inputVector, t);
-                    yield return null;
-                }
-                transform.position = inputVector;
-            }
-            else
-            {
-                yield return null;
-            }
-
-            isAnimStarted = false;
-
-            var currentCoord = new Coord((int)(transform.position.x / mapGenerate.tileSize), (int)(transform.position.z / mapGenerate.tileSize));
-
-            if (mapGenerate.Path.Contains(currentCoord))
-            {
-                //Debug.Log("inPath");
-            }
-            else
-            {
-                isPlayerReachedTarget = false;
-                break;
-            }
-
             if (mapGenerate.CoordToPosition(mapGenerate.currentMap.targetPoint.x, mapGenerate.currentMap.targetPoint.y) == inputVector.Vector3toXZ())
             {
                 isPlayerReachedTarget = true;
+                CharacterAnimationPlay();
             }
-        }
-
-        if (isPlayerReachedTarget)
-        {
-            CharacterAnimationPlay();
         }
         else
         {
+            isPlayerReachedTarget = false;
             EndGame();
+        }
+    }
+
+    private IEnumerator PlayMoveAnimation(bool isLastCommand)
+    {
+        if (isAnimStarted) yield break; // exit function
+        isAnimStarted = true;
+
+        var relativePos = new Vector3(inputVector.x, transform.position.y, inputVector.z) - transform.position;
+        var targetRotation = Quaternion.LookRotation(relativePos);
+
+        for (float t = 0f; t < 1f; t += Time.deltaTime * animationSpeed)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, t);
+            yield return null;
+        }
+
+        //if (i != gm.commander.commands.Count - 1)
+        if (!isLastCommand)
+        {
+            for (float t = 0f; t < 1f; t += Time.deltaTime * animationSpeed)
+            {
+                transform.position = Vector3.Lerp(transform.position, inputVector, t);
+                yield return null;
+            }
+            transform.position = inputVector;
+        }
+        else
+        {
+            yield return null;
+        }
+        isAnimStarted = false;
+    }
+
+    private void DirectionToVector(Direction moveCommand)
+    {
+        if (moveCommand == Direction.Left)
+        {
+            inputVector.x -= scaleFactor;
+        }
+        else if (moveCommand == Direction.Right)
+        {
+            inputVector.x += scaleFactor;
+        }
+        else if (moveCommand == Direction.Forward)
+        {
+            inputVector.z += scaleFactor;
+        }
+        else if (moveCommand == Direction.Backward)
+        {
+            inputVector.z -= scaleFactor;
         }
     }
 
@@ -130,9 +143,12 @@ public class CharacterMovement : MonoBehaviour
     {
         uh.OpenGameOverPanel(isPlayerReachedTarget);
         gm.GameOverStatSet(isPlayerReachedTarget);
+        isGameFinished = true;
     }
     void CharacterAnimationPlay()
     {
         anim.SetBool("animationStart", true);
     }
+
+    
 }

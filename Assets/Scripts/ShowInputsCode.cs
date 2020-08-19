@@ -26,24 +26,26 @@ public class ShowInputsCode : MonoBehaviour
 
     public void ShowCodesString()
     {
-        for (int i = 0; i < gm.inputs.inputs.Count; i++)
+        for (int i = 0; i < gm.commander.commands.Count; i++)
         {
-            if (gm.inputs.inputs[i] == GetInputs.code.Left)
-            {
-                codeString += "Sola Dön(); \n";
-            }
-            else if (gm.inputs.inputs[i] == GetInputs.code.Right)
-            {
-                codeString += "Sağa Dön(); \n";
-            }
-            else if (gm.inputs.inputs[i] == GetInputs.code.Forward)
-            {
-                codeString += "İlerle(); \n";
-            }
-            else if (gm.inputs.inputs[i] == GetInputs.code.Backward)
-            {
-                codeString += "Geri(); \n";
-            }
+            codeString += gm.commander.commands[i].ToCodeString();
+
+            //if (gm.commander.commands[i] == Direction.Left)
+            //{
+            //    codeString += "Sola Dön(); \n";
+            //}
+            //else if (gm.commander.commands[i] == Direction.Right)
+            //{
+            //    codeString += "Sağa Dön(); \n";
+            //}
+            //else if (gm.commander.commands[i] == Direction.Forward)
+            //{
+            //    codeString += "İlerle(); \n";
+            //}
+            //else if (gm.commander.commands[i] == Direction.Backward)
+            //{
+            //    codeString += "Geri(); \n";
+            //}
         }
 
         gm.uh.codeString.text = codeString;

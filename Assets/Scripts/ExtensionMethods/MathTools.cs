@@ -31,7 +31,6 @@ public static class MathTools
 
         return str.Remove(str.Length - 4, 4);
     }
-
     public static string ArrayPrint(this Array list)
     {
         var str = "";

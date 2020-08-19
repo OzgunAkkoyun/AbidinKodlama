@@ -10,18 +10,17 @@ public class SavedGameData
     public MapGenerator.Coord mapSize;
     public int seed;
     public float obstaclePercentages;
-    public List<GetInputs.code> keyCodes;
+    public List<Command> commands;
     public MapGenerator.Coord startCoord;
     public MapGenerator.Coord targetCoord;
     public List<Coord> Path;
     public int scenarioIndex;
-
-    public SavedGameData(MapGenerator.Coord mapSize, int seed, float obstaclePercentages, List<GetInputs.code> keyCodes, MapGenerator.Coord startCoord, MapGenerator.Coord targetCoord, List<Coord> Path,int scenarioIndex)
+    public SavedGameData(MapGenerator.Coord mapSize, int seed, float obstaclePercentages, List<Command> commands, MapGenerator.Coord startCoord, MapGenerator.Coord targetCoord, List<Coord> Path,int scenarioIndex)
     {
         this.mapSize = mapSize;
         this.seed = seed;
         this.obstaclePercentages = obstaclePercentages;
-        this.keyCodes = keyCodes;
+        this.commands = commands;
         this.startCoord = startCoord;
         this.targetCoord = targetCoord;
         this.Path = Path;
@@ -58,6 +57,7 @@ public class GameManager : MonoBehaviour
     public LoadGameData load;
     public UIHandler uh;
     public GetInputs inputs;
+    public Commander commander;
     public SoundController sc;
     public bool is3DStarted = false;
     public int lastMapSize = 5;
@@ -142,17 +142,19 @@ public class GameManager : MonoBehaviour
     public void GameAnimationStart()
     {
         is3DStarted = true;
+        character = FindObjectOfType<CharacterMovement>();
         ShowInputsCode.Instance.ShowCodesString();
         uh.StartCoroutine("MiniMapSetStartPosition");
         uh.StartCoroutine("CameraSmoothMovingToTargetPosition");
-        Invoke("ExecuteAnimation", 1.5f);
+        //Invoke("ExecuteAnimation", 1.5f);
+        commander.ApplyCommands();
     }
 
-    void ExecuteAnimation()
-    {
-        character = FindObjectOfType<CharacterMovement>();
-        character.StartCoroutine("ExecuteAnimation");
-    }
+    //void ExecuteAnimation()
+    //{
+    //    character = FindObjectOfType<CharacterMovement>();
+    //    character.StartCoroutine("ExecuteAnimation");
+    //}
 
     public void GameOverStatSet(bool isSuccess)
     {
@@ -169,12 +171,12 @@ public class GameManager : MonoBehaviour
                     playerDatas.winStreak = 0;
                     playerDatas.showedOpeningVideo = false;
                     sc.Pause("Theme");
-                    uh.ShowVideo(scenarioIndex+"-"+lastMapSize+"-end");
+                    uh.ShowVideo(scenarioIndex+"-"+ playerDatas.lastMapSize + "-end");
 
-                    if (lastMapSize != 9)
+                    if (playerDatas.lastMapSize != 9)
                     {
-                        lastMapSize += 2;
-                        playerDatas.lastMapSize = lastMapSize;
+                        playerDatas.lastMapSize += 2;
+                        //playerDatas.lastMapSize = lastMapSize;
                         PlayerPrefs.SetInt("lastMapSize", lastMapSize);
                     }
                     else//New Senario
@@ -200,7 +202,7 @@ public class GameManager : MonoBehaviour
     public void GameDataSave()
     {
         var current = map.currentMap;
-        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, inputs.inputs, current.startPoint, current.targetPoint, map.Path,scenarioIndex));
+        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, map.Path,scenarioIndex));
 
         string gameDataString = JsonHelper.ToJson<SavedGameData>(gameDatas, true);
         PlayerPrefs.SetString("gameDatas", gameDataString);

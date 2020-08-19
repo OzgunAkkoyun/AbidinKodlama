@@ -28,26 +28,28 @@ public class LoadGameData : MonoBehaviour
         gm.map.GameStartForLoad(gameData.mapSize, gameData.seed, gameData.startCoord, gameData.targetCoord, gameData.Path);
         if (isGameOrLoad == 1)
         {
-            gm.inputs.inputs = gameData.keyCodes;
+            gm.commander.commands = gameData.commands;
 
-            for (int i = 0; i < gm.inputs.inputs.Count; i++)
+            for (int i = 0; i < gm.commander.commands.Count; i++)
             {
-                if (gm.inputs.inputs[i] == GetInputs.code.Forward)
-                {
-                    gm.uh.ShowKeys(90);
-                }
-                else if (gm.inputs.inputs[i] == GetInputs.code.Left)
-                {
-                    gm.uh.ShowKeys(180);
-                }
-                else if (gm.inputs.inputs[i] == GetInputs.code.Right)
-                {
-                    gm.uh.ShowKeys(0);
-                }
-                else if (gm.inputs.inputs[i] == GetInputs.code.Backward)
-                {
-                    gm.uh.ShowKeys(-90);
-                }
+                gm.uh.ShowCommand(gm.commander.commands[i]);
+
+                //if (gm.inputs.inputs[i] == GetInputs.code.Forward)
+                //{
+                //    gm.uh.ShowKeys(90);
+                //}
+                //else if (gm.inputs.inputs[i] == GetInputs.code.Left)
+                //{
+                //    gm.uh.ShowKeys(180);
+                //}
+                //else if (gm.inputs.inputs[i] == GetInputs.code.Right)
+                //{
+                //    gm.uh.ShowKeys(0);
+                //}
+                //else if (gm.inputs.inputs[i] == GetInputs.code.Backward)
+                //{
+                //    gm.uh.ShowKeys(-90);
+                //}
             }
             Invoke("GameStart", 1);
         }

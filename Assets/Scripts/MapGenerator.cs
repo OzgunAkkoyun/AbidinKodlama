@@ -131,7 +131,7 @@ public class MapGenerator : MonoBehaviour {
 
         currentMap.seed = UnityEngine.Random.Range(0,200);
         prng = new System.Random (currentMap.seed);
-
+        currentMap.mapSize = new Coord(gm.playerDatas.lastMapSize, gm.playerDatas.lastMapSize);
         mapHolder = new GameObject(holderName).transform;
         GenerateAllTiles();
 
@@ -414,8 +414,8 @@ public class MapGenerator : MonoBehaviour {
    private void CreateStartandTargetPoints()
     {
         currentMap.startPoint = GetRandomOpenCoord();
-        //CreatePath();
-        CreatePathWithForLoop();
+        CreatePath();
+        //CreatePathWithForLoop();
         currentMap.targetPoint = Path[Path.Count - 1];
 
         var start = currentMap.startPoint;
