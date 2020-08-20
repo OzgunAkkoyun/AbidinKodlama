@@ -3,6 +3,7 @@ using UnityEngine;
 using SimpleJSON;
 using static MapGenerator;
 using System;
+using Newtonsoft.Json;
 
 [Serializable]
 public class SavedGameData
@@ -79,9 +80,15 @@ public class GameManager : MonoBehaviour
         var gameDataString = PlayerPrefs.GetString("gameDatas");
         var playerDataString = PlayerPrefs.GetString("playerDatas");
         //PlayerPrefs.DeleteAll();
+
         if (gameDataString != "")
         {
-            gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
+            gameDatas = JsonConvert.DeserializeObject<List<SavedGameData>>(gameDataString, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+
+            //gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
             scenarioIndex = gameDatas[gameDatas.Count - 1].scenarioIndex;
         }
         else
@@ -203,8 +210,13 @@ public class GameManager : MonoBehaviour
     {
         var current = map.currentMap;
         gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, map.Path,scenarioIndex));
+        
+        string gameDataString = JsonConvert.SerializeObject(gameDatas, Formatting.Indented, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto
+        });
 
-        string gameDataString = JsonHelper.ToJson<SavedGameData>(gameDatas, true);
+        //string gameDataString = JsonHelper.ToJson<SavedGameData>(gameDatas, true);
         PlayerPrefs.SetString("gameDatas", gameDataString);
     }
 

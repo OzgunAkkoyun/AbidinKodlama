@@ -230,7 +230,6 @@ public class UIHandler : MonoBehaviour
 
     public void ShowCommand(Command command)
     {
-        Debug.Log(command);
         var type = command.GetType();
 
         if (type == typeof(MoveCommand))

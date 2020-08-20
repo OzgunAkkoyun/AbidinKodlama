@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class LoadGameData : MonoBehaviour
@@ -15,7 +16,10 @@ public class LoadGameData : MonoBehaviour
         
         gameDataString = PlayerPrefs.GetString("gameDatas");
         if(gameDataString != "")
-            gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
+            gameDatas = JsonConvert.DeserializeObject<List<SavedGameData>>(gameDataString, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
     }
 
     public void LoadGenerateMap(int isGameOrLoad)
