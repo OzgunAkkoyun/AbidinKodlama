@@ -7,33 +7,22 @@ using UnityEngine.EventSystems;
 
 public enum Direction
 {
-    Left, Right, Forward, Backward
+    Left, Right, Forward, Backward,Empty
 }
 
 public class GetInputs : MonoBehaviour
 {
-    //[HideInInspector]
-    //public enum code { Left, Right, Forward, Backward, If, For, Time };
-
-    //public List<Direction> inputs = new List<Direction>();
-
-    //private GameManager gm;
     public UIHandler uh;
 
     public bool waitingMoveCommand;
 
     public int forLoopCount;
 
-    //public UnityEvent MyEvent;
-
     public Commander commander;
-
-    //public UnityEvent OnNewInput = new UnityEvent();
 
     private void Start()
     {
-        //gm = FindObjectOfType<GameManager>();
-        //MyEvent.AddListener(SetForLoopInput);
+        
     }
 
     void Update()
@@ -54,10 +43,6 @@ public class GetInputs : MonoBehaviour
                 commander.AddForCommand(Direction.Forward, forLoopCount);
                 waitingMoveCommand = false;
             }
-            
-            //inputs.Add(Direction.Forward);
-            //OnNewInput.Invoke();
-            //gm.uh.ShowKeys(90);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -70,9 +55,6 @@ public class GetInputs : MonoBehaviour
                 commander.AddForCommand(Direction.Left, forLoopCount);
                 waitingMoveCommand = false;
             }
-            //inputs.Add(Direction.Left);
-            //OnNewInput.Invoke();
-            //gm.uh.ShowKeys(180);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) )
         {
@@ -85,10 +67,6 @@ public class GetInputs : MonoBehaviour
                 commander.AddForCommand(Direction.Right, forLoopCount);
                 waitingMoveCommand = false;
             }
-            
-            //inputs.Add(Direction.Right);
-            //OnNewInput.Invoke();
-            //gm.uh.ShowKeys(0);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -101,15 +79,11 @@ public class GetInputs : MonoBehaviour
                 commander.AddForCommand(Direction.Backward, forLoopCount);
                 waitingMoveCommand = false;
             }
-            //inputs.Add(Direction.Backward);
-            //OnNewInput.Invoke();
-            //gm.uh.ShowKeys(-90);
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
             waitingMoveCommand = true;
             WaitForInput();
-            //commander.AddForCommand(Direction.Backward,3);
         }
     }
 
@@ -130,9 +104,4 @@ public class GetInputs : MonoBehaviour
         forLoopCount = int.Parse(count);
         uh.forInput.gameObject.SetActive(false);
     }
-
-    //private void SetForLoopInput()
-    //{
-    //    Debug.Log("deneme");
-    //}
 }

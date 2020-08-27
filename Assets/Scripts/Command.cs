@@ -4,11 +4,6 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
-//public enum CommandType
-//{
-//    If, For, Wait
-//}
-
 public abstract class Command
 {
     //public CommandType type;
@@ -24,10 +19,10 @@ public class MoveCommand : Command
     {
         switch (direction)
         {
-            case Direction.Left: return "Sola Dön();";
-            case Direction.Right:return "Sağa Dön();";
-            case Direction.Forward:return "İlerle();";
-            case Direction.Backward:return "Geri();";
+            case Direction.Left: return "Sola Dön(); \n";
+            case Direction.Right: return "Sağa Dön(); \n";
+            case Direction.Forward: return "İlerle(); \n";
+            case Direction.Backward: return "Geri(); \n";
 
             default:
                 throw new ArgumentOutOfRangeException();
@@ -38,21 +33,33 @@ public class ForCommand : Command
 {
     public Direction direction;
     public int loopCount;
+    public string codeString;
 
     public override string ToCodeString()
     {
-        switch (direction)
+        codeString = "for(var sayi = 0; sayi < " + loopCount + "; sayi++){\n";
+        if (direction == Direction.Left)
         {
-            case Direction.Left: return "Sola Dön();";
-            case Direction.Right: return "Sağa Dön();";
-            case Direction.Forward: return "İlerle();";
-            case Direction.Backward: return "Geri();";
-
-            default:
-                throw new ArgumentOutOfRangeException();
+            codeString += "\tSola Dön(); \n";
         }
+        else if (direction == Direction.Right)
+        {
+            codeString += "\tSağa Dön(); \n";
+        }
+        else if (direction == Direction.Forward)
+        {
+            codeString += "\tİlerle(); \n";
+        }
+        else if (direction == Direction.Backward)
+        {
+            codeString += "\tGeri(); \n";
+        }
+
+        codeString += "}";
+        return codeString;
     }
 }
+
 public class WaitCommand : Command
 {
     public int seconds;

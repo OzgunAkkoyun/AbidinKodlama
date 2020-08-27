@@ -81,6 +81,7 @@ public class MapGenerator : MonoBehaviour {
         vehiclePrefab = senarioObjects.vehicleGameObject;
         home[0] = senarioObjects.startGameObject;
         home[1] = senarioObjects.targetGameObject;
+        home[2] = senarioObjects.targetNewGameObject;
     }
     public void GameStart()
     {
@@ -154,14 +155,25 @@ public class MapGenerator : MonoBehaviour {
         timer.Finish(false);
     }
 
+    public GameObject targetHome;
+    public GameObject targetNewHome;
     public void SpawnHouses()
     {
         var startHome = Instantiate(home[0], new Vector3((float)currentMap.startPoint.x * tileSize, 1f, (float)currentMap.startPoint.y * tileSize), Quaternion.identity);
-        var targetHome = Instantiate(home[1], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
+        targetHome = Instantiate(home[1], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
+
         targetHome.name = "Target";
         startHome.transform.LookAt(new Vector3(Path[1].x * tileSize, 1, Path[1].y * tileSize));
 
         targetHome.transform.LookAt(new Vector3(Path[PathLength-2].x*tileSize, 1, Path[PathLength - 2].y*tileSize));
+
+        if (home[2] != null)
+        {
+            targetNewHome = Instantiate(home[2], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
+            targetNewHome.transform.LookAt(new Vector3(Path[PathLength - 2].x * tileSize, 1, Path[PathLength - 2].y * tileSize));
+            targetNewHome.SetActive(false);
+        }
+
     }
     public void CreatePath()
     {
@@ -185,9 +197,37 @@ public class MapGenerator : MonoBehaviour {
             }
         }
 
-        //SetPathDirections();
+        SetPathDirections();
     }
 
+    private void SetPathDirections()
+    {
+        for (int i = 0; i < Path.Count; i++)
+        {
+            if (i != 0)
+            {
+                var dist = FindMinusTwoCoord(Path[i], Path[i - 1]);
+                if (dist.x < 0)
+                {
+                    Path[i].pathDirection = Direction.Left;
+                }
+                else if (dist.x > 0)
+                {
+                    Path[i].pathDirection = Direction.Right;
+                }
+                else if (dist.y < 0)
+                {
+                    Path[i].pathDirection = Direction.Backward;
+                }
+                else if (dist.y > 0)
+                {
+                    Path[i].pathDirection = Direction.Forward;
+                }
+            }
+        }
+    }
+
+    private Vector2 FindMinusTwoCoord(Coord c1, Coord c2) => new Vector2(c1.x-c2.x,c1.y-c2.y);
     //For Loop variables
     public enum forLoopDirections {Left,Right,Up,Down }
 
@@ -280,16 +320,6 @@ public class MapGenerator : MonoBehaviour {
             directions.Add(forLoopDirections.Down);
     }
 
-    //private void SetPathDirections()
-    //{
-    //    for (int i = 0; i < Path.Count; i++)
-    //    {
-    //        if (i == 0)
-    //        {
-    //            Path[i].direction = Coord.directions.Empty;
-    //        }
-    //    }
-    //}
     private void OneStepBackinList(Coord currentCell, ref int currentPathIndex)
     {
         Path.RemoveAt(currentPathIndex);
@@ -307,7 +337,7 @@ public class MapGenerator : MonoBehaviour {
         }
         else
         {
-            selectedNeighbour = new Coord();
+            selectedNeighbour = new Coord(0,0);
             return false;
         }
     }
@@ -599,22 +629,13 @@ public class MapGenerator : MonoBehaviour {
     }
 
     [System.Serializable]
-    public struct Coord : IEquatable<Coord>
+    public class Coord : IEquatable<Coord>
     {
         public int x;
         public int y;
         public List<Coord> UnavaliableNeighbours;
 
-        //public enum directions
-        //{
-        //    Left,
-        //    Right,
-        //    Forward,
-        //    Backward,
-        //    Empty
-        //};
-
-        //public directions direction;
+        public Direction pathDirection;
 
         public List<Coord> GetNeighbours()
         {
@@ -637,7 +658,7 @@ public class MapGenerator : MonoBehaviour {
             x = _x;
             y = _y;
             UnavaliableNeighbours = new List<Coord>();
-            //direction = directions.Empty;
+            pathDirection = Direction.Empty;
         }
 
         public static bool operator ==(Coord c1, Coord c2)

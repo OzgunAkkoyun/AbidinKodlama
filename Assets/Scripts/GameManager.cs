@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
     public Commander commander;
     public SoundController sc;
     public bool is3DStarted = false;
+    public bool isGameOver = false;
     public int lastMapSize = 5;
     public List<SavedGameData> gameDatas = new List<SavedGameData>();
     public SavedPlayerData playerDatas;

@@ -8,13 +8,11 @@ public class CharacterMovement : MonoBehaviour
 {
     bool isAnimStarted = false;
     bool isPlayerReachedTarget = false;
+   
     GetInputs getInputs;
     private MapGenerator mapGenerate;
     UIHandler uh;
     GameManager gm;
-
-    [NonSerialized]
-    public bool isGameFinished;
 
     public float animationSpeed = 1f;
     public float scaleFactor = 1f;
@@ -34,14 +32,14 @@ public class CharacterMovement : MonoBehaviour
         scaleFactor = mapGenerate.tileSize;
     }
 
-    public IEnumerator ApplyMoveCommand(Direction moveCommand, bool isLastCommand)
+    public IEnumerator ApplyMoveCommand(Direction moveCommand, bool isLastCommand, int i)
     {
         DirectionToVector(moveCommand);
 
         //Code Inputs coloring
-        //uh.codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
-        //if (i != 0)
-        //    uh.codeInputsObjects[i - 1].GetComponent<Image>().color = Color.white;
+        uh.codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
+        if (i != 0)
+            uh.codeInputsObjects[i - 1].GetComponent<Image>().color = Color.white;
 
         yield return StartCoroutine(PlayMoveAnimation(isLastCommand));
 
@@ -57,19 +55,21 @@ public class CharacterMovement : MonoBehaviour
 
     private void CheckIfReachedTarget()
     {
-        var currentCoord = new Coord((int)(transform.position.x / mapGenerate.tileSize), (int)(transform.position.z / mapGenerate.tileSize));
+        var currentCoord = new Coord((int)(inputVector.x / mapGenerate.tileSize), (int)(inputVector.z / mapGenerate.tileSize));
 
         if (mapGenerate.Path.Contains(currentCoord))
         {
             if (mapGenerate.CoordToPosition(mapGenerate.currentMap.targetPoint.x, mapGenerate.currentMap.targetPoint.y) == inputVector.Vector3toXZ())
             {
                 isPlayerReachedTarget = true;
+                
                 CharacterAnimationPlay();
             }
         }
         else
         {
             isPlayerReachedTarget = false;
+          
             EndGame();
         }
     }
@@ -129,21 +129,28 @@ public class CharacterMovement : MonoBehaviour
     {
         anim.SetBool("animationStart", false);
         gm.sc.Play("Sparkle");
-        WindTurbine = GameObject.Find("Target");
 
-        WindTurbine.transform.Find("Fx_Smoke").gameObject.SetActive(false);
+        WindTurbine = mapGenerate.targetHome;
+
+        //WindTurbine.transform.Find("Fx_Smoke").gameObject.SetActive(false);
         WindTurbine.transform.Find("Fx_Sparkle").gameObject.SetActive(true);
 
         var sparkleDuration = WindTurbine.transform.Find("Fx_Sparkle").GetChild(0).GetComponent<ParticleSystem>().main.duration;
-        WindTurbine.GetComponent<Animator>().SetBool("playAnim",true);
-        Invoke("EndGame",sparkleDuration);
+        //WindTurbine.GetComponent<Animator>().SetBool("playAnim",true);
+        Invoke("WindTurbuneSetActive",sparkleDuration-3f);
     }
 
+    public void WindTurbuneSetActive()
+    {
+        WindTurbine.SetActive(false);
+        mapGenerate.targetNewHome.SetActive(true);
+        Invoke("EndGame", 2);
+    }
     public void EndGame()
     {
         uh.OpenGameOverPanel(isPlayerReachedTarget);
         gm.GameOverStatSet(isPlayerReachedTarget);
-        isGameFinished = true;
+        gm.isGameOver = true;
     }
     void CharacterAnimationPlay()
     {

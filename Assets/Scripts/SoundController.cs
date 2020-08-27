@@ -13,7 +13,6 @@ public class SoundController : MonoBehaviour
     public Sound[] sounds;
     public bool toggle = false;
     public Sprite[] soundImages;
-    public AudioListener listener;
     public static SoundController instance;
     void Awake()
     {

@@ -37,25 +37,8 @@ public class LoadGameData : MonoBehaviour
             for (int i = 0; i < gm.commander.commands.Count; i++)
             {
                 gm.uh.ShowCommand(gm.commander.commands[i]);
-
-                //if (gm.inputs.inputs[i] == GetInputs.code.Forward)
-                //{
-                //    gm.uh.ShowKeys(90);
-                //}
-                //else if (gm.inputs.inputs[i] == GetInputs.code.Left)
-                //{
-                //    gm.uh.ShowKeys(180);
-                //}
-                //else if (gm.inputs.inputs[i] == GetInputs.code.Right)
-                //{
-                //    gm.uh.ShowKeys(0);
-                //}
-                //else if (gm.inputs.inputs[i] == GetInputs.code.Backward)
-                //{
-                //    gm.uh.ShowKeys(-90);
-                //}
             }
-            Invoke("GameStart", 1);
+            Invoke("GameStart", 1.5f);
         }
        
     }

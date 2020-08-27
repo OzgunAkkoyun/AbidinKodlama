@@ -25,7 +25,9 @@ public class Commander : MonoBehaviour
     }
     public void AddForCommand(Direction direction,int loopCount)
     {
-        commands.Add(new ForCommand {direction = direction,loopCount = loopCount});
+        commands.Add(new ForCommand {direction=direction,loopCount = loopCount});
+
+        //commands.Add(new ForCommand { direction = new List<Direction> { direction[0], direction[1] }, loopCount = loopCount });
         OnNewCommand.Invoke();
     }
 
@@ -44,7 +46,7 @@ public class Commander : MonoBehaviour
             var type = command.GetType();
             var isLastCommand = i == commands.Count - 1;
 
-            if (gm.character.isGameFinished)
+            if (gm.isGameOver)
             {
                 break;
             }
@@ -52,16 +54,15 @@ public class Commander : MonoBehaviour
             if (type == typeof(MoveCommand))
             {
                 var commandMove = command as MoveCommand;
-                yield return StartCoroutine(gm.character.ApplyMoveCommand(commandMove.direction, isLastCommand));
+                yield return StartCoroutine(gm.character.ApplyMoveCommand(commandMove.direction, isLastCommand,i));
             }
             else if (type == typeof(ForCommand))
             {
                 var commandFor = command as ForCommand;
                 for (int j = 0; j < commandFor.loopCount; j++)
                 {
-                    yield return StartCoroutine(gm.character.ApplyMoveCommand(commandFor.direction, isLastCommand));
+                    yield return StartCoroutine(gm.character.ApplyMoveCommand(commandFor.direction, isLastCommand,i));
                 }
-               
             }
             else
             {

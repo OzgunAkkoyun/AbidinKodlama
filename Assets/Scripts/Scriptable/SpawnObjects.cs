@@ -6,6 +6,7 @@ public class SpawnObjects : ScriptableObject
 {
     public GameObject startGameObject;
     public GameObject targetGameObject;
+    public GameObject targetNewGameObject;
     public GameObject tileGameObject;
     public GameObject[] environmentGameObjects;
     public GameObject vehicleGameObject;
