@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using SimpleJSON;
 using static MapGenerator;
 using System;
 using Newtonsoft.Json;
@@ -55,14 +54,14 @@ public class GameManager : MonoBehaviour
 {
     public CharacterMovement character;
     public MapGenerator map;
+    public UiVideoController uiVideoController;
     public LoadGameData load;
     public UIHandler uh;
-    public GetInputs inputs;
+    public UiMiniMapController miniMapController;
     public Commander commander;
     public SoundController sc;
     public bool is3DStarted = false;
     public bool isGameOver = false;
-    public int lastMapSize = 5;
     public List<SavedGameData> gameDatas = new List<SavedGameData>();
     public SavedPlayerData playerDatas;
 
@@ -73,15 +72,63 @@ public class GameManager : MonoBehaviour
     {
         uh = FindObjectOfType<UIHandler>();
         map = FindObjectOfType<MapGenerator>();
-        inputs = FindObjectOfType<GetInputs>();
         load = FindObjectOfType<LoadGameData>();
         sc = FindObjectOfType<SoundController>();
-       
-        lastMapSize = PlayerPrefs.GetInt("lastMapSize");
+        uiVideoController = FindObjectOfType<UiVideoController>();
+        //PlayerPrefs.DeleteAll();
         var gameDataString = PlayerPrefs.GetString("gameDatas");
         var playerDataString = PlayerPrefs.GetString("playerDatas");
-        //PlayerPrefs.DeleteAll();
+        
+        GameDataCheck(gameDataString);
 
+        PlayerDataCheck(playerDataString);
+
+        WillVideoShown();
+
+        GameorLoadCheck();
+    }
+
+    private void GameorLoadCheck()
+    {
+        isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
+
+        if (isGameOrLoad == 0) //its mean gameScreen
+        {
+            SetMapAttributes();
+        }
+        else // its mean loading one of the previous games or Restart game
+        {
+            load.LoadGenerateMap(isGameOrLoad);
+        }
+    }
+
+    private void WillVideoShown()
+    {
+        if (!playerDatas.showedOpeningVideo)
+        {
+            uiVideoController.ShowVideo(playerDatas.whichScenario + "-" + playerDatas.lastMapSize);
+        }
+        else
+        {
+            uiVideoController.videoPanel.SetActive(false);
+            sc.Play("Theme");
+        }
+    }
+
+    private void PlayerDataCheck(string playerDataString)
+    {
+        if (playerDataString != "")
+        {
+            playerDatas = JsonUtility.FromJson<SavedPlayerData>(playerDataString);
+        }
+        else
+        {
+            playerDatas = new SavedPlayerData(0, 0, 1, 5, 0, 0, false);
+        }
+    }
+
+    private void GameDataCheck(string gameDataString)
+    {
         if (gameDataString != "")
         {
             gameDatas = JsonConvert.DeserializeObject<List<SavedGameData>>(gameDataString, new JsonSerializerSettings
@@ -96,35 +143,6 @@ public class GameManager : MonoBehaviour
         {
             scenarioIndex = 1;
         }
-
-        if (playerDataString != "")
-        {
-            playerDatas = JsonUtility.FromJson<SavedPlayerData>(playerDataString);
-        }
-        else
-        {
-            playerDatas = new SavedPlayerData(0,0,1,5,0,0,false);
-        }
-        if (!playerDatas.showedOpeningVideo)
-        {
-            uh.ShowVideo(playerDatas.whichScenario + "-" + playerDatas.lastMapSize);
-        }
-        else
-        {
-            uh.videoPanel.SetActive(false);
-            sc.Play("Theme");
-        }
-
-        isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
-        
-        if (isGameOrLoad == 0) //its mean gameScreen
-        {
-            SetMapAttributes();
-        }
-        else // its mean loading one of the previous games or Restart game
-        {
-            load.LoadGenerateMap(isGameOrLoad);
-        }
     }
 
     void SetMapAttributes()
@@ -132,7 +150,6 @@ public class GameManager : MonoBehaviour
         if (playerDatas.lastMapSize == 0)
         {
             playerDatas.lastMapSize = 5;
-            PlayerPrefs.SetInt("lastMapSize", lastMapSize);
         }
         map.currentMap.mapSize = new Coord(playerDatas.lastMapSize, playerDatas.lastMapSize);
         map.expectedPathLength = playerDatas.score + 2;
@@ -152,17 +169,10 @@ public class GameManager : MonoBehaviour
         is3DStarted = true;
         character = FindObjectOfType<CharacterMovement>();
         ShowInputsCode.Instance.ShowCodesString();
-        uh.StartCoroutine("MiniMapSetStartPosition");
+        miniMapController.StartCoroutine("MiniMapSetStartPosition");
         uh.StartCoroutine("CameraSmoothMovingToTargetPosition");
-        //Invoke("ExecuteAnimation", 1.5f);
         commander.ApplyCommands();
     }
-
-    //void ExecuteAnimation()
-    //{
-    //    character = FindObjectOfType<CharacterMovement>();
-    //    character.StartCoroutine("ExecuteAnimation");
-    //}
 
     public void GameOverStatSet(bool isSuccess)
     {
@@ -178,14 +188,12 @@ public class GameManager : MonoBehaviour
                 {
                     playerDatas.winStreak = 0;
                     playerDatas.showedOpeningVideo = false;
-                    sc.Pause("Theme");
-                    uh.ShowVideo(scenarioIndex+"-"+ playerDatas.lastMapSize + "-end");
+                   
+                    uiVideoController.ShowVideo(scenarioIndex+"-"+ playerDatas.lastMapSize + "-end");
 
                     if (playerDatas.lastMapSize != 9)
                     {
                         playerDatas.lastMapSize += 2;
-                        //playerDatas.lastMapSize = lastMapSize;
-                        PlayerPrefs.SetInt("lastMapSize", lastMapSize);
                     }
                     else//New Senario
                     {
@@ -205,6 +213,13 @@ public class GameManager : MonoBehaviour
             GameDataSave();
             PlayerDataSave();
         }
+    }
+
+    public void EndGame()
+    {
+        uh.OpenGameOverPanel(character.isPlayerReachedTarget);
+        GameOverStatSet(character.isPlayerReachedTarget);
+        isGameOver = true;
     }
 
     public void GameDataSave()

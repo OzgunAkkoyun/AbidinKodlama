@@ -3,16 +3,6 @@ using System.Collections.Generic;
 using System;
 using Random = System.Random;
 
-[Serializable]
-public class Data
-{
-    public int index;
-    public float r1;
-    public float r2;
-    public float r3;
-}
-
-
 public class MapGenerator : MonoBehaviour {
 	
 	public Map[] maps;
@@ -249,6 +239,7 @@ public class MapGenerator : MonoBehaviour {
         FindYDirection();
 
         CreateMapWithDirections(ref currentPathIndex);
+        SetPathDirections();
 
         for (int i = 0; i < Path.Count; i++)
         {
@@ -264,25 +255,32 @@ public class MapGenerator : MonoBehaviour {
     {
         var xLenght = UnityEngine.Random.Range(2, xSize);
         var yLenght = UnityEngine.Random.Range(2, ySize);
-        if (directions[0] == forLoopDirections.Left)
+
+        if (gm.playerDatas.lastMapSize == 5)
         {
-            for (int i = 0; i < xLenght; i++)
-            {
-                Path.Add(Path[currentPathIndex].GetNeighbours()[0]);
-                currentPathIndex++;
-            }
+            var random = UnityEngine.Random.Range(0, 2);
+            
+            if(random == 0)
+                AddPathinXDirection(ref currentPathIndex, xLenght);
+            else
+                AddPathinYDirection(ref currentPathIndex, xLenght);
         }
-        else if (directions[0] == forLoopDirections.Right)
+        else if (gm.playerDatas.lastMapSize == 7)
         {
-            for (int i = 0; i < xLenght; i++)
-            {
-                Path.Add(Path[currentPathIndex].GetNeighbours()[1]);
-                currentPathIndex++;
-            }
+            AddPathinXDirection(ref currentPathIndex, xLenght);
+            AddPathinYDirection(ref currentPathIndex, yLenght);
         }
-        if(directions[1] == forLoopDirections.Down)
+        else if (gm.playerDatas.lastMapSize == 9)
         {
-            for (int i = 0; i < yLenght; i++)
+            throw new NotImplementedException();
+        }
+    }
+
+    private void AddPathinYDirection(ref int currentPathIndex, int yLenght)
+    {
+        if (directions[1] == forLoopDirections.Down)
+        {
+            for (int i = 0; i < expectedPathLength; i++)
             {
                 Path.Add(Path[currentPathIndex].GetNeighbours()[2]);
                 currentPathIndex++;
@@ -290,9 +288,29 @@ public class MapGenerator : MonoBehaviour {
         }
         else if (directions[1] == forLoopDirections.Up)
         {
-            for (int i = 0; i < yLenght; i++)
+            for (int i = 0; i < expectedPathLength; i++)
             {
                 Path.Add(Path[currentPathIndex].GetNeighbours()[3]);
+                currentPathIndex++;
+            }
+        }
+    }
+
+    private void AddPathinXDirection(ref int currentPathIndex, int xLenght)
+    {
+        if (directions[0] == forLoopDirections.Left)
+        {
+            for (int i = 0; i < expectedPathLength; i++)
+            {
+                Path.Add(Path[currentPathIndex].GetNeighbours()[0]);
+                currentPathIndex++;
+            }
+        }
+        else if (directions[0] == forLoopDirections.Right)
+        {
+            for (int i = 0; i < expectedPathLength; i++)
+            {
+                Path.Add(Path[currentPathIndex].GetNeighbours()[1]);
                 currentPathIndex++;
             }
         }
@@ -443,19 +461,38 @@ public class MapGenerator : MonoBehaviour {
 
    private void CreateStartandTargetPoints()
     {
-        currentMap.startPoint = GetRandomOpenCoord();
-        CreatePath();
-        //CreatePathWithForLoop();
+        if (gm.scenarioIndex == 1)
+        {
+            currentMap.startPoint = GetRandomOpenCoord();
+            CreatePath();
+        }
+        else if (gm.scenarioIndex == 2)
+        {
+            expectedPathLength = (int) expectedPathLength / 2;
+            currentMap.startPoint = GetRandomStartCoord();
+            CreatePathWithForLoop();
+        }
+
         currentMap.targetPoint = Path[Path.Count - 1];
 
         var start = currentMap.startPoint;
         var target = Path[Path.Count-1];
 
-        //tileMap[start.x, start.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
-        //tileMap[target.x, target.y].gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
     }
 
-    #region Spawners
+   private Coord GetRandomStartCoord()
+   {
+       int[] startCoordToSelect = new[] {0, currentMap.mapSize.x-1};
+       var rnd = UnityEngine.Random.Range(0, 2);
+       var rnd1 = UnityEngine.Random.Range(0, 2);
+
+       var xPos = startCoordToSelect[rnd];
+       var yPos = startCoordToSelect[rnd1];
+
+       return new Coord(xPos, yPos);
+    }
+
+   #region Spawners
     void SpawnVehicle()
     {
         var vehiclePos = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y) * tileSize;
@@ -463,7 +500,6 @@ public class MapGenerator : MonoBehaviour {
         vehiclePrefab = Instantiate(vehiclePrefab, vehiclePos, Quaternion.identity);
         gm.uh.mainCamera = vehiclePrefab.transform.Find("Main Camera").gameObject;
         gm.uh.cameraTarget = vehiclePrefab.transform.Find("CameraTarget");
-        //vehiclePrefab.transform.position = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y)*tileSize;
     }
 
     private void SpawnObstacle(Random prng)

@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78656bb58b182214ca5a4144fd4565cf, type: 3}
   m_Name: SpawnObjects-senario2
   m_EditorClassIdentifier: 
-  startGameObject: {fileID: 5327447121006745843, guid: 621f353b3134dad43a609911557ea008,
+  startGameObject: {fileID: 8659874756527542646, guid: 1084e8225b3b99347a7bb58b890c94e3,
     type: 3}
-  targetGameObject: {fileID: 5836817708588453344, guid: abd902b3241869e478fd348dba8f6721,
+  targetGameObject: {fileID: 4358444602051483387, guid: abd902b3241869e478fd348dba8f6721,
+    type: 3}
+  targetNewGameObject: {fileID: 594363864919193213, guid: f3ec1f77c5d16624fa05f119bc0d53a7,
     type: 3}
   tileGameObject: {fileID: 195019098710043781, guid: 41ec3fecb9f622f4d81c5715b5e4194d,
     type: 3}

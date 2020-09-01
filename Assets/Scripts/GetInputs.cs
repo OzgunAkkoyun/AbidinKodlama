@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public enum Direction
@@ -20,10 +18,7 @@ public class GetInputs : MonoBehaviour
 
     public Commander commander;
 
-    private void Start()
-    {
-        
-    }
+    public List<Direction> forDirections = new List<Direction>();
 
     void Update()
     {
@@ -40,8 +35,9 @@ public class GetInputs : MonoBehaviour
             }
             else
             {
-                commander.AddForCommand(Direction.Forward, forLoopCount);
-                waitingMoveCommand = false;
+                //commander.AddForCommand(Direction.Forward, forLoopCount);
+                forDirections.Add(Direction.Forward);
+                //waitingMoveCommand = false;
             }
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -52,8 +48,9 @@ public class GetInputs : MonoBehaviour
             }
             else
             {
-                commander.AddForCommand(Direction.Left, forLoopCount);
-                waitingMoveCommand = false;
+                //commander.AddForCommand(Direction.Left, forLoopCount);
+                forDirections.Add(Direction.Left);
+                //waitingMoveCommand = false;
             }
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) )
@@ -64,8 +61,9 @@ public class GetInputs : MonoBehaviour
             }
             else
             {
-                commander.AddForCommand(Direction.Right, forLoopCount);
-                waitingMoveCommand = false;
+                //commander.AddForCommand(Direction.Right, forLoopCount);
+                forDirections.Add(Direction.Right);
+                //waitingMoveCommand = false;
             }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -76,14 +74,21 @@ public class GetInputs : MonoBehaviour
             }
             else
             {
-                commander.AddForCommand(Direction.Backward, forLoopCount);
-                waitingMoveCommand = false;
+                //commander.AddForCommand(Direction.Backward, forLoopCount);
+                forDirections.Add(Direction.Backward);
+                //waitingMoveCommand = false;
             }
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
+            forDirections.Clear();
             waitingMoveCommand = true;
             WaitForInput();
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            commander.AddForCommand(forDirections, forLoopCount);
+            waitingMoveCommand = false;
         }
     }
 

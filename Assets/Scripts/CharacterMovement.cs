@@ -7,23 +7,21 @@ using static MapGenerator;
 public class CharacterMovement : MonoBehaviour
 {
     bool isAnimStarted = false;
-    bool isPlayerReachedTarget = false;
+    public bool isPlayerReachedTarget = false;
    
-    GetInputs getInputs;
     private MapGenerator mapGenerate;
     UIHandler uh;
     GameManager gm;
+    public GameObjectsAnimationController animController;
 
     public float animationSpeed = 1f;
     public float scaleFactor = 1f;
     
     Vector3 inputVector;
     private Animator anim;
-    private GameObject WindTurbine;
 
     void Start()
     {
-        getInputs = FindObjectOfType<GetInputs>();
         mapGenerate = FindObjectOfType<MapGenerator>();
         uh = FindObjectOfType<UIHandler>();
         gm = FindObjectOfType<GameManager>();
@@ -35,7 +33,6 @@ public class CharacterMovement : MonoBehaviour
     public IEnumerator ApplyMoveCommand(Direction moveCommand, bool isLastCommand, int i)
     {
         DirectionToVector(moveCommand);
-
         //Code Inputs coloring
         uh.codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
         if (i != 0)
@@ -43,17 +40,17 @@ public class CharacterMovement : MonoBehaviour
 
         yield return StartCoroutine(PlayMoveAnimation(isLastCommand));
 
-        CheckIfReachedTarget();
+        CheckIfReachedTarget(isLastCommand);
     }
-    public IEnumerator ApplyForCommand(Direction command, bool isLastCommand)
+    public IEnumerator ApplyForCommand(Direction command, bool isLastCommand,int i)
     {
         DirectionToVector(command);
         yield return StartCoroutine(PlayMoveAnimation(isLastCommand));
 
-        CheckIfReachedTarget();
+        CheckIfReachedTarget(isLastCommand);
     }
 
-    private void CheckIfReachedTarget()
+    private void CheckIfReachedTarget(bool isLastCommand)
     {
         var currentCoord = new Coord((int)(inputVector.x / mapGenerate.tileSize), (int)(inputVector.z / mapGenerate.tileSize));
 
@@ -65,12 +62,21 @@ public class CharacterMovement : MonoBehaviour
                 
                 CharacterAnimationPlay();
             }
+            else
+            {
+                if (isLastCommand)
+                {
+                    isPlayerReachedTarget = false;
+                    gm.EndGame();
+                }
+                
+            }
         }
         else
         {
             isPlayerReachedTarget = false;
           
-            EndGame();
+            gm.EndGame();
         }
     }
 
@@ -78,7 +84,7 @@ public class CharacterMovement : MonoBehaviour
     {
         if (isAnimStarted) yield break; // exit function
         isAnimStarted = true;
-
+        
         var relativePos = new Vector3(inputVector.x, transform.position.y, inputVector.z) - transform.position;
         var targetRotation = Quaternion.LookRotation(relativePos);
 
@@ -127,31 +133,12 @@ public class CharacterMovement : MonoBehaviour
 
     void WindTurbineAnimationPlay()
     {
+        animController = FindObjectOfType<GameObjectsAnimationController>();
         anim.SetBool("animationStart", false);
-        gm.sc.Play("Sparkle");
 
-        WindTurbine = mapGenerate.targetHome;
-
-        //WindTurbine.transform.Find("Fx_Smoke").gameObject.SetActive(false);
-        WindTurbine.transform.Find("Fx_Sparkle").gameObject.SetActive(true);
-
-        var sparkleDuration = WindTurbine.transform.Find("Fx_Sparkle").GetChild(0).GetComponent<ParticleSystem>().main.duration;
-        //WindTurbine.GetComponent<Animator>().SetBool("playAnim",true);
-        Invoke("WindTurbuneSetActive",sparkleDuration-3f);
+        animController.WindTurbineAnimationPlay();
     }
-
-    public void WindTurbuneSetActive()
-    {
-        WindTurbine.SetActive(false);
-        mapGenerate.targetNewHome.SetActive(true);
-        Invoke("EndGame", 2);
-    }
-    public void EndGame()
-    {
-        uh.OpenGameOverPanel(isPlayerReachedTarget);
-        gm.GameOverStatSet(isPlayerReachedTarget);
-        gm.isGameOver = true;
-    }
+  
     void CharacterAnimationPlay()
     {
         anim.SetBool("animationStart", true);

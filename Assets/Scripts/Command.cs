@@ -31,29 +31,33 @@ public class MoveCommand : Command
 }
 public class ForCommand : Command
 {
-    public Direction direction;
+    public List<Direction> direction = new List<Direction>();
     public int loopCount;
     public string codeString;
 
     public override string ToCodeString()
     {
         codeString = "for(var sayi = 0; sayi < " + loopCount + "; sayi++){\n";
-        if (direction == Direction.Left)
+        for (int i = 0; i < direction.Count; i++)
         {
-            codeString += "\tSola Dön(); \n";
+            if (direction[i] == Direction.Left)
+            {
+                codeString += "\tSola Dön(); \n";
+            }
+            else if (direction[i] == Direction.Right)
+            {
+                codeString += "\tSağa Dön(); \n";
+            }
+            else if (direction[i] == Direction.Forward)
+            {
+                codeString += "\tİlerle(); \n";
+            }
+            else if (direction[i] == Direction.Backward)
+            {
+                codeString += "\tGeri(); \n";
+            }
         }
-        else if (direction == Direction.Right)
-        {
-            codeString += "\tSağa Dön(); \n";
-        }
-        else if (direction == Direction.Forward)
-        {
-            codeString += "\tİlerle(); \n";
-        }
-        else if (direction == Direction.Backward)
-        {
-            codeString += "\tGeri(); \n";
-        }
+        
 
         codeString += "}";
         return codeString;

@@ -21,9 +21,8 @@ public class HintButton : MonoBehaviour
 
     private void FindNextCommand()
     {
-        var nextCommandIndex = commander.commands.Count+1;
+        var nextCommandIndex = commander.commands.Count + 1;
         uh.ShowHintCommand(nextCommandIndex);
-
     }
 
     private bool CheckCommandInputs()
@@ -47,14 +46,14 @@ public class HintButton : MonoBehaviour
             }
             else if (type == typeof(ForCommand))
             {
-                var commandMove = currentCommand as ForCommand;
-                if (!CheckDirections(commandMove.direction, i))
-                {
-                    wrongCommandIndex = i;
-                    uh.ShowWrongCommand(wrongCommandIndex);
-                    return false;
-                    break;
-                }
+                //var commandMove = currentCommand as ForCommand;
+                //if (!CheckDirections(commandMove.direction, i))
+                //{
+                //    wrongCommandIndex = i;
+                //    uh.ShowWrongCommand(wrongCommandIndex);
+                //    return false;
+                //    break;
+                //}
             }
         }
 
