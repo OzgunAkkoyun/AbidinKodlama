@@ -1,15 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class HintButton : MonoBehaviour
 {
     public Commander commander;
-    public MapGenerator mapGenerator;
+    public PathGenarator pathGenarator;
     public UIHandler uh;
     public int wrongCommandIndex;
-    void Start()
-    {
-        
-    }
 
     public void Hint()
     {
@@ -36,7 +33,7 @@ public class HintButton : MonoBehaviour
             if (type == typeof(MoveCommand))
             {
                 var commandMove = currentCommand as MoveCommand;
-                if (!CheckDirections(commandMove.direction, i))
+                if (!CheckDirectionsMove(commandMove.direction, i))
                 {
                     wrongCommandIndex = i;
                     uh.ShowWrongCommand(wrongCommandIndex);
@@ -46,20 +43,43 @@ public class HintButton : MonoBehaviour
             }
             else if (type == typeof(ForCommand))
             {
-                //var commandMove = currentCommand as ForCommand;
-                //if (!CheckDirections(commandMove.direction, i))
-                //{
-                //    wrongCommandIndex = i;
-                //    uh.ShowWrongCommand(wrongCommandIndex);
-                //    return false;
-                //    break;
-                //}
+                var commandFor= currentCommand as ForCommand;
+                if (!CheckDirectionsFor(commandFor.directions, i,commandFor.loopCount))
+                {
+                    wrongCommandIndex = i;
+                    uh.ShowWrongCommand(wrongCommandIndex);
+                    return false;
+                    break;
+                }
             }
         }
 
         return true;
     }
 
-    private bool CheckDirections(Direction commandMoveDirection, int i) =>
-        mapGenerator.Path[i+1].pathDirection == commandMoveDirection;
+    private bool CheckDirectionsFor(List<Direction> commandForDirections, int i, int loopCount)
+    {
+        var falseCount = 0;
+        for (int j = 0; j < loopCount; j++)
+        {
+            for (int k = 0; k < commandForDirections.Count; k++)
+            {
+                if (pathGenarator.Path[i + 1].pathDirection == commandForDirections[k])
+                {
+
+                }
+                else
+                {
+                    falseCount++;
+                    return false;
+                    break;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private bool CheckDirectionsMove(Direction commandMoveDirection, int i) =>
+        pathGenarator.Path[i+1].pathDirection == commandMoveDirection;
 }

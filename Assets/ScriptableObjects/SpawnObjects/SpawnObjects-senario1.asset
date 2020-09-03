@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startGameObject: {fileID: 8659874756527542646, guid: 1084e8225b3b99347a7bb58b890c94e3,
     type: 3}
-  targetGameObject: {fileID: 4358444602051483387, guid: abd902b3241869e478fd348dba8f6721,
+  targetGameObject: {fileID: 2583607772728183531, guid: abd902b3241869e478fd348dba8f6721,
     type: 3}
   targetNewGameObject: {fileID: 594363864919193213, guid: f3ec1f77c5d16624fa05f119bc0d53a7,
     type: 3}

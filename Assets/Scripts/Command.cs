@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
-using UnityEngine;
 
 public abstract class Command
 {
@@ -31,35 +28,35 @@ public class MoveCommand : Command
 }
 public class ForCommand : Command
 {
-    public List<Direction> direction = new List<Direction>();
+    public List<Direction> directions;
     public int loopCount;
     public string codeString;
 
     public override string ToCodeString()
     {
         codeString = "for(var sayi = 0; sayi < " + loopCount + "; sayi++){\n";
-        for (int i = 0; i < direction.Count; i++)
+        for (int i = 0; i < directions.Count; i++)
         {
-            if (direction[i] == Direction.Left)
+            if (directions[i] == Direction.Left)
             {
                 codeString += "\tSola Dön(); \n";
             }
-            else if (direction[i] == Direction.Right)
+            else if (directions[i] == Direction.Right)
             {
                 codeString += "\tSağa Dön(); \n";
             }
-            else if (direction[i] == Direction.Forward)
+            else if (directions[i] == Direction.Forward)
             {
                 codeString += "\tİlerle(); \n";
             }
-            else if (direction[i] == Direction.Backward)
+            else if (directions[i] == Direction.Backward)
             {
                 codeString += "\tGeri(); \n";
             }
         }
         
 
-        codeString += "}";
+        codeString += "}\n";
         return codeString;
     }
 }

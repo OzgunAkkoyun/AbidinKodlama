@@ -28,7 +28,6 @@ public class UiMiniMapController : MonoBehaviour
         screenW = Screen.width;
         screenH = Screen.height;
         
-
         minimapTexture = minimap.transform.Find("MiniMapGraphics/Texture").gameObject;
 
         minimapPipBoy = minimap.transform.Find("MiniMapGraphics/PipBoy").gameObject;
@@ -66,21 +65,24 @@ public class UiMiniMapController : MonoBehaviour
         miniMapRect.SetAnchor(AnchorPresets.TopRight);
         miniMapRect.SetPivot(PivotPresets.TopRight);
         miniMapRect.sizeDelta = new Vector2(screenW, screenH);
-        minimapPipBoy.SetActive(false);
 
+        minimapPipBoy.SetActive(false);
         float t = 0;
+
         while (true)
         {
             t += Time.deltaTime / 10;
             miniMapRect.sizeDelta =
                 Vector2.Lerp(miniMapRect.sizeDelta, new Vector2(300, 300), t);
 
-            minimap.transform.GetChild(0).localScale =
-                Vector2.Lerp(minimap.transform.GetChild(0).localScale, new Vector3(1, 1, 1), t * 2);
+            miniMapGraphics.transform.localScale =
+                Vector2.Lerp(miniMapGraphics.transform.localScale, new Vector3(1, 1, 1), t * 2);
 
             miniMapGraphicsRect.sizeDelta = new Vector2(
                 (miniMapRect.sizeDelta.y - 20 - 1 * 30),
                 (miniMapRect.sizeDelta.y - 20 - 1 * 30));
+
+            minimapTextureRect.sizeDelta = Vector2.Lerp(minimapTextureRect.sizeDelta, new Vector2(300, 300), t);
 
             miniMapGraphicsRect.SetLeft(0);
             miniMapGraphicsRect.SetRight(0);
@@ -90,17 +92,6 @@ public class UiMiniMapController : MonoBehaviour
             miniMapGraphicsRect.SetAnchor(AnchorPresets.StretchAll);
 
             miniMapGraphicsRect.SetPivot(PivotPresets.MiddleCenter);
-
-            minimapTextureRect.SetAnchor(AnchorPresets.StretchAll);
-
-            minimapTextureRect.SetPivot(PivotPresets.MiddleCenter);
-
-            minimapTextureRect.SetLeft(-15);
-            minimapTextureRect.SetRight(-15);
-            minimapTextureRect.SetTop(-15);
-            minimapTextureRect.SetBottom(-15);
-
-            RatiosForMiniMap();
 
             if (Mathf.Round(miniMapRect.sizeDelta.x) == 300)
             {
@@ -129,7 +120,6 @@ public class UiMiniMapController : MonoBehaviour
                 yield return new WaitForSeconds(0f);
             }
         }
-
         mapZoomed = !mapZoomed;
     }
 }

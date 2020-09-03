@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using static MapGenerator;
@@ -10,6 +9,7 @@ public class CharacterMovement : MonoBehaviour
     public bool isPlayerReachedTarget = false;
    
     private MapGenerator mapGenerate;
+    private PathGenarator pathGenarator;
     UIHandler uh;
     GameManager gm;
     public GameObjectsAnimationController animController;
@@ -25,6 +25,7 @@ public class CharacterMovement : MonoBehaviour
         mapGenerate = FindObjectOfType<MapGenerator>();
         uh = FindObjectOfType<UIHandler>();
         gm = FindObjectOfType<GameManager>();
+        pathGenarator = FindObjectOfType<PathGenarator>();
         inputVector = transform.position;
         anim = GetComponent<Animator>();
         scaleFactor = mapGenerate.tileSize;
@@ -54,7 +55,7 @@ public class CharacterMovement : MonoBehaviour
     {
         var currentCoord = new Coord((int)(inputVector.x / mapGenerate.tileSize), (int)(inputVector.z / mapGenerate.tileSize));
 
-        if (mapGenerate.Path.Contains(currentCoord))
+        if (pathGenarator.Path.Contains(currentCoord))
         {
             if (mapGenerate.CoordToPosition(mapGenerate.currentMap.targetPoint.x, mapGenerate.currentMap.targetPoint.y) == inputVector.Vector3toXZ())
             {
@@ -106,6 +107,11 @@ public class CharacterMovement : MonoBehaviour
         }
         else
         {
+            //for (float t = 0f; t < 1f; t += Time.deltaTime * animationSpeed)
+            //{
+            //    transform.Translate(transform.forward/2); 
+            //}
+            //transform.position = inputVector;
             yield return null;
         }
         isAnimStarted = false;

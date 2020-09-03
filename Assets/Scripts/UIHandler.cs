@@ -12,6 +12,7 @@ public class UIHandler : MonoBehaviour
     private GameManager gm;
     private MapGenerator map;
     public CoinsManager cm;
+    public PathGenarator pathGenarator;
    
     public GameObject gameOverPanel;
     
@@ -120,7 +121,7 @@ public class UIHandler : MonoBehaviour
         else if (type == typeof(ForCommand))
         {
             var forCommand = (ForCommand) command;
-            ShowKeyForLoop(forCommand.direction, forCommand.loopCount, commandIndex);
+            ShowKeyForLoop(forCommand.directions, forCommand.loopCount, commandIndex);
             commandIndex++;
         }
     }
@@ -247,7 +248,7 @@ public class UIHandler : MonoBehaviour
     private GameObject hintObject;
     public void ShowHintCommand(int nextCommandIndex)
     {
-        int keyRotate = SetDirectionRotate(map.Path[nextCommandIndex].pathDirection);
+        int keyRotate = SetDirectionRotate(pathGenarator.Path[nextCommandIndex].pathDirection);
         
         hintObject = Instantiate(codeMoveObject, codeMoveObject.transform.position, Quaternion.identity);
 

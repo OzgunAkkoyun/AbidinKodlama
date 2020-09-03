@@ -26,16 +26,12 @@ public class MapGenerator : MonoBehaviour {
 	public float outlinePercent;
 	
 	public float tileSize;
-	List<Coord> allTileCoords;
-    List<Coord> allOpenCoords;
-    List<Coord> allObstacleCoord = new List<Coord>();
+    public List<Coord> allTileCoords;
+    public List<Coord> allOpenCoords;
+    public List<Coord> allObstacleCoord = new List<Coord>();
 
     Queue<Coord> shuffledTileCoords;
 	Queue<Coord> shuffledOpenTileCoords;
-
-    public List<Coord> Path = new List<Coord>();
-    public int expectedPathLength;
-    public int PathLength => Path.Count;
 
     Transform[,] tileMap;
 	[HideInInspector]
@@ -49,6 +45,7 @@ public class MapGenerator : MonoBehaviour {
     public List<GameObject> obstacleGameObject;
 
     private GameManager gm;
+    public PathGenarator pathGenarator;
 
     void Start()
     {
@@ -106,12 +103,13 @@ public class MapGenerator : MonoBehaviour {
         CreateMapLines();
 
         currentMap.startPoint = _startPoint;
-        Path = _Path;
-        currentMap.targetPoint = Path[Path.Count - 1];
+        pathGenarator.Path = _Path;
+        currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
 
+        pathGenarator.DestroyObstaclesInPath();
         var start = currentMap.startPoint;
-        var target = Path[Path.Count - 1];
-
+        var target = pathGenarator.Path[pathGenarator.Path.Count - 1];
+        pathGenarator.InstantiateObstaclePathSide();
         SpawnVehicle();
         SpawnHouses();
     }
@@ -145,281 +143,41 @@ public class MapGenerator : MonoBehaviour {
         timer.Finish(false);
     }
 
-    public GameObject targetHome;
-    public GameObject targetNewHome;
-    public void SpawnHouses()
+    private void CreateStartandTargetPoints()
     {
-        var startHome = Instantiate(home[0], new Vector3((float)currentMap.startPoint.x * tileSize, 1f, (float)currentMap.startPoint.y * tileSize), Quaternion.identity);
-        targetHome = Instantiate(home[1], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
-
-        targetHome.name = "Target";
-        startHome.transform.LookAt(new Vector3(Path[1].x * tileSize, 1, Path[1].y * tileSize));
-
-        targetHome.transform.LookAt(new Vector3(Path[PathLength-2].x*tileSize, 1, Path[PathLength - 2].y*tileSize));
-
-        if (home[2] != null)
+        if (gm.scenarioIndex == 0)
         {
-            targetNewHome = Instantiate(home[2], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
-            targetNewHome.transform.LookAt(new Vector3(Path[PathLength - 2].x * tileSize, 1, Path[PathLength - 2].y * tileSize));
-            targetNewHome.SetActive(false);
+            currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
+            pathGenarator.CreatePath();
         }
+        else if (gm.scenarioIndex == 1)
+        {
+            currentMap.startPoint = pathGenarator.GetRandomStartCoord();
+            pathGenarator.CreatePathWithForLoop();
+        }
+
+        currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
+
+        var start = currentMap.startPoint;
+        var target = pathGenarator.Path[pathGenarator.Path.Count - 1];
 
     }
-    public void CreatePath()
+
+    #region Spawners
+    void SpawnVehicle()
     {
-        Path.Clear();
-        var currentPathIndex = 0;
-        Path.Add(new Coord(currentMap.startPoint.x,currentMap.startPoint.y));
-        
-        while (currentPathIndex < expectedPathLength)
-        {
-            var currentCell = Path[currentPathIndex];
-            var neighbours = GetAvailableNeighbours(currentCell);
-            
-            if (SelectNextCell(neighbours, out Coord selectedNeighbour))
-            {
-                Path.Add(selectedNeighbour);
-                currentPathIndex++;
-            }
-            else
-            {
-                OneStepBackinList(currentCell, ref currentPathIndex);
-            }
-        }
+        var vehiclePos = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y) * tileSize;
 
-        SetPathDirections();
+        vehiclePrefab = Instantiate(vehiclePrefab, vehiclePos, Quaternion.identity);
+        gm.uh.mainCamera = vehiclePrefab.transform.Find("Main Camera").gameObject;
+        gm.uh.cameraTarget = vehiclePrefab.transform.Find("CameraTarget");
     }
-
-    private void SetPathDirections()
-    {
-        for (int i = 0; i < Path.Count; i++)
-        {
-            if (i != 0)
-            {
-                var dist = FindMinusTwoCoord(Path[i], Path[i - 1]);
-                if (dist.x < 0)
-                {
-                    Path[i].pathDirection = Direction.Left;
-                }
-                else if (dist.x > 0)
-                {
-                    Path[i].pathDirection = Direction.Right;
-                }
-                else if (dist.y < 0)
-                {
-                    Path[i].pathDirection = Direction.Backward;
-                }
-                else if (dist.y > 0)
-                {
-                    Path[i].pathDirection = Direction.Forward;
-                }
-            }
-        }
-    }
-
-    private Vector2 FindMinusTwoCoord(Coord c1, Coord c2) => new Vector2(c1.x-c2.x,c1.y-c2.y);
-    //For Loop variables
-    public enum forLoopDirections {Left,Right,Up,Down }
-
-    public List<forLoopDirections> directions = new List<forLoopDirections>();
-
-    public int xSize => Mathf.Max(left, right);
-    public int ySize => Mathf.Max(up, down);
-    public int left;
-    public int right;
-    public int up;
-    public int down;
-    public void CreatePathWithForLoop()
-    {
-        Path.Clear();
-        var currentPathIndex = 0;
-        Path.Add(new Coord(currentMap.startPoint.x, currentMap.startPoint.y));
-
-        FindXDirection();
-        FindYDirection();
-
-        CreateMapWithDirections(ref currentPathIndex);
-        SetPathDirections();
-
-        for (int i = 0; i < Path.Count; i++)
-        {
-            var index = allObstacleCoord.FindIndex(v => (v.x == Path[i].x) && (v.y == Path[i].y));
-            if (index >= 0)
-            {
-                DestroyImmediate(obstacleGameObject[index]);
-            }
-        }
-    }
-
-    private void CreateMapWithDirections(ref int currentPathIndex)
-    {
-        var xLenght = UnityEngine.Random.Range(2, xSize);
-        var yLenght = UnityEngine.Random.Range(2, ySize);
-
-        if (gm.playerDatas.lastMapSize == 5)
-        {
-            var random = UnityEngine.Random.Range(0, 2);
-            
-            if(random == 0)
-                AddPathinXDirection(ref currentPathIndex, xLenght);
-            else
-                AddPathinYDirection(ref currentPathIndex, xLenght);
-        }
-        else if (gm.playerDatas.lastMapSize == 7)
-        {
-            AddPathinXDirection(ref currentPathIndex, xLenght);
-            AddPathinYDirection(ref currentPathIndex, yLenght);
-        }
-        else if (gm.playerDatas.lastMapSize == 9)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    private void AddPathinYDirection(ref int currentPathIndex, int yLenght)
-    {
-        if (directions[1] == forLoopDirections.Down)
-        {
-            for (int i = 0; i < expectedPathLength; i++)
-            {
-                Path.Add(Path[currentPathIndex].GetNeighbours()[2]);
-                currentPathIndex++;
-            }
-        }
-        else if (directions[1] == forLoopDirections.Up)
-        {
-            for (int i = 0; i < expectedPathLength; i++)
-            {
-                Path.Add(Path[currentPathIndex].GetNeighbours()[3]);
-                currentPathIndex++;
-            }
-        }
-    }
-
-    private void AddPathinXDirection(ref int currentPathIndex, int xLenght)
-    {
-        if (directions[0] == forLoopDirections.Left)
-        {
-            for (int i = 0; i < expectedPathLength; i++)
-            {
-                Path.Add(Path[currentPathIndex].GetNeighbours()[0]);
-                currentPathIndex++;
-            }
-        }
-        else if (directions[0] == forLoopDirections.Right)
-        {
-            for (int i = 0; i < expectedPathLength; i++)
-            {
-                Path.Add(Path[currentPathIndex].GetNeighbours()[1]);
-                currentPathIndex++;
-            }
-        }
-    }
-
-    private void FindXDirection()
-    {
-        left = Mathf.Abs(currentMap.startPoint.x);
-        right = Mathf.Abs(currentMap.mapSize.x - currentMap.startPoint.x - 1);
-
-        if (left >= right)
-            directions.Add(forLoopDirections.Left);
-        else
-            directions.Add(forLoopDirections.Right);
-    }
-
-    private void FindYDirection()
-    {
-        up = Mathf.Abs(currentMap.mapSize.y - currentMap.startPoint.y - 1);
-        down = Mathf.Abs(currentMap.startPoint.y);
-
-        if (up >= down)
-            directions.Add(forLoopDirections.Up);
-        else
-            directions.Add(forLoopDirections.Down);
-    }
-
-    private void OneStepBackinList(Coord currentCell, ref int currentPathIndex)
-    {
-        Path.RemoveAt(currentPathIndex);
-        currentPathIndex--;
-        Path[currentPathIndex].UnavaliableNeighbours.Add(new Coord(currentCell.x,currentCell.y));
-    }
-
-    private bool SelectNextCell(List<Coord> neighbours, out Coord selectedNeighbour)
-    {
-        if (neighbours.Count > 0)
-        {
-            var rnd = UnityEngine.Random.Range(0, neighbours.Count);
-            selectedNeighbour = neighbours[rnd];
-            return true;
-        }
-        else
-        {
-            selectedNeighbour = new Coord(0,0);
-            return false;
-        }
-    }
-    private List<Coord> GetAvailableNeighbours(Coord cell)
-    {
-        var neighbours = cell.GetNeighbours();
-        List<Coord> availableCells = new List<Coord>();
-        foreach (var neighbour in neighbours)
-        {
-            if (IsCellOnPath(neighbour))
-            {
-                //Log("Cell On Path");
-            }
-            else
-            {
-                if (CellinBounds(neighbour))
-                {
-                    if (CellUnavaliableNeighboursGet(neighbour, cell))
-                    {
-                        //Log("Cell UnavaliableNeighbours");
-                    }
-                    else
-                    {
-                        availableCells.Add(neighbour);
-                    }
-                }
-            }
-        }
-        return availableCells;
-    }
-
-    public bool CellinBounds(Coord neighbours)
-    {
-        if (neighbours.x < 0 || neighbours.x >= currentMap.mapSize.x || neighbours.y < 0 || neighbours.y >= currentMap.mapSize.y)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-        
-    }
-
-    public bool IsCellOnPath(Coord neighbours) => Path.Contains(neighbours);
-
-    public bool CellUnavaliableNeighboursGet(Coord neighbours, Coord cell)
-    {
-        if (allObstacleCoord.Contains(neighbours) || cell.UnavaliableNeighbours.Contains(neighbours))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     public void CreateMapLines()
     {
         //Close all sides Left Right
-        for (int i = -1; i <= currentMap.mapSize.x+1; i += currentMap.mapSize.x+1 )
+        for (int i = -1; i <= currentMap.mapSize.x + 1; i += currentMap.mapSize.x + 1)
         {
-            for (int j = -1; j < currentMap.mapSize.y+1; j++)
+            for (int j = -1; j < currentMap.mapSize.y + 1; j++)
             {
                 Vector3 tilePosition = CoordToPosition(i, j);
                 Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90)) as Transform;
@@ -434,7 +192,7 @@ public class MapGenerator : MonoBehaviour {
         }
 
         //Close all sides Top Bottom
-        for (int j = -1; j <= currentMap.mapSize.y+1; j += currentMap.mapSize.y+1 )
+        for (int j = -1; j <= currentMap.mapSize.y + 1; j += currentMap.mapSize.y + 1)
         {
             for (int i = 0; i < currentMap.mapSize.x; i++)
             {
@@ -450,56 +208,25 @@ public class MapGenerator : MonoBehaviour {
             }
         }
     }
-
-    private Coord GetRandomOpenCoord()
+    public GameObject targetHome;
+    public GameObject targetNewHome;
+    public void SpawnHouses()
     {
-        var rnd = UnityEngine.Random.Range(0, allOpenCoords.Count);
-        return new Coord(allOpenCoords[rnd].x,allOpenCoords[rnd].y);
-    }
+        var startHome = Instantiate(home[0], new Vector3((float)currentMap.startPoint.x * tileSize, 1f, (float)currentMap.startPoint.y * tileSize), Quaternion.identity);
+        targetHome = Instantiate(home[1], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
 
-    private float GetDistance(Coord point1, Coord point2) => Vector3.Distance(CoordToPosition(point1.x,point1.y), CoordToPosition(point2.x,point2.y))/tileSize;
+        targetHome.name = "Target";
+        startHome.transform.LookAt(new Vector3(pathGenarator.Path[1].x * tileSize, 1, pathGenarator.Path[1].y * tileSize));
 
-   private void CreateStartandTargetPoints()
-    {
-        if (gm.scenarioIndex == 1)
+        targetHome.transform.LookAt(new Vector3(pathGenarator.Path[pathGenarator.PathLength - 2].x * tileSize, 1, pathGenarator.Path[pathGenarator.PathLength - 2].y * tileSize));
+
+        if (home[2] != null)
         {
-            currentMap.startPoint = GetRandomOpenCoord();
-            CreatePath();
-        }
-        else if (gm.scenarioIndex == 2)
-        {
-            expectedPathLength = (int) expectedPathLength / 2;
-            currentMap.startPoint = GetRandomStartCoord();
-            CreatePathWithForLoop();
+            targetNewHome = Instantiate(home[2], new Vector3((float)currentMap.targetPoint.x * tileSize, 1f, (float)currentMap.targetPoint.y * tileSize), Quaternion.identity);
+            targetNewHome.transform.LookAt(new Vector3(pathGenarator.Path[pathGenarator.PathLength - 2].x * tileSize, 1, pathGenarator.Path[pathGenarator.PathLength - 2].y * tileSize));
+            targetNewHome.SetActive(false);
         }
 
-        currentMap.targetPoint = Path[Path.Count - 1];
-
-        var start = currentMap.startPoint;
-        var target = Path[Path.Count-1];
-
-    }
-
-   private Coord GetRandomStartCoord()
-   {
-       int[] startCoordToSelect = new[] {0, currentMap.mapSize.x-1};
-       var rnd = UnityEngine.Random.Range(0, 2);
-       var rnd1 = UnityEngine.Random.Range(0, 2);
-
-       var xPos = startCoordToSelect[rnd];
-       var yPos = startCoordToSelect[rnd1];
-
-       return new Coord(xPos, yPos);
-    }
-
-   #region Spawners
-    void SpawnVehicle()
-    {
-        var vehiclePos = new Vector3(currentMap.startPoint.x, 0.6f, currentMap.startPoint.y) * tileSize;
-
-        vehiclePrefab = Instantiate(vehiclePrefab, vehiclePos, Quaternion.identity);
-        gm.uh.mainCamera = vehiclePrefab.transform.Find("Main Camera").gameObject;
-        gm.uh.cameraTarget = vehiclePrefab.transform.Find("CameraTarget");
     }
 
     private void SpawnObstacle(Random prng)
@@ -519,7 +246,7 @@ public class MapGenerator : MonoBehaviour {
 
             if (randomCoord != currentMap.mapCentre && MapIsFullyAccessible(obstacleMap, currentObstacleCount))
             {
-                ObstacleInstantiate(randomCoord, prng);
+                ObstacleInstantiate(randomCoord);
             }
             else
             {
@@ -531,9 +258,9 @@ public class MapGenerator : MonoBehaviour {
         shuffledOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray(allOpenCoords.ToArray(), currentMap.seed));
     }
 
-    public void ObstacleInstantiate(Coord randomCoord, Random prng)
+    public void ObstacleInstantiate(Coord randomCoord)
     {
-        float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
+        float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, 1);
         Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
 
         Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;

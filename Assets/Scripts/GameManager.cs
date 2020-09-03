@@ -60,6 +60,8 @@ public class GameManager : MonoBehaviour
     public UiMiniMapController miniMapController;
     public Commander commander;
     public SoundController sc;
+    public PathGenarator pathGenarator;
+
     public bool is3DStarted = false;
     public bool isGameOver = false;
     public List<SavedGameData> gameDatas = new List<SavedGameData>();
@@ -152,7 +154,7 @@ public class GameManager : MonoBehaviour
             playerDatas.lastMapSize = 5;
         }
         map.currentMap.mapSize = new Coord(playerDatas.lastMapSize, playerDatas.lastMapSize);
-        map.expectedPathLength = playerDatas.score + 2;
+        pathGenarator.expectedPathLength = playerDatas.score + 2;
 
         map.GameStart();
     }
@@ -225,7 +227,7 @@ public class GameManager : MonoBehaviour
     public void GameDataSave()
     {
         var current = map.currentMap;
-        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, map.Path,scenarioIndex));
+        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, pathGenarator.Path,scenarioIndex));
         
         string gameDataString = JsonConvert.SerializeObject(gameDatas, Formatting.Indented, new JsonSerializerSettings
         {

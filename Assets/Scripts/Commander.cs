@@ -25,9 +25,7 @@ public class Commander : MonoBehaviour
     }
     public void AddForCommand(List<Direction> direction,int loopCount)
     {
-        commands.Add(new ForCommand {direction = direction, loopCount = loopCount} );
-
-        //commands.Add(new ForCommand { direction = new List<Direction> { direction[0], direction[1] }, loopCount = loopCount });
+        commands.Add(new ForCommand { directions = direction, loopCount = loopCount });
         OnNewCommand.Invoke();
     }
 
@@ -59,13 +57,16 @@ public class Commander : MonoBehaviour
             else if (type == typeof(ForCommand))
             {
                 var commandFor = command as ForCommand;
+                var isLastForCommand = false;
+
                 for (int j = 0; j < commandFor.loopCount; j++)
                 {
-                    for (int k = 0; k < commandFor.direction.Count; k++)
+                    for (int k = 0; k < commandFor.directions.Count; k++)
                     {
-                        yield return StartCoroutine(gm.character.ApplyMoveCommand(commandFor.direction[k], isLastCommand, i));
+                        isLastForCommand = isLastCommand && j == commandFor.loopCount - 1 && k == commandFor.directions.Count-1;
+
+                        yield return StartCoroutine(gm.character.ApplyMoveCommand(commandFor.directions[k], isLastForCommand, i));
                     }
-                    
                 }
             }
             else

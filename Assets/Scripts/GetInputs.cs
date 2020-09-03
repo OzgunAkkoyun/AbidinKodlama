@@ -18,7 +18,7 @@ public class GetInputs : MonoBehaviour
 
     public Commander commander;
 
-    public List<Direction> forDirections = new List<Direction>();
+    public List<Direction> forDirections ;
 
     void Update()
     {
@@ -81,13 +81,13 @@ public class GetInputs : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
-            forDirections.Clear();
+            forDirections = new List<Direction>();
             waitingMoveCommand = true;
             WaitForInput();
         }
         else if (Input.GetKeyDown(KeyCode.P))
         {
-            commander.AddForCommand(forDirections, forLoopCount);
+            if (commander != null) commander.AddForCommand(forDirections, forLoopCount);
             waitingMoveCommand = false;
         }
     }

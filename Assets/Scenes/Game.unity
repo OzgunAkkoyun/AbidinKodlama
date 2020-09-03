@@ -1475,6 +1475,7 @@ MonoBehaviour:
   miniMapController: {fileID: 1258718090}
   commander: {fileID: 891223700}
   sc: {fileID: 0}
+  pathGenarator: {fileID: 2050750489}
   is3DStarted: 0
   isGameOver: 0
   gameDatas: []
@@ -1630,7 +1631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   commander: {fileID: 891223700}
-  mapGenerator: {fileID: 2050750486}
+  pathGenarator: {fileID: 2050750489}
   uh: {fileID: 1258718087}
   wrongCommandIndex: 0
 --- !u!1 &581994567
@@ -3692,6 +3693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cm: {fileID: 1688749468}
+  pathGenarator: {fileID: 2050750489}
   gameOverPanel: {fileID: 140383811}
   codeStringPanel: {fileID: 74541230}
   forInput: {fileID: 1854341678}
@@ -4791,7 +4793,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -8, y: -8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1615469660
 MonoBehaviour:
@@ -4839,14 +4841,14 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 14
+  m_fontSize: 39.35
   m_fontSizeBase: 14
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_textAlignment: 257
+  m_fontStyle: 1
+  m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -5477,7 +5479,7 @@ RectTransform:
   m_GameObject: {fileID: 1854341676}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.7002, y: 1.7002, z: 1.7002}
   m_Children:
   - {fileID: 37913077}
   m_Father: {fileID: 4827462815167882828}
@@ -5486,7 +5488,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 140, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1854341678
 MonoBehaviour:
@@ -5602,8 +5604,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -263511437403757397, guid: 6a60daa6af2966746be22dfed4f3a597,
+    type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -5936,8 +5939,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2133996082
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
+    rgba: 2654089778
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.61960787}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5962,7 +5965,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 2
-  m_textAlignment: 257
+  m_textAlignment: 514
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -6433,6 +6436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2050750487}
   - component: {fileID: 2050750486}
+  - component: {fileID: 2050750489}
   - component: {fileID: 2050750488}
   m_Layer: 0
   m_Name: Map
@@ -6486,8 +6490,9 @@ MonoBehaviour:
   maxMapSize: {x: 9, y: 9}
   outlinePercent: 0
   tileSize: 2
-  Path: []
-  expectedPathLength: 3
+  allTileCoords: []
+  allOpenCoords: []
+  allObstacleCoord: []
   currentMap:
     mapSize:
       x: 0
@@ -6515,13 +6520,9 @@ MonoBehaviour:
   - {fileID: 5836817708588453344, guid: abd902b3241869e478fd348dba8f6721, type: 3}
   - {fileID: 5836817708588453344, guid: abd902b3241869e478fd348dba8f6721, type: 3}
   obstacleGameObject: []
+  pathGenarator: {fileID: 2050750489}
   targetHome: {fileID: 0}
   targetNewHome: {fileID: 0}
-  directions: 
-  left: 0
-  right: 0
-  up: 0
-  down: 0
 --- !u!4 &2050750487
 Transform:
   m_ObjectHideFlags: 0
@@ -6551,6 +6552,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 18, y: 0.05, z: 18}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2050750489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050750485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2df3323ceadf26b42ba6a6bbabd06386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapGenerator: {fileID: 2050750486}
+  gm: {fileID: 538906878}
+  Path: []
+  expectedPathLength: 0
+  directions: 
+  left: 0
+  right: 0
+  up: 0
+  down: 0
 --- !u!1 &2052145859
 GameObject:
   m_ObjectHideFlags: 0
