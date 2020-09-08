@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startGameObject: {fileID: 4644379270013986926, guid: 9925c98b61a2bc840b2e2ec7dc2a5bf2,
     type: 3}
-  targetGameObject: {fileID: 5836817708588453344, guid: abd902b3241869e478fd348dba8f6721,
-    type: 3}
+  targetGameObject: []
+  targetNewGameObject: []
   tileGameObject: {fileID: 195019098710043781, guid: 848e2688d9929de42bb54e2c188e15ea,
     type: 3}
   environmentGameObjects:
   - {fileID: 896536603123513099, guid: e4f7db8bc3e4cac4686d4418295b8ca3, type: 3}
   - {fileID: 7233332780669468039, guid: 057f0e80924d35d418c3b84885178d8d, type: 3}
+  - {fileID: 9133106575594577879, guid: 267160f41bfb8d74cbff67ae08fdb5dd, type: 3}
+  - {fileID: 8449052269137585891, guid: 692e5afea29567547abec4ae3585ee7c, type: 3}
   vehicleGameObject: {fileID: 6894881165646105096, guid: ae6b22571080f60488984d25cafa30d6,
     type: 3}

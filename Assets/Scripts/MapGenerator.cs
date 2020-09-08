@@ -66,9 +66,23 @@ public class MapGenerator : MonoBehaviour {
         }
 
         vehiclePrefab = senarioObjects.vehicleGameObject;
+
+        var gameObjectIndex = 0;
+        
+        if (gm.playerDatas.lastMapSize == 5)
+        {
+            gameObjectIndex = 0;
+        }else if (gm.playerDatas.lastMapSize == 7)
+        {
+            gameObjectIndex = 1;
+        }else if (gm.playerDatas.lastMapSize == 9)
+        {
+            gameObjectIndex = 2;
+        }
+
         home[0] = senarioObjects.startGameObject;
-        home[1] = senarioObjects.targetGameObject;
-        home[2] = senarioObjects.targetNewGameObject;
+        home[1] = senarioObjects.targetGameObject[gameObjectIndex];
+        home[2] = senarioObjects.targetNewGameObject[gameObjectIndex];
     }
     public void GameStart()
     {
@@ -145,12 +159,12 @@ public class MapGenerator : MonoBehaviour {
 
     private void CreateStartandTargetPoints()
     {
-        if (gm.scenarioIndex == 0)
+        if (gm.scenarioIndex == 1)
         {
             currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
             pathGenarator.CreatePath();
         }
-        else if (gm.scenarioIndex == 1)
+        else if (gm.scenarioIndex == 2)
         {
             currentMap.startPoint = pathGenarator.GetRandomStartCoord();
             pathGenarator.CreatePathWithForLoop();
@@ -226,6 +240,10 @@ public class MapGenerator : MonoBehaviour {
             targetNewHome.transform.LookAt(new Vector3(pathGenarator.Path[pathGenarator.PathLength - 2].x * tileSize, 1, pathGenarator.Path[pathGenarator.PathLength - 2].y * tileSize));
             targetNewHome.SetActive(false);
         }
+        else
+        {
+            targetNewHome = null;
+        }
 
     }
 
@@ -267,11 +285,11 @@ public class MapGenerator : MonoBehaviour {
         newObstacle.parent = mapHolder;
         newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
 
-        Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
-        Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
-        float colourPercent = randomCoord.y / (float)currentMap.mapSize.y;
-        obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour, currentMap.backgroundColour, colourPercent);
-        obstacleRenderer.sharedMaterial = obstacleMaterial;
+        //Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
+        //Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
+        //float colourPercent = randomCoord.y / (float)currentMap.mapSize.y;
+        //obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour, currentMap.backgroundColour, colourPercent);
+        //obstacleRenderer.sharedMaterial = obstacleMaterial;
 
         obstacleGameObject.Add(newObstacle.gameObject);
         allObstacleCoord.Add(randomCoord);

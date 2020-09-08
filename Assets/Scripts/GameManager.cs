@@ -2,6 +2,7 @@
 using UnityEngine;
 using static MapGenerator;
 using System;
+using System.Collections;
 using Newtonsoft.Json;
 
 [Serializable]
@@ -33,16 +34,20 @@ public class SavedPlayerData
     public int succesedLevelCount;
     public int failededLevelCount;
     public int whichScenario;
+    public int whichLevel;
+    public int whichSubLevel;
     public int lastMapSize;
     public int winStreak;
     public int score;
     public bool showedOpeningVideo;
 
-    public SavedPlayerData(int succesedLevelCount, int failededLevelCount, int whichScenario, int lastMapSize, int winStreak, int score, bool showedOpeningVideo)
+    public SavedPlayerData(int succesedLevelCount, int failededLevelCount, int whichScenario, int whichLevel, int whichSubLevel, int lastMapSize, int winStreak, int score, bool showedOpeningVideo)
     {
         this.succesedLevelCount = succesedLevelCount;
         this.failededLevelCount = failededLevelCount;
         this.whichScenario = whichScenario;
+        this.whichLevel = whichLevel;
+        this.whichSubLevel = whichSubLevel;
         this.lastMapSize = lastMapSize;
         this.winStreak = winStreak;
         this.score = score;
@@ -61,6 +66,7 @@ public class GameManager : MonoBehaviour
     public Commander commander;
     public SoundController sc;
     public PathGenarator pathGenarator;
+    public LevelLoader levelLoader;
 
     public bool is3DStarted = false;
     public bool isGameOver = false;
@@ -69,6 +75,10 @@ public class GameManager : MonoBehaviour
 
     public int isGameOrLoad;
     public int scenarioIndex;
+    public LevelStats.Senarios.Levels.SubLevels currentSubLevel;
+    public LevelStats.Senarios.Levels currentLevel;
+
+    public bool DeleteAllPlayerPrefs;
 
     void Awake()
     {
@@ -77,7 +87,12 @@ public class GameManager : MonoBehaviour
         load = FindObjectOfType<LoadGameData>();
         sc = FindObjectOfType<SoundController>();
         uiVideoController = FindObjectOfType<UiVideoController>();
-        //PlayerPrefs.DeleteAll();
+        levelLoader = FindObjectOfType<LevelLoader>();
+        if (DeleteAllPlayerPrefs)
+        {
+            PlayerPrefs.DeleteAll();
+        }
+        
         var gameDataString = PlayerPrefs.GetString("gameDatas");
         var playerDataString = PlayerPrefs.GetString("playerDatas");
         
@@ -87,9 +102,21 @@ public class GameManager : MonoBehaviour
 
         WillVideoShown();
 
+        //yield return new WaitUntil(() => levelLoader != null );
+        levelLoader.SetLevels();
+
+        currentSubLevel = levelLoader.currentLevelStats.GetSubLevel(playerDatas.whichScenario, playerDatas.whichLevel,
+            playerDatas.whichSubLevel.ToString());
+
+       currentLevel = levelLoader.currentLevelStats.GetLevel(playerDatas.whichScenario, playerDatas.whichLevel);
+       
         GameorLoadCheck();
     }
 
+    // 0 == Game
+    // 1 == Watch previous game
+    // 2 == RestartGame
+    // 3 == Cliked On The map
     private void GameorLoadCheck()
     {
         isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
@@ -125,7 +152,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            playerDatas = new SavedPlayerData(0, 0, 1, 5, 0, 0, false);
+            playerDatas = new SavedPlayerData(0, 0, 1,1,1, 5, 0, 0, false);
         }
     }
 
@@ -154,7 +181,7 @@ public class GameManager : MonoBehaviour
             playerDatas.lastMapSize = 5;
         }
         map.currentMap.mapSize = new Coord(playerDatas.lastMapSize, playerDatas.lastMapSize);
-        pathGenarator.expectedPathLength = playerDatas.score + 2;
+        pathGenarator.expectedPathLength = currentSubLevel.pathLenght;
 
         map.GameStart();
     }
@@ -178,16 +205,22 @@ public class GameManager : MonoBehaviour
 
     public void GameOverStatSet(bool isSuccess)
     {
-        if (isGameOrLoad == 0 || isGameOrLoad == 2)
+        Debug.Log(currentSubLevel.passed);
+        if ((isGameOrLoad == 0 || isGameOrLoad == 2) && !currentSubLevel.passed)
         {
+            Debug.Log("ilk if");
             if (isSuccess)
             {
-                playerDatas.winStreak++;
-                playerDatas.score++;
-                playerDatas.succesedLevelCount++;
+                //playerDatas.winStreak++;
+                //playerDatas.score++;
+                //playerDatas.succesedLevelCount++;
 
-                if (playerDatas.winStreak == 3)
+                currentSubLevel.passed = true;
+                if (playerDatas.whichSubLevel == 3)
                 {
+                    playerDatas.whichSubLevel = 1;
+                    playerDatas.whichLevel++;
+                    currentLevel.levelComplated = true;
                     playerDatas.winStreak = 0;
                     playerDatas.showedOpeningVideo = false;
                    
@@ -204,6 +237,11 @@ public class GameManager : MonoBehaviour
                         playerDatas.score = 0;
                     }
                 }
+                else
+                {
+                    playerDatas.whichSubLevel++;
+                }
+                
             }
             else
             {
@@ -211,7 +249,7 @@ public class GameManager : MonoBehaviour
                 playerDatas.failededLevelCount++;
                 playerDatas.score = playerDatas.score > 0 ? (playerDatas.score - 1) : 0;
             }
-            
+            levelLoader.SaveLevelStats();
             GameDataSave();
             PlayerDataSave();
         }

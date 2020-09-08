@@ -6,6 +6,25 @@ public class GameObjectsAnimationController : MonoBehaviour
     public GameManager gm;
     public MapGenerator mapGenerate;
 
+    public void GameObjectAnimationPlay()
+    {
+        if (gm.playerDatas.whichScenario == 1)
+        {
+            WindTurbineAnimationPlay();
+        }
+        else if (gm.playerDatas.whichScenario == 2)
+        {
+        }
+        else if (gm.playerDatas.whichScenario == 3)
+        {
+        }
+        else if (gm.playerDatas.whichScenario == 4)
+        {
+        }
+        else if (gm.playerDatas.whichScenario == 5)
+        {
+        }
+    }
     public void WindTurbineAnimationPlay()
     {
         gm.sc.Play("Sparkle");
@@ -22,7 +41,7 @@ public class GameObjectsAnimationController : MonoBehaviour
     public void WindTurbuneSetActive()
     {
         windTurbine.SetActive(false);
-        mapGenerate.targetNewHome.SetActive(true);
+        mapGenerate.targetNewHome?.SetActive(true);
         gm.Invoke("EndGame", 2);
     }
 }

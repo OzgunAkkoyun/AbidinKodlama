@@ -142,7 +142,7 @@ public class CharacterMovement : MonoBehaviour
         animController = FindObjectOfType<GameObjectsAnimationController>();
         anim.SetBool("animationStart", false);
 
-        animController.WindTurbineAnimationPlay();
+        animController.GameObjectAnimationPlay();
     }
   
     void CharacterAnimationPlay()

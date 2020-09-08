@@ -1,0 +1,210 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a248ddc0ab6469d4ba75bcea73b3d273, type: 3}
+  m_Name: LevelStats
+  m_EditorClassIdentifier: 
+  senarios:
+  - senarioName: Senario-1
+    levels:
+    - LevelName: Level-1
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 2
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 3
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 4
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-2
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 5
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 6
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 7
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-3
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 8
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 9
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 10
+        passed: 0
+      levelComplated: 0
+    senarioComplated: 0
+  - senarioName: Senario-2
+    levels:
+    - LevelName: Level-1
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 2
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 3
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 4
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-2
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 5
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 6
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 7
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-3
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 8
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 9
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 10
+        passed: 0
+      levelComplated: 0
+    senarioComplated: 0
+  - senarioName: Senario-3
+    levels:
+    - LevelName: Level-1
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 2
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 3
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 4
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-2
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 5
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 6
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 7
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-3
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 8
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 9
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 10
+        passed: 0
+      levelComplated: 0
+    senarioComplated: 0
+  - senarioName: Senario-4
+    levels:
+    - LevelName: Level-1
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 2
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 3
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 4
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-2
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 5
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 6
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 7
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-3
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 8
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 9
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 10
+        passed: 0
+      levelComplated: 0
+    senarioComplated: 0
+  - senarioName: Senario-5
+    levels:
+    - LevelName: Level-1
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 2
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 3
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 4
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-2
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 5
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 6
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 7
+        passed: 0
+      levelComplated: 0
+    - LevelName: Level-3
+      subLevels:
+      - subLevelName: 1
+        pathLenght: 8
+        passed: 0
+      - subLevelName: 2
+        pathLenght: 9
+        passed: 0
+      - subLevelName: 3
+        pathLenght: 10
+        passed: 0
+      levelComplated: 0
+    senarioComplated: 0

@@ -5,8 +5,9 @@ using UnityEngine;
 public class SpawnObjects : ScriptableObject
 {
     public GameObject startGameObject;
-    public GameObject targetGameObject;
-    public GameObject targetNewGameObject;
+    public GameObject[] targetGameObject;
+    public GameObject[] targetNewGameObject;
+    [Space(20f)]
     public GameObject tileGameObject;
     public GameObject[] environmentGameObjects;
     public GameObject vehicleGameObject;
