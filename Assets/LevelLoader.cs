@@ -8,24 +8,15 @@ public class LevelLoader : MonoBehaviour
 {
     public LevelStats levelStats;
     public LevelStats currentLevelStats;
-    private SavedPlayerData playerDatas;
+    public SavedPlayerData playerDatas;
 
     public void SetLevels()
     {
         var playerDataString = PlayerPrefs.GetString("playerDatas");
         var levelStatsString = PlayerPrefs.GetString("levelStats");
 
-        Debug.Log(levelStatsString);
         LevelStatCheck(levelStatsString);
         PlayerDataCheck(playerDataString);
-       
-
-        //var selectedSubLevel = currentLevelStats.GetSubLevel(playerDatas.whichScenario, playerDatas.whichLevel, playerDatas.whichSubLevel.ToString());
-        //selectedSubLevel.passed = true;
-
-        //SaveLevelStats();
-        //PlayerPrefs.DeleteKey("levelStats");
-
     }
 
     public void SaveLevelStats()
@@ -59,8 +50,6 @@ public class LevelLoader : MonoBehaviour
             PlayerPrefs.SetString("levelStats", levelStatsJsonString1);
             currentLevelStats = levelStats;
         }
-
-        Debug.Log(currentLevelStats);
     }
 
     private void PlayerDataCheck(string playerDataString)

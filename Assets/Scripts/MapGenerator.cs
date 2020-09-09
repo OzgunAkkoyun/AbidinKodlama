@@ -163,11 +163,13 @@ public class MapGenerator : MonoBehaviour {
         {
             currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
             pathGenarator.CreatePath();
+            Debug.Log("1");
         }
         else if (gm.scenarioIndex == 2)
         {
             currentMap.startPoint = pathGenarator.GetRandomStartCoord();
             pathGenarator.CreatePathWithForLoop();
+            Debug.Log("2");
         }
 
         currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
@@ -199,9 +201,9 @@ public class MapGenerator : MonoBehaviour {
                 newTile.parent = mapHolder;
 
                 float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
-                Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], tilePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
+                Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], tilePosition + Vector3.up * obstacleHeight , Quaternion.identity) as Transform;
                 newObstacle.parent = mapHolder;
-                newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
+               // newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight*2, (1 - outlinePercent) * tileSize);
             }
         }
 
@@ -216,9 +218,9 @@ public class MapGenerator : MonoBehaviour {
                 newTile.parent = mapHolder;
 
                 float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
-                Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], tilePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
+                Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], tilePosition + Vector3.up * obstacleHeight, Quaternion.identity) as Transform;
                 newObstacle.parent = mapHolder;
-                newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
+                //newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight*2, (1 - outlinePercent) * tileSize);
             }
         }
     }
@@ -281,9 +283,9 @@ public class MapGenerator : MonoBehaviour {
         float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, 1);
         Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
 
-        Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
+        Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight, Quaternion.identity) as Transform;
         newObstacle.parent = mapHolder;
-        newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
+        //newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight*2, (1 - outlinePercent) * tileSize);
 
         //Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
         //Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);

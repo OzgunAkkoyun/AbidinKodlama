@@ -32,16 +32,9 @@ public class LevelStats : ScriptableObject
     }
     public Senarios[] senarios;
 
-    public Senarios.Levels.SubLevels GetSubLevel(int whichSenario,int whichLevel,string name)
-    {
-        var subLevel = senarios[whichSenario-1].levels[whichLevel-1].subLevels.FirstOrDefault(element => element.subLevelName == name);
+    public Senarios.Levels.SubLevels GetSubLevel(int whichSenario,int whichLevel,string name) => senarios[whichSenario - 1].levels[whichLevel - 1].subLevels.FirstOrDefault(element => element.subLevelName == name);
 
-        return subLevel;
-    }
+    public Senarios.Levels GetLevel(int whichSenario, int whichLevel) => senarios[whichSenario - 1].levels[whichLevel - 1];
 
-    public Senarios.Levels GetLevel(int whichSenario, int whichLevel)
-    {
-        var level = senarios[whichSenario - 1].levels[whichLevel - 1];
-        return level;
-    }
+    public Senarios GetSenario(int whichSenario) => senarios[whichSenario - 1];
 }

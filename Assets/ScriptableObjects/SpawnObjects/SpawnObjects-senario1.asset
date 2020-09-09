@@ -25,7 +25,8 @@ MonoBehaviour:
   tileGameObject: {fileID: 195019098710043781, guid: 848e2688d9929de42bb54e2c188e15ea,
     type: 3}
   environmentGameObjects:
-  - {fileID: 9133106575594577879, guid: 267160f41bfb8d74cbff67ae08fdb5dd, type: 3}
+  - {fileID: 7663823250004851570, guid: 5e422eb9050960642ad69742519a2686, type: 3}
   - {fileID: 8449052269137585891, guid: 692e5afea29567547abec4ae3585ee7c, type: 3}
+  - {fileID: 8671417270018687044, guid: 24a4145ad1dee21418efb1f0e399f0c4, type: 3}
   vehicleGameObject: {fileID: 6894881165646105096, guid: ae6b22571080f60488984d25cafa30d6,
     type: 3}

@@ -16,13 +16,17 @@ MonoBehaviour:
     type: 3}
   targetGameObject:
   - {fileID: 5327447121006745843, guid: 621f353b3134dad43a609911557ea008, type: 3}
-  targetNewGameObject: []
+  - {fileID: 4644379270013986926, guid: 9925c98b61a2bc840b2e2ec7dc2a5bf2, type: 3}
+  - {fileID: 5327447121006745843, guid: 621f353b3134dad43a609911557ea008, type: 3}
+  targetNewGameObject:
+  - {fileID: 5327447121006745843, guid: 621f353b3134dad43a609911557ea008, type: 3}
+  - {fileID: 4644379270013986926, guid: 9925c98b61a2bc840b2e2ec7dc2a5bf2, type: 3}
+  - {fileID: 5327447121006745843, guid: 621f353b3134dad43a609911557ea008, type: 3}
   tileGameObject: {fileID: 195019098710043781, guid: 41ec3fecb9f622f4d81c5715b5e4194d,
     type: 3}
   environmentGameObjects:
-  - {fileID: 896536603123513099, guid: e4f7db8bc3e4cac4686d4418295b8ca3, type: 3}
-  - {fileID: 7233332780669468039, guid: 057f0e80924d35d418c3b84885178d8d, type: 3}
-  - {fileID: 9133106575594577879, guid: 267160f41bfb8d74cbff67ae08fdb5dd, type: 3}
-  - {fileID: 8449052269137585891, guid: 692e5afea29567547abec4ae3585ee7c, type: 3}
+  - {fileID: 3293796080576707530, guid: 01c46de35d1053e419f54eafd99dc98e, type: 3}
+  - {fileID: 1689537640347392630, guid: b7868c37059ab934e99f32732b66dc18, type: 3}
+  - {fileID: 5714781685626102538, guid: 330cc1a012bbdd04cb51fbc520881ed9, type: 3}
   vehicleGameObject: {fileID: 6894881165646105096, guid: ae6b22571080f60488984d25cafa30d6,
     type: 3}

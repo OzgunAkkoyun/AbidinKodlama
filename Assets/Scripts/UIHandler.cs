@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,7 +105,7 @@ public class UIHandler : MonoBehaviour
             }
         }
 
-        codePanelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
+        codePanelOpenButton.transform.Find("Button/Arrow").transform.Rotate(new Vector3(0, 0, 180));
         codePanelOpened = !codePanelOpened;
     }
 
@@ -269,25 +270,13 @@ public class UIHandler : MonoBehaviour
 
     private void DeleteHintCommandStarter()
     {
-        StartCoroutine(DeleteHintCommand());
-    }
-    private IEnumerator DeleteHintCommand()
-    {
-        Color curColor = hintObject.GetComponent<Image>().color;
-        var targetAlpha = 0;
-        while (curColor.a > 0)
+        //StartCoroutine(DeleteHintCommand());
+        var arrow = hintObject.transform.Find("Image").GetComponent<Image>();
+        arrow.DOFade(0f, 1f);
+        hintObject.GetComponent<Image>().DOFade(0f, 1f).OnComplete(() =>
         {
-            curColor = hintObject.GetComponent<Image>().color;
-            float alphaDiff = Mathf.Abs(curColor.a - targetAlpha);
-            //curColor.a = Mathf.Lerp(curColor.a, targetAlpha, 5 * Time.deltaTime);
-            curColor.a -= 1.1f * Time.deltaTime;
-
-            hintObject.GetComponent<Image>().color = curColor;
-            var arrow = hintObject.transform.Find("Image");
-            arrow.GetComponent<Image>().color = curColor;
-
-            yield return new WaitForSeconds(0);
-        }
-        Destroy(hintObject);
+            Destroy(hintObject);
+        });
     }
+    
 }

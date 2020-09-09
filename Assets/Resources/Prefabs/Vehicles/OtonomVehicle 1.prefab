@@ -70,7 +70,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerReachedTarget: 0
   animController: {fileID: 0}
-  animationSpeed: 1
+  animationSpeed: 5
   scaleFactor: 1
 --- !u!1 &7051132908528570723
 GameObject:

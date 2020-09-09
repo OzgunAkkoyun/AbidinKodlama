@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
     public int scenarioIndex;
     public LevelStats.Senarios.Levels.SubLevels currentSubLevel;
     public LevelStats.Senarios.Levels currentLevel;
+    public LevelStats.Senarios currentSenario;
 
     public bool DeleteAllPlayerPrefs;
 
@@ -96,20 +97,22 @@ public class GameManager : MonoBehaviour
         var gameDataString = PlayerPrefs.GetString("gameDatas");
         var playerDataString = PlayerPrefs.GetString("playerDatas");
         
+        PlayerDataCheck(playerDataString);
         GameDataCheck(gameDataString);
 
-        PlayerDataCheck(playerDataString);
 
         WillVideoShown();
 
         //yield return new WaitUntil(() => levelLoader != null );
+    
         levelLoader.SetLevels();
 
         currentSubLevel = levelLoader.currentLevelStats.GetSubLevel(playerDatas.whichScenario, playerDatas.whichLevel,
             playerDatas.whichSubLevel.ToString());
 
        currentLevel = levelLoader.currentLevelStats.GetLevel(playerDatas.whichScenario, playerDatas.whichLevel);
-       
+       currentSenario = levelLoader.currentLevelStats.GetSenario(playerDatas.whichScenario);
+
         GameorLoadCheck();
     }
 
@@ -166,7 +169,7 @@ public class GameManager : MonoBehaviour
             });
 
             //gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
-            scenarioIndex = gameDatas[gameDatas.Count - 1].scenarioIndex;
+            scenarioIndex = playerDatas.whichScenario;
         }
         else
         {
@@ -205,10 +208,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOverStatSet(bool isSuccess)
     {
-        Debug.Log(currentSubLevel.passed);
         if ((isGameOrLoad == 0 || isGameOrLoad == 2) && !currentSubLevel.passed)
         {
-            Debug.Log("ilk if");
             if (isSuccess)
             {
                 //playerDatas.winStreak++;
@@ -233,6 +234,8 @@ public class GameManager : MonoBehaviour
                     else//New Senario
                     {
                         playerDatas.whichScenario++;
+                        playerDatas.whichLevel = 1;
+                        currentSenario.senarioComplated = true;
                         playerDatas.lastMapSize = 5;
                         playerDatas.score = 0;
                     }

@@ -14,6 +14,7 @@ public class GameObjectsAnimationController : MonoBehaviour
         }
         else if (gm.playerDatas.whichScenario == 2)
         {
+            gm.Invoke("EndGame", 2);
         }
         else if (gm.playerDatas.whichScenario == 3)
         {
