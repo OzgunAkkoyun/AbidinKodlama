@@ -38,13 +38,27 @@ public class UiMiniMapController : MonoBehaviour
         minimapTextureRect = minimapTexture.GetComponent<RectTransform>();
         MiniMapSizeSet();
 
+        var miniMapZPos = 0f;
+        if (map.currentMap.mapSize.y == 5)
+        {
+            miniMapZPos = -6f;
+        }else if (map.currentMap.mapSize.y == 7)
+        {
+            miniMapZPos = -4.5f;
+        }
+        else if (map.currentMap.mapSize.y == 9)
+        {
+            miniMapZPos = -1.7f;
+        }
+
         miniMapCamera.transform.position = new Vector3(map.currentMap.mapSize.x - 1, miniMapCamera.transform.position.y,
-            map.currentMap.mapSize.y - 1);
+            miniMapZPos);
+
         miniMapCamera.orthographicSize = miniMapCamera.transform.position.x + 4;
     }
     void MiniMapSizeSet()
     {
-        miniMapGraphicsRect.sizeDelta = new Vector2(screenW - 100, screenH);
+        miniMapGraphicsRect.sizeDelta = new Vector2(screenH-100, screenH-100);
         RatiosForMiniMap();
     }
 

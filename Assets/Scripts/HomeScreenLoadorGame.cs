@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class HomeScreenLoadorGame : MonoBehaviour
@@ -9,5 +7,11 @@ public class HomeScreenLoadorGame : MonoBehaviour
     {
         PlayerPrefs.SetInt("isGameOrLoad",index);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+ 1);
+    }
+
+    public void Game()
+    {
+        PlayerPrefs.SetInt("isGameOrLoad", 0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

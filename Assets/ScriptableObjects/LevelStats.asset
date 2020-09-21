@@ -13,198 +13,258 @@ MonoBehaviour:
   m_Name: LevelStats
   m_EditorClassIdentifier: 
   senarios:
-  - senarioName: Senario-1
+  - senarioIndex: 1
     levels:
-    - LevelName: Level-1
+    - levelIndex: 1
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 2
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 3
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 4
         passed: 0
+      mapSize: 5
       levelComplated: 0
-    - LevelName: Level-2
+    - levelIndex: 2
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 5
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 6
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 7
         passed: 0
+      mapSize: 7
       levelComplated: 0
-    - LevelName: Level-3
+    - levelIndex: 3
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 8
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 9
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 10
         passed: 0
+      mapSize: 9
       levelComplated: 0
     senarioComplated: 0
-  - senarioName: Senario-2
+  - senarioIndex: 2
     levels:
-    - LevelName: Level-1
+    - levelIndex: 1
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 2
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 3
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 4
         passed: 0
+      mapSize: 5
       levelComplated: 0
-    - LevelName: Level-2
+    - levelIndex: 2
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
+        pathLenght: 2
+        passed: 0
+      - subLevelName: 2
+        subLevelIndex: 2
+        pathLenght: 3
+        passed: 0
+      - subLevelName: 3
+        subLevelIndex: 3
+        pathLenght: 4
+        passed: 0
+      mapSize: 7
+      levelComplated: 0
+    - levelIndex: 3
+      subLevels:
+      - subLevelName: 1
+        subLevelIndex: 1
+        pathLenght: 3
+        passed: 0
+      - subLevelName: 2
+        subLevelIndex: 2
+        pathLenght: 4
+        passed: 0
+      - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 5
         passed: 0
-      - subLevelName: 2
-        pathLenght: 6
-        passed: 0
-      - subLevelName: 3
-        pathLenght: 7
-        passed: 0
-      levelComplated: 0
-    - LevelName: Level-3
-      subLevels:
-      - subLevelName: 1
-        pathLenght: 8
-        passed: 0
-      - subLevelName: 2
-        pathLenght: 9
-        passed: 0
-      - subLevelName: 3
-        pathLenght: 10
-        passed: 0
+      mapSize: 9
       levelComplated: 0
     senarioComplated: 0
-  - senarioName: Senario-3
+  - senarioIndex: 3
     levels:
-    - LevelName: Level-1
+    - levelIndex: 1
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 2
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 3
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 4
         passed: 0
+      mapSize: 0
       levelComplated: 0
-    - LevelName: Level-2
+    - levelIndex: 2
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 5
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 6
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 7
         passed: 0
+      mapSize: 0
       levelComplated: 0
-    - LevelName: Level-3
+    - levelIndex: 3
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 8
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 9
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 10
         passed: 0
+      mapSize: 0
       levelComplated: 0
     senarioComplated: 0
-  - senarioName: Senario-4
+  - senarioIndex: 4
     levels:
-    - LevelName: Level-1
+    - levelIndex: 1
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 2
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 3
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 4
         passed: 0
+      mapSize: 0
       levelComplated: 0
-    - LevelName: Level-2
+    - levelIndex: 2
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 5
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 6
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 7
         passed: 0
+      mapSize: 0
       levelComplated: 0
-    - LevelName: Level-3
+    - levelIndex: 3
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 8
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 9
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 10
         passed: 0
+      mapSize: 0
       levelComplated: 0
     senarioComplated: 0
-  - senarioName: Senario-5
+  - senarioIndex: 5
     levels:
-    - LevelName: Level-1
+    - levelIndex: 1
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 2
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 3
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 4
         passed: 0
+      mapSize: 0
       levelComplated: 0
-    - LevelName: Level-2
+    - levelIndex: 2
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 5
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 6
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 7
         passed: 0
+      mapSize: 0
       levelComplated: 0
-    - LevelName: Level-3
+    - levelIndex: 3
       subLevels:
       - subLevelName: 1
+        subLevelIndex: 1
         pathLenght: 8
         passed: 0
       - subLevelName: 2
+        subLevelIndex: 2
         pathLenght: 9
         passed: 0
       - subLevelName: 3
+        subLevelIndex: 3
         pathLenght: 10
         passed: 0
+      mapSize: 0
       levelComplated: 0
     senarioComplated: 0

@@ -14,7 +14,7 @@ public class GameObjectsAnimationController : MonoBehaviour
         }
         else if (gm.playerDatas.whichScenario == 2)
         {
-            gm.Invoke("EndGame", 2);
+            gm.Invoke("EndGame", 3.5f);
         }
         else if (gm.playerDatas.whichScenario == 3)
         {
@@ -43,6 +43,6 @@ public class GameObjectsAnimationController : MonoBehaviour
     {
         windTurbine.SetActive(false);
         mapGenerate.targetNewHome?.SetActive(true);
-        gm.Invoke("EndGame", 2);
+        gm.Invoke("EndGame", 3.5f);
     }
 }

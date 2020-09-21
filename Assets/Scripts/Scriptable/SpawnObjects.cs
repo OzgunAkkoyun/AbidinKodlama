@@ -9,6 +9,7 @@ public class SpawnObjects : ScriptableObject
     public GameObject[] targetNewGameObject;
     [Space(20f)]
     public GameObject tileGameObject;
+    public GameObject pathGameObject;
     public GameObject[] environmentGameObjects;
     public GameObject vehicleGameObject;
 }

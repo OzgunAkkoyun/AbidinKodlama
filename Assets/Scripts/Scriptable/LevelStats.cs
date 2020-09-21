@@ -11,19 +11,22 @@ public class LevelStats : ScriptableObject
     [Serializable]
     public class Senarios
     {
-        public string senarioName;
+        public int senarioIndex;
         [Serializable]
         public class Levels
         {
-            public string LevelName;
+            public int levelIndex;
             [Serializable]
             public class SubLevels
             {
                 public string subLevelName;
+                public int subLevelIndex;
                 public int pathLenght;
                 public bool passed;
+               
             }
             public SubLevels[] subLevels;
+            public int mapSize;
             public bool levelComplated;
         }
         public Levels[] levels;

@@ -79,7 +79,7 @@ public class MapGenerator : MonoBehaviour {
         {
             gameObjectIndex = 2;
         }
-
+        
         home[0] = senarioObjects.startGameObject;
         home[1] = senarioObjects.targetGameObject[gameObjectIndex];
         home[2] = senarioObjects.targetNewGameObject[gameObjectIndex];
@@ -120,10 +120,14 @@ public class MapGenerator : MonoBehaviour {
         pathGenarator.Path = _Path;
         currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
 
-        pathGenarator.DestroyObstaclesInPath();
         var start = currentMap.startPoint;
         var target = pathGenarator.Path[pathGenarator.Path.Count - 1];
-        pathGenarator.InstantiateObstaclePathSide();
+
+        if (gm.currentSenario.senarioIndex == 2)
+        {
+            pathGenarator.ChangeEnvironment();
+        }
+
         SpawnVehicle();
         SpawnHouses();
     }
@@ -163,19 +167,18 @@ public class MapGenerator : MonoBehaviour {
         {
             currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
             pathGenarator.CreatePath();
-            Debug.Log("1");
         }
         else if (gm.scenarioIndex == 2)
         {
             currentMap.startPoint = pathGenarator.GetRandomStartCoord();
             pathGenarator.CreatePathWithForLoop();
-            Debug.Log("2");
         }
 
         currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
 
         var start = currentMap.startPoint;
         var target = pathGenarator.Path[pathGenarator.Path.Count - 1];
+        //allOpenCoords.Remove(target);
 
     }
 
@@ -247,6 +250,10 @@ public class MapGenerator : MonoBehaviour {
             targetNewHome = null;
         }
 
+        if (gm.currentSenario.senarioIndex == 1)
+        {
+            pathGenarator.changeEnvironment.AddSignNumber();
+        }
     }
 
     private void SpawnObstacle(Random prng)
@@ -286,7 +293,7 @@ public class MapGenerator : MonoBehaviour {
         Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight, Quaternion.identity) as Transform;
         newObstacle.parent = mapHolder;
         //newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight*2, (1 - outlinePercent) * tileSize);
-
+        
         //Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
         //Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
         //float colourPercent = randomCoord.y / (float)currentMap.mapSize.y;
@@ -298,6 +305,7 @@ public class MapGenerator : MonoBehaviour {
         allOpenCoords.Remove(randomCoord);
     }
 
+    public List<GameObject> allTileGameObject = new List<GameObject>();
     private void SpawnAllTiles()
     {
         // Spawning tiles
@@ -310,6 +318,7 @@ public class MapGenerator : MonoBehaviour {
                 newTile.localScale = Vector3.one * (1 - outlinePercent) * tileSize;
                 newTile.parent = mapHolder;
                 tileMap[x, y] = newTile;
+                allTileGameObject.Add(newTile.gameObject);
             }
         }
     }

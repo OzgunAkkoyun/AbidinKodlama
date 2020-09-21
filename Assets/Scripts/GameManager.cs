@@ -3,6 +3,7 @@ using UnityEngine;
 using static MapGenerator;
 using System;
 using System.Collections;
+using System.Linq;
 using Newtonsoft.Json;
 
 [Serializable]
@@ -79,6 +80,7 @@ public class GameManager : MonoBehaviour
     public LevelStats.Senarios.Levels currentLevel;
     public LevelStats.Senarios currentSenario;
 
+    public int[] senarioAndLevelIndexs;
     public bool DeleteAllPlayerPrefs;
 
     void Awake()
@@ -103,7 +105,7 @@ public class GameManager : MonoBehaviour
 
         WillVideoShown();
 
-        //yield return new WaitUntil(() => levelLoader != null );
+        //yield return new WaitUntil(() => levelController != null );
     
         levelLoader.SetLevels();
 
@@ -123,14 +125,51 @@ public class GameManager : MonoBehaviour
     private void GameorLoadCheck()
     {
         isGameOrLoad = PlayerPrefs.GetInt("isGameOrLoad");
+        var isRestart = PlayerPrefs.GetInt("isRestart");
 
         if (isGameOrLoad == 0) //its mean gameScreen
         {
-            SetMapAttributes();
+            if (isRestart == 1)
+                load.RestartGenerateMap();
+            else
+                SetMapAttributes();
         }
-        else // its mean loading one of the previous games or Restart game
+        else if(isGameOrLoad == 1 /*|| isGameOrLoad == 2*/) // its mean loading one of the previous games or Restart game
         {
             load.LoadGenerateMap(isGameOrLoad);
+        }
+        else
+        {
+            SetSelectedLevelProporties(isRestart);
+        }
+    }
+
+    private void SetSelectedLevelProporties(int isRestart)
+    {
+        senarioAndLevelIndexs = PlayerPrefs.GetString("selcetedLevelProps").Split('-').Select(int.Parse).ToArray();
+
+        currentSubLevel = levelLoader.currentLevelStats.GetSubLevel(senarioAndLevelIndexs[0],
+            senarioAndLevelIndexs[1],
+            senarioAndLevelIndexs[2].ToString());
+
+        currentLevel = levelLoader.currentLevelStats.GetLevel(senarioAndLevelIndexs[0],
+            senarioAndLevelIndexs[1]);
+
+        currentSenario = levelLoader.currentLevelStats.GetSenario(senarioAndLevelIndexs[0]);
+
+        playerDatas.whichScenario = senarioAndLevelIndexs[0];
+        scenarioIndex = senarioAndLevelIndexs[0];
+        playerDatas.lastMapSize = currentLevel.mapSize;
+        map.currentMap.mapSize = new Coord(currentLevel.mapSize, currentLevel.mapSize);
+        pathGenarator.expectedPathLength = currentSubLevel.pathLenght;
+
+        if (isRestart == 1)
+        {
+            load.RestartGenerateMap();
+        }
+        else
+        {
+            map.GameStart();
         }
     }
 
@@ -212,10 +251,6 @@ public class GameManager : MonoBehaviour
         {
             if (isSuccess)
             {
-                //playerDatas.winStreak++;
-                //playerDatas.score++;
-                //playerDatas.succesedLevelCount++;
-
                 currentSubLevel.passed = true;
                 if (playerDatas.whichSubLevel == 3)
                 {
@@ -253,9 +288,10 @@ public class GameManager : MonoBehaviour
                 playerDatas.score = playerDatas.score > 0 ? (playerDatas.score - 1) : 0;
             }
             levelLoader.SaveLevelStats();
-            GameDataSave();
+            
             PlayerDataSave();
         }
+        GameDataSave();
     }
 
     public void EndGame()

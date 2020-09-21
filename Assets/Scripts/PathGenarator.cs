@@ -7,6 +7,7 @@ public class PathGenarator : MonoBehaviour
 {
     public MapGenerator mapGenerator;
     public GameManager gm;
+    public ChangeEnvironment changeEnvironment;
     public List<Coord> Path = new List<Coord>();
     public int expectedPathLength;
     public int PathLength => Path.Count;
@@ -35,8 +36,24 @@ public class PathGenarator : MonoBehaviour
         CreateMapWithDirections(ref currentPathIndex);
         SetPathDirections();
 
-        DestroyObstaclesInPath();
+        ChangeEnvironment();
+    }
+
+    public void ChangeEnvironment()
+    {
+        changeEnvironment.DestroyObstaclesInPath();
+        RemovePathinOpenCoord();
         InstantiateObstaclePathSide();
+        changeEnvironment.AddForestEmptyTiles();
+        changeEnvironment.AddStreetLightsToPath();
+    }
+
+    public void RemovePathinOpenCoord()
+    {
+        for (int i = 0; i < Path.Count; i++)
+        {
+            mapGenerator.allOpenCoords.Remove(Path[i]);
+        }
     }
 
     public void InstantiateObstaclePathSide()
@@ -47,26 +64,17 @@ public class PathGenarator : MonoBehaviour
             var neightbours = currentPath.GetNeighbours();
             for (int j = 0; j < neightbours.Count; j++)
             {
-                var indexObstacle = mapGenerator.allObstacleCoord.FindIndex(v => (v.x == neightbours[j].x) && (v.y == neightbours[j].y));
-
-                var indexPath = Path.FindIndex(v => (v.x == neightbours[j].x) && (v.y == neightbours[j].y));
-                Debug.Log(indexObstacle + " // " + indexPath);
-                if (indexObstacle < 0 && indexPath < 0)
+                if (CellinBounds(neightbours[j]))
                 {
-                    mapGenerator.ObstacleInstantiate(neightbours[j]);
-                }
-            }
-        }
-    }
+                    var indexObstacle = mapGenerator.allObstacleCoord.FindIndex(v => (v.x == neightbours[j].x) && (v.y == neightbours[j].y));
 
-    public void DestroyObstaclesInPath()
-    {
-        for (int i = 0; i < Path.Count; i++)
-        {
-            var index = mapGenerator.allObstacleCoord.FindIndex(v => (v.x == Path[i].x) && (v.y == Path[i].y));
-            if (index >= 0)
-            {
-                DestroyImmediate(mapGenerator.obstacleGameObject[index]);
+                    var indexPath = Path.FindIndex(v => (v.x == neightbours[j].x) && (v.y == neightbours[j].y));
+
+                    if (indexObstacle < 0 && indexPath < 0)
+                    {
+                        mapGenerator.ObstacleInstantiate(neightbours[j]);
+                    }
+                }
             }
         }
     }
@@ -109,13 +117,11 @@ public class PathGenarator : MonoBehaviour
         }
         else if (gm.playerDatas.lastMapSize == 7)
         {
-            expectedPathLength = (int)expectedPathLength / 2;
             AddPathinXDirection(ref currentPathIndex, xLenght);
             AddPathinYDirection(ref currentPathIndex, yLenght);
         }
         else if (gm.playerDatas.lastMapSize == 9)
         {
-            expectedPathLength = (int)expectedPathLength / 2;
             AddPathXYDirectionsTogether(ref currentPathIndex, xLenght, yLenght);
         }
     }
@@ -139,6 +145,7 @@ public class PathGenarator : MonoBehaviour
             }
         }
     }
+
     private void AddPathinYDirection(ref int currentPathIndex, int yLenght)
     {
         if (directions[1] == forLoopDirections.Down)
@@ -185,11 +192,7 @@ public class PathGenarator : MonoBehaviour
                 currentPathIndex++;
             }
         }
-        
-
-
     }
-
 
     public Coord GetRandomStartCoord()
     {
@@ -227,7 +230,7 @@ public class PathGenarator : MonoBehaviour
                 OneStepBackinList(currentCell, ref currentPathIndex);
             }
         }
-
+        //changeEnvironment.AddSignNumber();
         SetPathDirections();
     }
     private void OneStepBackinList(Coord currentCell, ref int currentPathIndex)

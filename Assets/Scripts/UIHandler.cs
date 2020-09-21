@@ -38,6 +38,8 @@ public class UIHandler : MonoBehaviour
     public TextMeshProUGUI codeString;
 
     public int commandIndex = 0;
+    public Sprite[] gameOverScoreImages;
+    public Image gameOverScoreObject;
 
     void Awake()
     {
@@ -147,9 +149,6 @@ public class UIHandler : MonoBehaviour
             codeInput.transform.localScale = new Vector3(1, 1, 1);
 
             codeInputsObjects.Add(codeInputFor);
-            Debug.Log(codeInputFor.transform.localScale.x);
-            
-
 
             var arrow = codeInput.transform.Find("Image");
             arrow.gameObject.transform.Rotate(new Vector3(0, 0, keyRotate));
@@ -211,24 +210,98 @@ public class UIHandler : MonoBehaviour
 
     public void RestartOrNewGame(int isGameOrLoad)
     {
-        PlayerPrefs.SetInt("isGameOrLoad", isGameOrLoad);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (gm.isGameOrLoad == 3)
+        {
+            PlayerPrefs.SetInt("isGameOrLoad", 3);
+            if (isGameOrLoad == 0)//In game over panel pressed play button
+            {
+                PlayerPrefs.SetInt("isRestart", 0);
+                var levelsInt = gm.senarioAndLevelIndexs;
+
+                if (levelsInt[2] != 3 )
+                {
+                    if (gm.character.isPlayerReachedTarget)
+                    {
+                        levelsInt[2]++;
+                        var senarioAndLevelIndexs = levelsInt[0].ToString() + "-" + levelsInt[1].ToString() + "-" + levelsInt[2].ToString();
+                        PlayerPrefs.SetString("selcetedLevelProps", senarioAndLevelIndexs);
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    }
+                    
+                }
+                else
+                {
+                    if (gm.character.isPlayerReachedTarget)
+                    {
+                        SceneManager.LoadScene(1);
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    }
+                }
+            }
+            else//In game over panel pressed restart button
+            {
+                PlayerPrefs.SetInt("isRestart", 1);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            
+        }
+        else if (gm.isGameOrLoad == 1)
+        {
+            if (isGameOrLoad == 0) //In game over panel pressed play button
+            {
+                PlayerPrefs.SetInt("isRestart", 0);
+                SceneManager.LoadScene(1); //level maps scene
+            }
+            else
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+        else
+        {
+            if (isGameOrLoad == 0) //In game over panel pressed play button
+            {
+                PlayerPrefs.SetInt("isRestart", 0);
+                if (gm.currentSubLevel.subLevelName == "3")
+                    SceneManager.LoadScene(1);//level maps scene
+                else
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
+            }
+            else
+            {
+                PlayerPrefs.SetInt("isRestart", 1);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
     }
 
     public void OpenGameOverPanel(bool isSuccess)
     {
         gameOverPanel.SetActive(true);
-        var gameOverText = gameOverPanel.transform.Find("Text");
         
         if (isSuccess)
         {
-            gameOverText.GetComponent<TextMeshProUGUI>().text = "Başarılı!";
+            var index = 0;
+            if (gm.currentSubLevel.subLevelName == "1")
+                index = 0;
+            else if (gm.currentSubLevel.subLevelName == "2")
+                index = 1;
+            else if (gm.currentSubLevel.subLevelName == "3")
+                index = 2;
+            gameOverScoreObject.sprite = gameOverScoreImages[index];
             gameOverReplay.GetComponent<Button>().interactable = false;
             cm.StartAnimateCoins();
         }
         else
         {
-            gameOverText.GetComponent<TextMeshProUGUI>().text = "Başarısız!";
+            gameOverScoreObject.sprite = gameOverScoreImages[3];
         }
     }
 

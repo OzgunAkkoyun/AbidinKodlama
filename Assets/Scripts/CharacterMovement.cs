@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 using static MapGenerator;
@@ -107,11 +109,9 @@ public class CharacterMovement : MonoBehaviour
         }
         else
         {
-            //for (float t = 0f; t < 1f; t += Time.deltaTime * animationSpeed)
-            //{
-            //    transform.Translate(transform.forward/2); 
-            //}
-            //transform.position = inputVector;
+            var Direction = inputVector - transform.position;
+            var a = inputVector - Direction / 2;
+            transform.DOMove(a, .5f);
             yield return null;
         }
         isAnimStarted = false;
@@ -140,15 +140,20 @@ public class CharacterMovement : MonoBehaviour
     void WindTurbineAnimationPlay()
     {
         animController = FindObjectOfType<GameObjectsAnimationController>();
-        anim.SetBool("animationStart", false);
-
+        if(anim != null)
+            anim.SetBool("animationStart", false);
         animController.GameObjectAnimationPlay();
     }
-  
+
     void CharacterAnimationPlay()
     {
-        anim.SetBool("animationStart", true);
+        if (anim != null)
+        {
+            anim.SetBool("animationStart", true);
+        }
+        else
+        {
+            WindTurbineAnimationPlay();
+        }
     }
-
-    
 }
