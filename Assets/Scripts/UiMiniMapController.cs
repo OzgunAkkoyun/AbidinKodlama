@@ -41,14 +41,14 @@ public class UiMiniMapController : MonoBehaviour
         var miniMapZPos = 0f;
         if (map.currentMap.mapSize.y == 5)
         {
-            miniMapZPos = -6f;
+            miniMapZPos = -5.8f;
         }else if (map.currentMap.mapSize.y == 7)
         {
-            miniMapZPos = -4.5f;
+            miniMapZPos = -3.8f;
         }
         else if (map.currentMap.mapSize.y == 9)
         {
-            miniMapZPos = -1.7f;
+            miniMapZPos = -1.6f;
         }
 
         miniMapCamera.transform.position = new Vector3(map.currentMap.mapSize.x - 1, miniMapCamera.transform.position.y,
@@ -58,7 +58,7 @@ public class UiMiniMapController : MonoBehaviour
     }
     void MiniMapSizeSet()
     {
-        miniMapGraphicsRect.sizeDelta = new Vector2(screenH-100, screenH-100);
+        miniMapGraphicsRect.sizeDelta = new Vector2(screenH-50, screenH-50);
         RatiosForMiniMap();
     }
 
@@ -80,7 +80,7 @@ public class UiMiniMapController : MonoBehaviour
         miniMapRect.SetPivot(PivotPresets.TopRight);
         miniMapRect.sizeDelta = new Vector2(screenW, screenH);
 
-        minimapPipBoy.SetActive(false);
+        //minimapPipBoy.SetActive(false);
         float t = 0;
 
         while (true)
@@ -96,7 +96,7 @@ public class UiMiniMapController : MonoBehaviour
                 (miniMapRect.sizeDelta.y - 20 - 1 * 30),
                 (miniMapRect.sizeDelta.y - 20 - 1 * 30));
 
-            minimapTextureRect.sizeDelta = Vector2.Lerp(minimapTextureRect.sizeDelta, new Vector2(300, 300), t);
+            minimapTextureRect.sizeDelta = Vector2.Lerp(minimapTextureRect.sizeDelta, new Vector2(260, 260), t);
 
             miniMapGraphicsRect.SetLeft(0);
             miniMapGraphicsRect.SetRight(0);

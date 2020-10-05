@@ -173,6 +173,11 @@ public class MapGenerator : MonoBehaviour {
             currentMap.startPoint = pathGenarator.GetRandomStartCoord();
             pathGenarator.CreatePathWithForLoop();
         }
+        else if (gm.scenarioIndex == 3)
+        {
+            currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
+            pathGenarator.CreatePathWithIfStatement();
+        }
 
         currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
 
@@ -428,6 +433,7 @@ public class MapGenerator : MonoBehaviour {
         public List<Coord> UnavaliableNeighbours;
 
         public Direction pathDirection;
+        public PathGenarator.IfObjects.AnimalForLevel animal;
 
         public List<Coord> GetNeighbours()
         {
@@ -451,6 +457,7 @@ public class MapGenerator : MonoBehaviour {
             y = _y;
             UnavaliableNeighbours = new List<Coord>();
             pathDirection = Direction.Empty;
+            animal = null;
         }
 
         public static bool operator ==(Coord c1, Coord c2)

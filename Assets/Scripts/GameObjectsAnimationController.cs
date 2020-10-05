@@ -5,6 +5,7 @@ public class GameObjectsAnimationController : MonoBehaviour
     private GameObject windTurbine;
     public GameManager gm;
     public MapGenerator mapGenerate;
+    private float animFinishTime = 5f;
 
     public void GameObjectAnimationPlay()
     {
@@ -14,7 +15,7 @@ public class GameObjectsAnimationController : MonoBehaviour
         }
         else if (gm.playerDatas.whichScenario == 2)
         {
-            gm.Invoke("EndGame", 3.5f);
+            gm.Invoke("EndGame", animFinishTime);
         }
         else if (gm.playerDatas.whichScenario == 3)
         {
@@ -28,7 +29,7 @@ public class GameObjectsAnimationController : MonoBehaviour
     }
     public void WindTurbineAnimationPlay()
     {
-        gm.sc.Play("Sparkle");
+        SoundController.instance.Play("Sparkle");
 
         windTurbine = mapGenerate.targetHome;
 
@@ -41,8 +42,10 @@ public class GameObjectsAnimationController : MonoBehaviour
 
     public void WindTurbuneSetActive()
     {
+        SoundController.instance.Play("Wind");
         windTurbine.SetActive(false);
         mapGenerate.targetNewHome?.SetActive(true);
-        gm.Invoke("EndGame", 3.5f);
+        gm.Invoke("EndGame", animFinishTime);
+        StartCoroutine(SoundController.instance.Pause("Wind", animFinishTime));
     }
 }

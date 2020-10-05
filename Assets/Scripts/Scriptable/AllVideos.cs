@@ -13,11 +13,9 @@ public class AllVideos : ScriptableObject
     public VideoClip GetVideo(int scenario, string videoName)
     {
         var videos = senarioVideos[scenario - 1].videos;
-
-        //var pickedVideo = Array.Find(videos, element => element.name == videoName);
         var pickedVideo = videos.FirstOrDefault(element => element.name == videoName);
 
         return pickedVideo.video;
     }
-
+  
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5811533803494585232}
   - component: {fileID: -4307726030964572502}
+  - component: {fileID: 3416451494430779922}
   m_Layer: 0
   m_Name: Senario2-Otonom
   m_TagString: Untagged
@@ -50,6 +51,18 @@ MonoBehaviour:
   animController: {fileID: 0}
   animationSpeed: 1
   scaleFactor: 1
+--- !u!114 &3416451494430779922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799194424892124439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce52b1c758735b4d996550cc8915274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3650464092451764602
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,6 +227,7 @@ GameObject:
   - component: {fileID: 4536636756868729255}
   - component: {fileID: 5612934125648800182}
   - component: {fileID: 6228323733845979444}
+  - component: {fileID: 2032186109816505558}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -295,6 +309,18 @@ Skybox:
   m_GameObject: {fileID: 5857089163462469375}
   m_Enabled: 1
   m_CustomSkybox: {fileID: 2100000, guid: acef969085560684b9e35b00f14d23b2, type: 2}
+--- !u!114 &2032186109816505558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5857089163462469375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce52b1c758735b4d996550cc8915274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7203455902596339288
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c6faaa80f0338a4984cbee296dc63d0, type: 3}
   m_Name: LogCommand
   m_EditorClassIdentifier: 
-  commandWord: log
+  commandWord: openLevel

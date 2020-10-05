@@ -17,11 +17,11 @@ MonoBehaviour:
   targetGameObject:
   - {fileID: 4644379270013986926, guid: 9925c98b61a2bc840b2e2ec7dc2a5bf2, type: 3}
   - {fileID: 6045814010249554945, guid: 79b158c9118862d44bddcd3de261bf64, type: 3}
-  - {fileID: 5327447121006745843, guid: 621f353b3134dad43a609911557ea008, type: 3}
+  - {fileID: 5942393793910207002, guid: 58a36493c115ee3418824fab7e24f8c2, type: 3}
   targetNewGameObject:
   - {fileID: 4644379270013986926, guid: 9925c98b61a2bc840b2e2ec7dc2a5bf2, type: 3}
   - {fileID: 6045814010249554945, guid: 79b158c9118862d44bddcd3de261bf64, type: 3}
-  - {fileID: 5327447121006745843, guid: 621f353b3134dad43a609911557ea008, type: 3}
+  - {fileID: 5942393793910207002, guid: 58a36493c115ee3418824fab7e24f8c2, type: 3}
   tileGameObject: {fileID: 195019098710043781, guid: 848e2688d9929de42bb54e2c188e15ea,
     type: 3}
   pathGameObject: {fileID: 195019098710043781, guid: 41ec3fecb9f622f4d81c5715b5e4194d,

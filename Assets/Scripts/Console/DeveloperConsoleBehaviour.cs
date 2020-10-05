@@ -30,15 +30,10 @@ namespace DapperDino.UDCT.Utilities.DeveloperConsole
 
         private void Awake()
         {
-            if (instance != null && instance != this)
+            if (instance == null )
             {
-                Destroy(gameObject);
-                return;
+                instance = this;
             }
-
-            instance = this;
-
-            DontDestroyOnLoad(gameObject);
         }
 
         public void Update()
@@ -47,13 +42,13 @@ namespace DapperDino.UDCT.Utilities.DeveloperConsole
             {
                 if (uiCanvas.activeSelf)
                 {
-                    Time.timeScale = pausedTimeScale;
+                    //Time.timeScale = pausedTimeScale;
                     uiCanvas.SetActive(false);
                 }
                 else
                 {
-                    pausedTimeScale = Time.timeScale;
-                    Time.timeScale = 0;
+                    //pausedTimeScale = Time.timeScale;
+                    //Time.timeScale = 0;
                     uiCanvas.SetActive(true);
                     inputField.ActivateInputField();
                 }

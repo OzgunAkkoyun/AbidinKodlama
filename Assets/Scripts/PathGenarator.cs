@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static MapGenerator;
 using Random = System.Random;
@@ -106,7 +107,7 @@ public class PathGenarator : MonoBehaviour
         var xLenght = UnityEngine.Random.Range(2, xSize);
         var yLenght = UnityEngine.Random.Range(2, ySize);
 
-        if (gm.playerDatas.lastMapSize == 5)
+        if (gm.currentLevel.levelIndex == 1)
         {
             var random = UnityEngine.Random.Range(0, 2);
 
@@ -115,12 +116,12 @@ public class PathGenarator : MonoBehaviour
             else
                 AddPathinYDirection(ref currentPathIndex, xLenght);
         }
-        else if (gm.playerDatas.lastMapSize == 7)
+        else if (gm.currentLevel.levelIndex == 2)
         {
             AddPathinXDirection(ref currentPathIndex, xLenght);
             AddPathinYDirection(ref currentPathIndex, yLenght);
         }
-        else if (gm.playerDatas.lastMapSize == 9)
+        else if (gm.currentLevel.levelIndex == 3)
         {
             AddPathXYDirectionsTogether(ref currentPathIndex, xLenght, yLenght);
         }
@@ -312,6 +313,54 @@ public class PathGenarator : MonoBehaviour
 
     #endregion
 
+    #region IfPathGenerate
+    [Serializable]
+    public class IfObjects
+    {
+        [Serializable]
+        public class AnimalForLevel
+        {
+            public string name;
+            public GameObject animalsGameObjects;
+
+        }
+        public AnimalForLevel[] animals;
+
+    }
+
+    public IfObjects[] ifObjects;
+        
+    public void CreatePathWithIfStatement()
+    {
+        //CreatePath();
+        Path = mapGenerator.allOpenCoords;
+        SetIfObjects();
+    }
+
+    private void SetIfObjects()
+    {
+        var howManyObject = UnityEngine.Random.Range(1, gm.currentSubLevel.pathLenght);
+        var levelIndex = gm.currentLevel.levelIndex;
+        var subLevelIndex = gm.currentSubLevel.subLevelIndex;
+
+        //for (int i = 0; i < 1;)
+        //{
+            var whichPathHaveObject = UnityEngine.Random.Range(1, PathLength - 1);
+            var currentPath = Path[whichPathHaveObject];
+            var selectedAnimal = ifObjects[levelIndex-1].animals[subLevelIndex-1];
+           
+            if (currentPath.animal == null)
+            {
+                Path[whichPathHaveObject].animal = selectedAnimal;
+                var spawnPosition = mapGenerator.CoordToPosition(currentPath.x, currentPath.y);
+                Instantiate(selectedAnimal.animalsGameObjects, spawnPosition, Quaternion.identity);
+                //i++;
+            }
+        //}
+
+    }
+
+    #endregion
     public Coord GetRandomOpenCoord()
     {
         var rnd = UnityEngine.Random.Range(0, mapGenerator.allOpenCoords.Count);

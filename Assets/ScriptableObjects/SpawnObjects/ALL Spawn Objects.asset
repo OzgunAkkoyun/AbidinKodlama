@@ -15,6 +15,6 @@ MonoBehaviour:
   allSpawnObjects:
   - {fileID: 11400000, guid: 09fb595100f77a24990814aab54f0ad7, type: 2}
   - {fileID: 11400000, guid: 02c8c9735bb9b6c4bbef3d846e9ba553, type: 2}
-  - {fileID: 11400000, guid: 2232e3709f94ac94ea53207618119150, type: 2}
+  - {fileID: 11400000, guid: 7191baa66da9b5d4e9e24dd85d3c711a, type: 2}
   - {fileID: 11400000, guid: 16880dbc1e6d5cc4a9f93bcf0ed753eb, type: 2}
   - {fileID: 11400000, guid: 088f6db3d0439cf4183149d05b2950c4, type: 2}

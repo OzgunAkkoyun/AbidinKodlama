@@ -26,10 +26,12 @@ public class LevelController : MonoBehaviour
 
     void Awake()
     {
+        //PlayerPrefs.DeleteAll();
         levelLoader.SetLevels();
         UnlockAllPassedLevels();
-        
+  
         PlayerPrefs.SetInt("isGameOrLoad", 0);
+
     }
 
     public void UnlockAllPassedLevels()
@@ -79,7 +81,7 @@ public class LevelController : MonoBehaviour
 
         if (selectedLevel.levelComplated)
         {
-            //Player wants to play again this level complated
+            //Player wants to play again, this level already completed
            
             PlayerPrefs.SetString("selcetedLevelProps", senarioAndLevelIndexs);
             PlayerPrefs.SetInt("isGameOrLoad",3);
@@ -90,6 +92,32 @@ public class LevelController : MonoBehaviour
             PlayerPrefs.SetInt("isGameOrLoad", 0);
             SceneManager.LoadScene("Game");
         }
+    }
+
+
+    public void OpenSenario(int senarioIndex)
+    {
+        for (int i = 0; i < senarioIndex; i++)
+        {
+            levelLoader.currentLevelStats.senarios[i].senarioComplated = true;
+            for (int j = 0; j < 3; j++)
+            {
+                levelLoader.currentLevelStats.senarios[i].levels[j].levelComplated = true;
+                for (int k = 0; k < 3; k++)
+                {
+                    levelLoader.currentLevelStats.senarios[i].levels[j].subLevels[k].passed = true;
+                }
+            }
+            levelLoader.playerDatas.whichScenario++;
+            levelLoader.playerDatas.whichLevel = 1;
+            levelLoader.playerDatas.whichSubLevel = 1;
+            levelLoader.playerDatas.lastMapSize = 5;
+            string playerDataString = JsonUtility.ToJson(levelLoader.playerDatas);
+            PlayerPrefs.SetString("playerDatas", playerDataString);
+        }
+
+        levelLoader.SaveLevelStats();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void HomeButton()

@@ -131,6 +131,10 @@ public class UIHandler : MonoBehaviour
 
     private void ShowKeyForLoop(List<Direction> direction, int loopCount, int commandIndex)
     {
+        if (panel == null)
+        {
+            panel = GameObject.Find("CodePanel/Scroll");
+        }
         var codeInputFor = Instantiate(codeForObject, codeForObject.transform.position, Quaternion.identity);
         codeInputFor.transform.Find("LoopCountText").gameObject.GetComponent<TextMeshProUGUI>().text =
             loopCount.ToString();
@@ -159,6 +163,10 @@ public class UIHandler : MonoBehaviour
 
     private void ShowKey(Direction direction, int commandIndex)
     {
+        if (panel == null)
+        {
+            panel = GameObject.Find("CodePanel/Scroll");
+        }
         int keyRotate = SetDirectionRotate(direction);
 
         var codeInput = Instantiate(codeMoveObject, codeMoveObject.transform.position, Quaternion.identity);
@@ -270,7 +278,16 @@ public class UIHandler : MonoBehaviour
             {
                 PlayerPrefs.SetInt("isRestart", 0);
                 if (gm.currentSubLevel.subLevelName == "3")
-                    SceneManager.LoadScene(1);//level maps scene
+                {
+                    if (gm.character.isPlayerReachedTarget)
+                    {
+                        SceneManager.LoadScene(1);//level maps scene
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                    }
+                }
                 else
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
             }
@@ -307,7 +324,7 @@ public class UIHandler : MonoBehaviour
 
     public void HomeButton()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void ShowWrongCommand(int wrongCommandIndex)

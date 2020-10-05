@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 public class ChangeEnvironment : MonoBehaviour
@@ -15,7 +16,6 @@ public class ChangeEnvironment : MonoBehaviour
     {
         var whichLevelIndex = pathGenarator.gm.currentLevel.levelIndex;
         var whichSubLevelIndex = pathGenarator.gm.currentSubLevel.subLevelIndex;
-
         var number = (whichLevelIndex - 1) * 3 + whichSubLevelIndex;
 
         mapGenerator.targetHome.transform.Find("Sign").GetComponentInChildren<TextMeshPro>().text = number.ToString();
@@ -35,6 +35,7 @@ public class ChangeEnvironment : MonoBehaviour
     public GameObject[] forest;
     public Material loopMapPathMaterial;
     public GameObject streetLightPrefab;
+    public Color changeTargetColor;
 
     public void AddForestEmptyTiles()
     {
@@ -69,6 +70,11 @@ public class ChangeEnvironment : MonoBehaviour
                     loopMapPathMaterial;
             }
 
+            if (i == pathGenarator.PathLength - 1)
+            {
+                mapGenerator.allTileGameObject[PathIndex].gameObject.GetComponent<Renderer>().material.DOColor(changeTargetColor, 3).SetEase(Ease.Linear).SetLoops(-1, LoopType.Restart);
+            }
+
             if (index >= 0)
             {
                 DestroyImmediate(mapGenerator.obstacleGameObject[index]);
@@ -81,78 +87,41 @@ public class ChangeEnvironment : MonoBehaviour
         for (int i = 0; i < pathGenarator.PathLength; i++)
         {
             var pathGenaratorPath = pathGenarator.Path;
-
-            if (i == pathGenarator.PathLength-1) return;
-
+            
             Vector3 LightPos = Vector3.zero;
-            Vector3 LightPos1 = Vector3.zero;
 
-            if (pathGenaratorPath[i].pathDirection == Direction.Left || pathGenaratorPath[i].pathDirection == Direction.Right)
+            var neighbours = pathGenaratorPath[i].GetNeighbours();
+
+            for (int j = 0; j < neighbours.Count; j++)
             {
-                
-                if (pathGenaratorPath[i+1].pathDirection != Direction.Forward)
+                if (!pathGenaratorPath.Contains(neighbours[j]))
                 {
-                    LightPos = new Vector3(
-                        pathGenaratorPath[i].x * mapGenerator.tileSize,
+                    var diff = new Vector3(
+                        neighbours[j].x - pathGenaratorPath[i].x,
                         0,
-                        pathGenaratorPath[i].y * mapGenerator.tileSize + 1);
-                }
-                if (pathGenaratorPath[i + 1].pathDirection != Direction.Backward)
-                {
-                    LightPos1 = new Vector3(
-                        pathGenaratorPath[i].x * mapGenerator.tileSize,
-                        0,
-                        pathGenaratorPath[i].y * mapGenerator.tileSize - 1);
-                }
+                        neighbours[j].y - pathGenaratorPath[i].y);
 
-                var lamp = Instantiate(streetLightPrefab,LightPos,Quaternion.identity);
-                var lamp1 = Instantiate(streetLightPrefab, LightPos1, Quaternion.identity);
-
-                var lookPos = new Vector3(
-                    pathGenaratorPath[0].x * mapGenerator.tileSize,
-                    0,
-                    pathGenaratorPath[0].y * mapGenerator.tileSize + 1);
-                var lookPos1 = new Vector3(
-                    pathGenaratorPath[0].x * mapGenerator.tileSize,
-                    0,
-                    pathGenaratorPath[0].y * mapGenerator.tileSize - 1);
-                lamp.transform.LookAt(lookPos);
-                lamp1.transform.LookAt(lookPos1);
-            }
-            else if (pathGenaratorPath[i].pathDirection == Direction.Forward || pathGenaratorPath[i].pathDirection == Direction.Backward)
-            {
-                if (pathGenaratorPath[i + 1].pathDirection != Direction.Left)
-                {
-                    LightPos = new Vector3(
-                        pathGenaratorPath[i].x * mapGenerator.tileSize + 1,
-                        0,
+                    var originalPos = new Vector3(
+                        pathGenaratorPath[i].x * mapGenerator.tileSize,
+                        0, 
                         pathGenaratorPath[i].y * mapGenerator.tileSize);
+
+                    LightPos = originalPos + diff;
+
+                    var lamp = Instantiate(streetLightPrefab, LightPos, Quaternion.identity);
+
+                    var lookPos = new Vector3(
+                        pathGenaratorPath[0].x * mapGenerator.tileSize + 1,
+                        0,
+                        pathGenaratorPath[0].y * mapGenerator.tileSize);
+
+                    lamp.transform.LookAt(lookPos);
                 }
-                if (pathGenaratorPath[i + 1].pathDirection != Direction.Right)
-                {
-                    LightPos1 = new Vector3(
-                    pathGenaratorPath[i].x * mapGenerator.tileSize- 1,
-                    0,
-                    pathGenaratorPath[i].y * mapGenerator.tileSize );
-                }
-
-
-                var lamp = Instantiate(streetLightPrefab, LightPos, Quaternion.identity);
-                var lamp1 = Instantiate(streetLightPrefab, LightPos1, Quaternion.identity);
-
-                var lookPos = new Vector3(
-                    pathGenaratorPath[0].x * mapGenerator.tileSize+ 1,
-                    0,
-                    pathGenaratorPath[0].y * mapGenerator.tileSize );
-                var lookPos1 = new Vector3(
-                    pathGenaratorPath[0].x * mapGenerator.tileSize- 1,
-                    0,
-                    pathGenaratorPath[0].y * mapGenerator.tileSize );
-                lamp.transform.LookAt(lookPos);
-                lamp1.transform.LookAt(lookPos1);
             }
+            
         }
     }
+    
 
     #endregion
 

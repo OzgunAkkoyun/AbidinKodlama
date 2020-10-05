@@ -28,7 +28,8 @@ public class SliderController : MonoBehaviour
         rectTransform.DOAnchorPosX(0, 0f);
         var playerDataString = PlayerPrefs.GetString("playerDatas");
         PlayerPrefs.SetInt("isRestart",0);
-
+        SoundController.instance.PrepareSounds();
+        SoundController.instance.Play("Theme");
         if (playerDataString != "")
         {
             playerDatas = JsonUtility.FromJson<SavedPlayerData>(playerDataString);

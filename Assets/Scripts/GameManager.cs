@@ -17,7 +17,9 @@ public class SavedGameData
     public MapGenerator.Coord targetCoord;
     public List<Coord> Path;
     public int scenarioIndex;
-    public SavedGameData(MapGenerator.Coord mapSize, int seed, float obstaclePercentages, List<Command> commands, MapGenerator.Coord startCoord, MapGenerator.Coord targetCoord, List<Coord> Path,int scenarioIndex)
+    public int levelIndex;
+    public int subLevelIndex;
+    public SavedGameData(MapGenerator.Coord mapSize, int seed, float obstaclePercentages, List<Command> commands, MapGenerator.Coord startCoord, MapGenerator.Coord targetCoord, List<Coord> Path,int scenarioIndex, int levelIndex, int subLevelIndex)
     {
         this.mapSize = mapSize;
         this.seed = seed;
@@ -27,6 +29,8 @@ public class SavedGameData
         this.targetCoord = targetCoord;
         this.Path = Path;
         this.scenarioIndex = scenarioIndex;
+        this.levelIndex = levelIndex;
+        this.subLevelIndex = subLevelIndex;
     }
 }
 
@@ -91,30 +95,36 @@ public class GameManager : MonoBehaviour
         sc = FindObjectOfType<SoundController>();
         uiVideoController = FindObjectOfType<UiVideoController>();
         levelLoader = FindObjectOfType<LevelLoader>();
+
         if (DeleteAllPlayerPrefs)
         {
             PlayerPrefs.DeleteAll();
         }
-        
+
         var gameDataString = PlayerPrefs.GetString("gameDatas");
         var playerDataString = PlayerPrefs.GetString("playerDatas");
-        
+       
         PlayerDataCheck(playerDataString);
         GameDataCheck(gameDataString);
 
+        sc.PrepareSounds();
+
+        SoundController.instance.Play("Theme");
+        uiVideoController.PrepareAllVideos();
 
         WillVideoShown();
 
         //yield return new WaitUntil(() => levelController != null );
-    
+
         levelLoader.SetLevels();
 
         currentSubLevel = levelLoader.currentLevelStats.GetSubLevel(playerDatas.whichScenario, playerDatas.whichLevel,
             playerDatas.whichSubLevel.ToString());
 
-       currentLevel = levelLoader.currentLevelStats.GetLevel(playerDatas.whichScenario, playerDatas.whichLevel);
-       currentSenario = levelLoader.currentLevelStats.GetSenario(playerDatas.whichScenario);
-
+        currentLevel = levelLoader.currentLevelStats.GetLevel(playerDatas.whichScenario, playerDatas.whichLevel);
+        currentSenario = levelLoader.currentLevelStats.GetSenario(playerDatas.whichScenario);
+        
+        Debug.Log(currentLevel.levelIndex);
         GameorLoadCheck();
     }
 
@@ -136,6 +146,10 @@ public class GameManager : MonoBehaviour
         }
         else if(isGameOrLoad == 1 /*|| isGameOrLoad == 2*/) // its mean loading one of the previous games or Restart game
         {
+            playerDatas.whichScenario = gameDatas[gameDatas.Count - 1].scenarioIndex;
+            currentSenario.senarioIndex = gameDatas[gameDatas.Count - 1].scenarioIndex;
+            currentLevel.levelIndex = gameDatas[gameDatas.Count - 1].levelIndex;
+            currentSubLevel.subLevelIndex = gameDatas[gameDatas.Count - 1].subLevelIndex;
             load.LoadGenerateMap(isGameOrLoad);
         }
         else
@@ -175,14 +189,15 @@ public class GameManager : MonoBehaviour
 
     private void WillVideoShown()
     {
-        if (!playerDatas.showedOpeningVideo)
+        uiVideoController.GetCurrentVideoObject(playerDatas.whichScenario + "-" + playerDatas.lastMapSize);
+
+        if (!uiVideoController.currentVideoObject.isShowed)
         {
             uiVideoController.ShowVideo(playerDatas.whichScenario + "-" + playerDatas.lastMapSize);
         }
         else
         {
             uiVideoController.videoPanel.SetActive(false);
-            sc.Play("Theme");
         }
     }
 
@@ -209,6 +224,7 @@ public class GameManager : MonoBehaviour
 
             //gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
             scenarioIndex = playerDatas.whichScenario;
+
         }
         else
         {
@@ -233,6 +249,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             GameAnimationStart();
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            ScreenShotHandler.TakeScreenShot_Static(512,360);
         }
     }
     public void GameAnimationStart()
@@ -259,8 +280,8 @@ public class GameManager : MonoBehaviour
                     currentLevel.levelComplated = true;
                     playerDatas.winStreak = 0;
                     playerDatas.showedOpeningVideo = false;
-                   
-                    uiVideoController.ShowVideo(scenarioIndex+"-"+ playerDatas.lastMapSize + "-end");
+
+                    uiVideoController.ShowVideo(scenarioIndex + "-" + playerDatas.lastMapSize + "-end");
 
                     if (playerDatas.lastMapSize != 9)
                     {
@@ -304,7 +325,7 @@ public class GameManager : MonoBehaviour
     public void GameDataSave()
     {
         var current = map.currentMap;
-        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, pathGenarator.Path,scenarioIndex));
+        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, pathGenarator.Path,currentSenario.senarioIndex,currentLevel.levelIndex,currentSubLevel.subLevelIndex));
         
         string gameDataString = JsonConvert.SerializeObject(gameDatas, Formatting.Indented, new JsonSerializerSettings
         {
