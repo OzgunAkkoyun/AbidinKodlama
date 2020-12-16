@@ -13,6 +13,7 @@ public class UiVideoController : MonoBehaviour
     private GameObject video;
     public AllVideos allVideos;
     public GameObject videoPanel;
+    public GameObject videoEndControlButtons;
     public AllVideosShowed allVideosShowed;
     public AllVideosShowed currentAllVideosShowed;
 
@@ -60,6 +61,7 @@ public class UiVideoController : MonoBehaviour
     public void ShowVideo(string videoName)
     {
         var pickedVideo = allVideos.GetVideo(gm.playerDatas.whichScenario, videoName);
+        videoEndControlButtons.SetActive(false);
 
         if (pickedVideo == null)
             return;
@@ -71,17 +73,30 @@ public class UiVideoController : MonoBehaviour
 
         videoPlayer.clip = pickedVideo;
         videoPlayer.Play();
-        videoPlayer.loopPointReached += CloseVideo;
+        videoPlayer.loopPointReached += VideoEnd;
     }
 
-    public void CloseVideo(VideoPlayer vp)
+    public void VideoEnd(VideoPlayer vp)
+    {
+        videoEndControlButtons.SetActive(true);
+    }
+
+    public void VideoSkipButton()
+    {
+        CloseVideo();
+    }
+
+    public void CloseVideo()
     {
         StartCoroutine("VideoFadeOut");
         SoundController.instance.Play("Theme");
         currentVideoObject.isShowed = true;
-        SaveVideos();
-        //gm.playerDatas.showedOpeningVideo = true;
-        //gm.PlayerDataSave();
+        SaveVideos(); 
+    }
+
+    public void VideoShowAgain()
+    {
+        ShowVideo(gm.playerDatas.whichScenario + "-" + gm.playerDatas.lastMapSize);
     }
 
     IEnumerator VideoFadeOut()

@@ -55,26 +55,29 @@ public class ForCommand : Command
             }
         }
         
-
         codeString += "}\n";
         return codeString;
     }
 }
 
+public class PickIfAnyObjectExistsCommand : Command
+{
+    public string animalName;
+
+    public override string ToCodeString()
+    {
+        return "if(" + animalName + " ise){\n Fotoğraf Çek();\n}";
+    }
+}
 public class WaitCommand : Command
 {
     public int seconds;
 
     public override string ToCodeString()
     {
-        throw new NotImplementedException();
+        return "Bekle( "+seconds+" saniye);\n";
     }
 }
-
-//public class PickIfObjectMatchesCommand : Command
-//{
-//    public ObjectType expectedObjectType;
-//}
 
 //public class PickIfAnyObjectExistsCommand : Command
 //{
@@ -90,4 +93,3 @@ public class WaitCommand : Command
 //{
 //    public Direction adjacentCellDirection;
 //}
-    

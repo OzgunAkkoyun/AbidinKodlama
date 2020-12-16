@@ -45,8 +45,7 @@ public class CoinsManager : MonoBehaviour
 	void Awake ()
 	{
 		targetPosition = target.position;
-
-		//prepare pool
+        //prepare pool
 		PrepareCoins ();
 	}
 
@@ -104,11 +103,9 @@ public class CoinsManager : MonoBehaviour
 			    }
                 yield return null;
             }
-           
         }
     }
-
-	public void AddCoins (Vector3 collectedCoinPosition, int amount)
+    public void AddCoins (Vector3 collectedCoinPosition, int amount)
 	{
 		Animate (amount);
 	}

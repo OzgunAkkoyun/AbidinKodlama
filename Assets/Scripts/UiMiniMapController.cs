@@ -58,7 +58,7 @@ public class UiMiniMapController : MonoBehaviour
     }
     void MiniMapSizeSet()
     {
-        miniMapGraphicsRect.sizeDelta = new Vector2(screenH-50, screenH-50);
+        miniMapGraphicsRect.sizeDelta = new Vector2(screenH, screenH);
         RatiosForMiniMap();
     }
 
@@ -96,7 +96,7 @@ public class UiMiniMapController : MonoBehaviour
                 (miniMapRect.sizeDelta.y - 20 - 1 * 30),
                 (miniMapRect.sizeDelta.y - 20 - 1 * 30));
 
-            minimapTextureRect.sizeDelta = Vector2.Lerp(minimapTextureRect.sizeDelta, new Vector2(260, 260), t);
+            minimapTextureRect.sizeDelta = Vector2.Lerp(minimapTextureRect.sizeDelta, new Vector2(240, 240), t);
 
             miniMapGraphicsRect.SetLeft(0);
             miniMapGraphicsRect.SetRight(0);

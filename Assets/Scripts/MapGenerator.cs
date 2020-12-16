@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using JetBrains.Annotations;
 using Random = System.Random;
 
 public class MapGenerator : MonoBehaviour {
@@ -31,28 +32,24 @@ public class MapGenerator : MonoBehaviour {
     public List<Coord> allObstacleCoord = new List<Coord>();
 
     Queue<Coord> shuffledTileCoords;
-	Queue<Coord> shuffledOpenTileCoords;
+	public Queue<Coord> shuffledOpenTileCoords;
 
     Transform[,] tileMap;
 	[HideInInspector]
 	public Map currentMap;
 
     string holderName = "Generated Map";
-    private Transform mapHolder;
+    public Transform mapHolder;
     private System.Random prng;
 
     public GameObject[] home;
     public List<GameObject> obstacleGameObject;
 
-    private GameManager gm;
+    public GameManager gm;
     public PathGenarator pathGenarator;
-
-    void Start()
-    {
-        
-       
-    }
-
+    public ChangeEnvironment changeEnvironment;
+    public SpawnObstacleInSpesificPlaces spawnObstacleInSpesificPlaces;
+    
     public void VariableAssign()
     {
         gm = FindObjectOfType<GameManager>();
@@ -112,7 +109,15 @@ public class MapGenerator : MonoBehaviour {
 
         SpawnAllTiles();
 
-        SpawnObstacle(prng);
+        if (gm.currentSenario.senarioIndex != 4)
+        {
+            SpawnObstacle(prng);
+        }
+        else if (gm.currentSenario.senarioIndex == 4)
+        {
+            spawnObstacleInSpesificPlaces.SpawnObstacleInSpesificPlace();
+            pathGenarator.SetDirtForLoad();
+        }
 
         CreateMapLines();
 
@@ -123,6 +128,7 @@ public class MapGenerator : MonoBehaviour {
         var start = currentMap.startPoint;
         var target = pathGenarator.Path[pathGenarator.Path.Count - 1];
 
+        pathGenarator.SetIfAnimalsForLoad();
         if (gm.currentSenario.senarioIndex == 2)
         {
             pathGenarator.ChangeEnvironment();
@@ -151,7 +157,14 @@ public class MapGenerator : MonoBehaviour {
 
 	    SpawnAllTiles();
 
-	    SpawnObstacle(prng);
+        if (gm.currentSenario.senarioIndex != 4)
+        {
+            SpawnObstacle(prng);
+        }
+        else if (gm.currentSenario.senarioIndex == 4)
+        {
+            spawnObstacleInSpesificPlaces.SpawnObstacleInSpesificPlace();
+        }
 
         CreateMapLines();
 
@@ -163,23 +176,32 @@ public class MapGenerator : MonoBehaviour {
 
     private void CreateStartandTargetPoints()
     {
-        if (gm.scenarioIndex == 1)
+        if (gm.currentSenario.senarioIndex == 1)
         {
             currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
             pathGenarator.CreatePath();
+            currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
         }
-        else if (gm.scenarioIndex == 2)
+        else if (gm.currentSenario.senarioIndex == 2)
         {
             currentMap.startPoint = pathGenarator.GetRandomStartCoord();
             pathGenarator.CreatePathWithForLoop();
+            currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
+
         }
-        else if (gm.scenarioIndex == 3)
+        else if (gm.currentSenario.senarioIndex == 3)
         {
             currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
             pathGenarator.CreatePathWithIfStatement();
+            currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
         }
-
-        currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
+        else if (gm.currentSenario.senarioIndex == 4)
+        {
+            currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
+            pathGenarator.CreatePathForWait();
+            currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
+            pathGenarator.SetDirtInPath();
+        }
 
         var start = currentMap.startPoint;
         var target = pathGenarator.Path[pathGenarator.Path.Count - 1];
@@ -195,6 +217,11 @@ public class MapGenerator : MonoBehaviour {
         vehiclePrefab = Instantiate(vehiclePrefab, vehiclePos, Quaternion.identity);
         gm.uh.mainCamera = vehiclePrefab.transform.Find("Main Camera").gameObject;
         gm.uh.cameraTarget = vehiclePrefab.transform.Find("CameraTarget");
+
+        if (gm.currentSenario.senarioIndex == 2)
+        {
+            changeEnvironment.SetCarInsideObject();
+        }
     }
     public void CreateMapLines()
     {
@@ -433,7 +460,9 @@ public class MapGenerator : MonoBehaviour {
         public List<Coord> UnavaliableNeighbours;
 
         public Direction pathDirection;
-        public PathGenarator.IfObjects.AnimalForLevel animal;
+        public AnimalsInIfPath whichCoord;
+        public PathGenarator.WaitObjects.DirtsForLevel whichDirt;
+        public bool isVisited;
 
         public List<Coord> GetNeighbours()
         {
@@ -457,7 +486,9 @@ public class MapGenerator : MonoBehaviour {
             y = _y;
             UnavaliableNeighbours = new List<Coord>();
             pathDirection = Direction.Empty;
-            animal = null;
+            whichCoord = AnimalsInIfPath.Empty;
+            isVisited = false;
+            whichDirt = null;
         }
 
         public static bool operator ==(Coord c1, Coord c2)
@@ -483,7 +514,7 @@ public class MapGenerator : MonoBehaviour {
 		public Color foregroundColour;
 		public Color backgroundColour;
 	    public Coord startPoint;
-	    public Coord targetPoint;
+	    [CanBeNull] public Coord targetPoint;
 
         public Coord mapCentre => new Coord(mapSize.x/2,mapSize.y/2);
     }

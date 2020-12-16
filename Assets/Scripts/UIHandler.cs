@@ -20,6 +20,7 @@ public class UIHandler : MonoBehaviour
     public GameObject codeStringPanel;
     
     public TMP_InputField forInput;
+    public TMP_InputField waitInput;
 
     public GameObject mainCamera;
     public Transform cameraTarget;
@@ -32,6 +33,9 @@ public class UIHandler : MonoBehaviour
     [HideInInspector] public List<GameObject> codeInputsObjects = new List<GameObject>();
     public GameObject codeMoveObject;
     public GameObject codeForObject;
+    public GameObject codeIfObject;
+    public GameObject codeWaitObject;
+    public GameObject codeIfObjectChild;
     public GameObject panel;
     public GameObject gameOverReplay;
 
@@ -127,6 +131,70 @@ public class UIHandler : MonoBehaviour
             ShowKeyForLoop(forCommand.directions, forCommand.loopCount, commandIndex);
             commandIndex++;
         }
+        else if (type == typeof(PickIfAnyObjectExistsCommand))
+        {
+            var ifCommand = (PickIfAnyObjectExistsCommand)command;
+            ShowKeyForIf(ifCommand.animalName);
+            commandIndex++;
+        }
+        else if (type == typeof(WaitCommand))
+        {
+            var waitCommand = (WaitCommand)command;
+            ShowKeyForWait(waitCommand.seconds);
+            commandIndex++;
+        }
+    }
+
+    private void ShowKeyForWait(int waitCommandSeconds)
+    {
+        if (panel == null)
+        {
+            panel = GameObject.Find("CodePanel/Scroll");
+        }
+
+        var codeInputWait = Instantiate(codeWaitObject, codeWaitObject.transform.position, Quaternion.identity);
+        codeInputWait.transform.Find("seconds").gameObject.GetComponent<TextMeshProUGUI>().text =
+            waitCommandSeconds.ToString();
+
+        codeInputWait.transform.parent = panel.transform;
+        codeInputWait.transform.name = commandIndex.ToString();
+
+        codeInputWait.transform.localScale = new Vector3(2.5f, 1f, 1f);
+
+        codeInputsObjects.Add(codeInputWait);
+    }
+
+    private void ShowKeyForIf(string ifCommandAnimalName)
+    {
+        if (panel == null)
+        {
+            panel = GameObject.Find("CodePanel/Scroll");
+        }
+
+        var codeInputIf = Instantiate(codeIfObject, codeIfObject.transform.position, Quaternion.identity);
+        codeInputIf.transform.Find("ifObjectName").gameObject.GetComponent<TextMeshProUGUI>().text =
+            ifCommandAnimalName;
+        codeInputIf.transform.parent = panel.transform;
+        codeInputIf.transform.name = commandIndex.ToString();
+
+        codeInputIf.transform.localScale = new Vector3(2.5f, 1, 1);
+
+
+        var codeInput = Instantiate(codeIfObjectChild, codeIfObjectChild.transform.position, Quaternion.identity);
+
+        codeInput.transform.parent = codeInputIf.transform.Find("CodeInputArea").transform;
+        Destroy(codeInput.GetComponent<DeleteCommand>());
+
+        codeInputIf.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(codeInputIf.transform.GetComponent<RectTransform>().sizeDelta.x, codeInputIf.transform.GetComponent<RectTransform>().sizeDelta.y + 75);
+        codeInput.transform.localScale = new Vector3(1, 1, 1);
+
+        codeInputsObjects.Add(codeInputIf);
+
+        var image = codeInput.transform.Find("Image").GetComponent<Image>();
+
+        image.sprite = pathGenarator.currentAnimals.animals.ToList().Find(v => v.ifName == ifCommandAnimalName).animalsGameObjectsImage;
+        GameObject.Find("CodePanel").GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 0);
+        
     }
 
     private void ShowKeyForLoop(List<Direction> direction, int loopCount, int commandIndex)
@@ -367,6 +435,13 @@ public class UIHandler : MonoBehaviour
         {
             Destroy(hintObject);
         });
+    }
+
+    public void MarkCurrentCommand(int i)
+    {
+        codeInputsObjects[i].GetComponent<Image>().color = new Color(163 / 255, 255 / 255, 131 / 255);
+        if (i != 0)
+            codeInputsObjects[i - 1].GetComponent<Image>().color = Color.white;
     }
     
 }

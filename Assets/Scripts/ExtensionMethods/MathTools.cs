@@ -20,6 +20,11 @@ public static class MathTools
         return new Vector2(value.x, value.y);
     }
 
+    public static Vector3 Vector2ToVector3(this Vector2 value)
+    {
+        return new Vector3(value.x,0, value.y);
+    }
+
     public static string ListPrint<T>(this List<T> list)
     {
         var str = "";
@@ -42,4 +47,5 @@ public static class MathTools
 
         return str.Remove(str.Length - 4, 4);
     }
+
 }

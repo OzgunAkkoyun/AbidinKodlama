@@ -40,7 +40,6 @@ public class LoadGameData : MonoBehaviour
             }
             Invoke("GameStart", 1.5f);
         }
-       
     }
 
     public void RestartGenerateMap()

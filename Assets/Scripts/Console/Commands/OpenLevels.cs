@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityScript.Steps;
 
 namespace DapperDino.UDCT.Utilities.DeveloperConsole.Commands
 {
@@ -13,7 +15,7 @@ namespace DapperDino.UDCT.Utilities.DeveloperConsole.Commands
 
             //Debug.Log(logText);
             var levelController = GameObject.FindObjectOfType<LevelController>();
-            levelController.OpenSenario(1);
+            levelController.OpenSenario(int.Parse(logText));
 
             return true;
         }

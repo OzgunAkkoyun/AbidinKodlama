@@ -6,10 +6,12 @@ using UnityEngine.UI;
 
 public class ScreenShotHandler : MonoBehaviour
 {
-    private static ScreenShotHandler instance;
+    public static ScreenShotHandler instance;
 
     private Camera myCamera;
     private bool takeScreenShootOnNextFrame;
+    public bool isSSTaken;
+    public int collectedAnimalPhoto;
     void Awake()
     {
         instance = this;
@@ -34,17 +36,22 @@ public class ScreenShotHandler : MonoBehaviour
         myCamera.targetTexture = null;
 
         //Show taken ss
-        var fileBytes = File.ReadAllBytes(Application.dataPath + "/CameraSS.png");
-        var texture = new Texture2D(2, 2, TextureFormat.RGB24, false);
-        texture.LoadImage(fileBytes);
+        //var fileBytes = File.ReadAllBytes(Application.dataPath + "/CameraSS.png");
+        //var texture = new Texture2D(2, 2, TextureFormat.RGB24, false);
+        //texture.LoadImage(fileBytes);
 
-        Sprite mySprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f), 100.0f);
-        mySprite.name = "deneme";
-       // GameObject.Find("SSImage").GetComponent<Image>().sprite = mySprite;
+        //Sprite mySprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f), 100.0f);
+        //mySprite.name = "deneme";
+        // GameObject.Find("SSImage").GetComponent<Image>().sprite = mySprite;
+        collectedAnimalPhoto++;
+        isSSTaken = false;
     }
 
     private void TakeScreenShot(int width, int height)
     {
+        isSSTaken = true;
+        SSUi.instance.SSImageEnable();
+        SoundController.instance.Play("SS");
         myCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
 
         myCamera.targetTexture = RenderTexture.GetTemporary(width, height, 16);
@@ -55,4 +62,6 @@ public class ScreenShotHandler : MonoBehaviour
     {
         instance.TakeScreenShot(width,height);
     }
+
+    
 }

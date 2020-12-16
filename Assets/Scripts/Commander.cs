@@ -29,6 +29,18 @@ public class Commander : MonoBehaviour
         OnNewCommand.Invoke();
     }
 
+    public void AddIfCommand(string name)
+    {
+        commands.Add(new PickIfAnyObjectExistsCommand{animalName = name});
+        OnNewCommand.Invoke();
+    }
+
+    public void AddWaitCommand(int seconds)
+    {
+        commands.Add(new WaitCommand { seconds = seconds });
+        OnNewCommand.Invoke();
+    }
+
     public void ApplyCommands()
     {
         StartCoroutine(DoApplyCommands());
@@ -69,9 +81,15 @@ public class Commander : MonoBehaviour
                     }
                 }
             }
-            else
+            else if(type == typeof(PickIfAnyObjectExistsCommand))
             {
-                throw new NotImplementedException();
+                var commandIf = command as PickIfAnyObjectExistsCommand;
+                yield return StartCoroutine(gm.character.ApplyIfCommand(commandIf.animalName,isLastCommand));
+            }
+            else if (type == typeof(WaitCommand))
+            {
+                var commandWait = command as WaitCommand;
+                yield return StartCoroutine(gm.character.ApplyWaitCommand(commandWait.seconds, isLastCommand, i));
             }
         }
     }

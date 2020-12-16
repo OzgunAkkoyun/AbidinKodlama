@@ -26,12 +26,10 @@ public class LevelController : MonoBehaviour
 
     void Awake()
     {
-        //PlayerPrefs.DeleteAll();
         levelLoader.SetLevels();
         UnlockAllPassedLevels();
   
         PlayerPrefs.SetInt("isGameOrLoad", 0);
-
     }
 
     public void UnlockAllPassedLevels()
@@ -68,7 +66,6 @@ public class LevelController : MonoBehaviour
             }
         }
     }
-
     public void LevelButtonClick(string levelIndexs)
     {
         string[] levelsString = levelIndexs.Split('-');
@@ -83,7 +80,7 @@ public class LevelController : MonoBehaviour
         {
             //Player wants to play again, this level already completed
            
-            PlayerPrefs.SetString("selcetedLevelProps", senarioAndLevelIndexs);
+            PlayerPrefs.SetString("selectedLevelProps", senarioAndLevelIndexs);
             PlayerPrefs.SetInt("isGameOrLoad",3);
             SceneManager.LoadScene("Game");
         }
@@ -109,6 +106,7 @@ public class LevelController : MonoBehaviour
                 }
             }
             levelLoader.playerDatas.whichScenario++;
+            Debug.Log(levelLoader.playerDatas.whichScenario);
             levelLoader.playerDatas.whichLevel = 1;
             levelLoader.playerDatas.whichSubLevel = 1;
             levelLoader.playerDatas.lastMapSize = 5;
@@ -123,5 +121,11 @@ public class LevelController : MonoBehaviour
     public void HomeButton()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void DeleteAllPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

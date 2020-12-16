@@ -37,6 +37,7 @@ public class ChangeEnvironment : MonoBehaviour
     public GameObject streetLightPrefab;
     public Color changeTargetColor;
 
+
     public void AddForestEmptyTiles()
     {
         ChangeLightSettings();
@@ -121,7 +122,35 @@ public class ChangeEnvironment : MonoBehaviour
             
         }
     }
-    
+
+    private Transform carInsideTarget;
+    public GameObject[] carInsideObjects;
+    public GameObject realCarInsideObject;
+    public void SetCarInsideObject()
+    {
+        carInsideTarget = mapGenerator.vehiclePrefab.transform.Find("CarInsideObjectPos");
+        GameObject selectedCarInsideObject = carInsideObjects[0];
+
+        if (pathGenarator.gm.currentLevel.levelIndex == 1)
+        {
+            selectedCarInsideObject = carInsideObjects[0];
+        }
+        else if (pathGenarator.gm.currentLevel.levelIndex == 2)
+        {
+            selectedCarInsideObject = carInsideObjects[1];
+        }
+        else if (pathGenarator.gm.currentLevel.levelIndex == 3)
+        {
+            selectedCarInsideObject = carInsideObjects[2];
+        }
+
+        realCarInsideObject = Instantiate(selectedCarInsideObject, carInsideTarget);
+        realCarInsideObject.transform.SetParent(mapGenerator.vehiclePrefab.transform);
+        realCarInsideObject.transform.localScale = Vector3.one;
+        realCarInsideObject.transform.position = carInsideTarget.position;
+        realCarInsideObject.transform.rotation = carInsideTarget.rotation;
+        
+    }
 
     #endregion
 

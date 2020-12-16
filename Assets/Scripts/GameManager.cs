@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
     public SavedPlayerData playerDatas;
 
     public int isGameOrLoad;
-    public int scenarioIndex;
+    //public int scenarioIndex;
     public LevelStats.Senarios.Levels.SubLevels currentSubLevel;
     public LevelStats.Senarios.Levels currentLevel;
     public LevelStats.Senarios currentSenario;
@@ -114,8 +114,13 @@ public class GameManager : MonoBehaviour
 
         WillVideoShown();
 
-        //yield return new WaitUntil(() => levelController != null );
+        CheckLevels();
 
+        GameorLoadCheck();
+    }
+
+    private void CheckLevels()
+    {
         levelLoader.SetLevels();
 
         currentSubLevel = levelLoader.currentLevelStats.GetSubLevel(playerDatas.whichScenario, playerDatas.whichLevel,
@@ -123,9 +128,6 @@ public class GameManager : MonoBehaviour
 
         currentLevel = levelLoader.currentLevelStats.GetLevel(playerDatas.whichScenario, playerDatas.whichLevel);
         currentSenario = levelLoader.currentLevelStats.GetSenario(playerDatas.whichScenario);
-        
-        Debug.Log(currentLevel.levelIndex);
-        GameorLoadCheck();
     }
 
     // 0 == Game
@@ -144,12 +146,14 @@ public class GameManager : MonoBehaviour
             else
                 SetMapAttributes();
         }
-        else if(isGameOrLoad == 1 /*|| isGameOrLoad == 2*/) // its mean loading one of the previous games or Restart game
+        else if(isGameOrLoad == 1 /*|| isGameOrLoad == 2*/) // its mean loading one of the previous games
         {
             playerDatas.whichScenario = gameDatas[gameDatas.Count - 1].scenarioIndex;
             currentSenario.senarioIndex = gameDatas[gameDatas.Count - 1].scenarioIndex;
             currentLevel.levelIndex = gameDatas[gameDatas.Count - 1].levelIndex;
             currentSubLevel.subLevelIndex = gameDatas[gameDatas.Count - 1].subLevelIndex;
+
+            Debug.Log("Senarios: " + currentSenario.senarioIndex + "-" + currentLevel.levelIndex + "-" + currentSubLevel.subLevelIndex);
             load.LoadGenerateMap(isGameOrLoad);
         }
         else
@@ -160,8 +164,8 @@ public class GameManager : MonoBehaviour
 
     private void SetSelectedLevelProporties(int isRestart)
     {
-        senarioAndLevelIndexs = PlayerPrefs.GetString("selcetedLevelProps").Split('-').Select(int.Parse).ToArray();
-
+        senarioAndLevelIndexs = PlayerPrefs.GetString("selectedLevelProps").Split('-').Select(int.Parse).ToArray();
+        Debug.Log("ComingData: "+senarioAndLevelIndexs[0] + "-" + senarioAndLevelIndexs[1]);
         currentSubLevel = levelLoader.currentLevelStats.GetSubLevel(senarioAndLevelIndexs[0],
             senarioAndLevelIndexs[1],
             senarioAndLevelIndexs[2].ToString());
@@ -170,9 +174,9 @@ public class GameManager : MonoBehaviour
             senarioAndLevelIndexs[1]);
 
         currentSenario = levelLoader.currentLevelStats.GetSenario(senarioAndLevelIndexs[0]);
-
+        
         playerDatas.whichScenario = senarioAndLevelIndexs[0];
-        scenarioIndex = senarioAndLevelIndexs[0];
+        //scenarioIndex = senarioAndLevelIndexs[0];
         playerDatas.lastMapSize = currentLevel.mapSize;
         map.currentMap.mapSize = new Coord(currentLevel.mapSize, currentLevel.mapSize);
         pathGenarator.expectedPathLength = currentSubLevel.pathLenght;
@@ -223,12 +227,12 @@ public class GameManager : MonoBehaviour
             });
 
             //gameDatas = JsonHelper.FromJson<SavedGameData>(gameDataString);
-            scenarioIndex = playerDatas.whichScenario;
+            //scenarioIndex = playerDatas.whichScenario;
 
         }
         else
         {
-            scenarioIndex = 1;
+            //scenarioIndex = 1;
         }
     }
 
@@ -249,11 +253,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             GameAnimationStart();
-        }
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            ScreenShotHandler.TakeScreenShot_Static(512,360);
         }
     }
     public void GameAnimationStart()
@@ -281,7 +280,7 @@ public class GameManager : MonoBehaviour
                     playerDatas.winStreak = 0;
                     playerDatas.showedOpeningVideo = false;
 
-                    uiVideoController.ShowVideo(scenarioIndex + "-" + playerDatas.lastMapSize + "-end");
+                    uiVideoController.ShowVideo(currentSenario.senarioIndex + "-" + playerDatas.lastMapSize + "-end");
 
                     if (playerDatas.lastMapSize != 9)
                     {
@@ -300,7 +299,6 @@ public class GameManager : MonoBehaviour
                 {
                     playerDatas.whichSubLevel++;
                 }
-                
             }
             else
             {

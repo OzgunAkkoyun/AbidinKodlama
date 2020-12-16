@@ -22,6 +22,9 @@ public class LevelStats : ScriptableObject
                 public string subLevelName;
                 public int subLevelIndex;
                 public int pathLenght;
+                public int maxIfObjectCount;
+                public int ifObjectCount;
+                public int dirtCount;
                 public bool passed;
                
             }

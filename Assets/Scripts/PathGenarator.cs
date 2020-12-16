@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static MapGenerator;
 using Random = System.Random;
 
+public enum AnimalsInIfPath
+{
+    isAnimalCoord, isEmptyAnimalCoord,Empty
+}
 public class PathGenarator : MonoBehaviour
 {
     public MapGenerator mapGenerator;
@@ -320,50 +325,191 @@ public class PathGenarator : MonoBehaviour
         [Serializable]
         public class AnimalForLevel
         {
-            public string name;
+            public string ifName;
             public GameObject animalsGameObjects;
-
+            public Sprite animalsGameObjectsImage;
         }
         public AnimalForLevel[] animals;
 
     }
 
     public IfObjects[] ifObjects;
-        
+
+    public GameObject smoke;
+
+    public IfObjects.AnimalForLevel currentAnimal;
+    public List<IfObjects.AnimalForLevel> selectedAnimals = new List<IfObjects.AnimalForLevel>();
+    public IfObjects currentAnimals;
+    public RotateToyUi rotateToyUi;
+    public List<GameObject> animals = new List<GameObject>();
+    public List<GameObject> justSmoke = new List<GameObject>();
+    
+    public void PrepareAnimals()
+    {
+        currentAnimal = ifObjects[gm.currentLevel.levelIndex - 1].animals[gm.currentSubLevel.subLevelIndex-1];
+        currentAnimals = ifObjects[gm.currentLevel.levelIndex - 1];
+    }
     public void CreatePathWithIfStatement()
     {
         //CreatePath();
         Path = mapGenerator.allOpenCoords;
+        PrepareAnimals();
+        //rotateToyUi.SetAllIfObjectsInContainer(3);
+        rotateToyUi.SetAllIfObjectsInWheel(3);
         SetIfObjects();
     }
 
     private void SetIfObjects()
     {
-        var howManyObject = UnityEngine.Random.Range(1, gm.currentSubLevel.pathLenght);
+        var maxObject = gm.currentSubLevel.maxIfObjectCount;
+        var howManyObject = gm.currentSubLevel.ifObjectCount;
         var levelIndex = gm.currentLevel.levelIndex;
         var subLevelIndex = gm.currentSubLevel.subLevelIndex;
-
-        //for (int i = 0; i < 1;)
-        //{
+        
+        for (int i = 0; i < maxObject-howManyObject; i++)
+        {
             var whichPathHaveObject = UnityEngine.Random.Range(1, PathLength - 1);
-            var currentPath = Path[whichPathHaveObject];
-            var selectedAnimal = ifObjects[levelIndex-1].animals[subLevelIndex-1];
-           
-            if (currentPath.animal == null)
-            {
-                Path[whichPathHaveObject].animal = selectedAnimal;
-                var spawnPosition = mapGenerator.CoordToPosition(currentPath.x, currentPath.y);
-                Instantiate(selectedAnimal.animalsGameObjects, spawnPosition, Quaternion.identity);
-                //i++;
-            }
-        //}
+            var selectedPath = Path[whichPathHaveObject];
 
+            if (selectedPath.whichCoord == AnimalsInIfPath.Empty)
+            {
+                Path[whichPathHaveObject].whichCoord = AnimalsInIfPath.isEmptyAnimalCoord;
+                var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
+                var onlySmoke = Instantiate(smoke, spawnPosition+Vector3.up, Quaternion.identity);
+                justSmoke.Add(onlySmoke);
+            }
+        }
+        
+        for (int i = 0; i < howManyObject;)
+        {
+            var whichPathHaveObject = UnityEngine.Random.Range(1, PathLength - 1);
+            var selectedPath = Path[whichPathHaveObject];
+            var selectedAnimal = ifObjects[levelIndex-1].animals[subLevelIndex-1];
+
+            if (selectedPath.whichCoord == AnimalsInIfPath.Empty)
+            {
+                Path[whichPathHaveObject].whichCoord = AnimalsInIfPath.isAnimalCoord;
+                var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
+                var animal = Instantiate(selectedAnimal.animalsGameObjects, spawnPosition, Quaternion.identity);
+                animals.Add(animal);
+                i++;
+            }
+        }
+    }
+
+    public void SetIfAnimalsForLoad()
+    {
+        PrepareAnimals();
+        //rotateToyUi.SetAllIfObjectsInContainer(3);
+        rotateToyUi.SetAllIfObjectsInWheel(3);
+        for (int i = 0; i < PathLength; i++)
+        {
+            var selectedPath = Path[i];
+            if (Path[i].whichCoord == AnimalsInIfPath.isEmptyAnimalCoord)
+            {
+                var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
+                var onlySmoke = Instantiate(smoke, spawnPosition + Vector3.up, Quaternion.identity);
+                justSmoke.Add(onlySmoke);
+            }
+            else if (Path[i].whichCoord == AnimalsInIfPath.isAnimalCoord)
+            {
+                var levelIndex = gm.currentLevel.levelIndex;
+                var subLevelIndex = gm.currentSubLevel.subLevelIndex;
+                var selectedAnimal = ifObjects[levelIndex - 1].animals[subLevelIndex - 1];
+                var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
+                var animal = Instantiate(selectedAnimal.animalsGameObjects, spawnPosition, Quaternion.identity);
+                animals.Add(animal);
+            }
+        }
     }
 
     #endregion
+
+    #region WaitPathGenerate
+
+    [Serializable]
+    public class WaitObjects
+    {
+        [Serializable]
+        public class DirtsForLevel
+        {
+            public string waitName;
+            public Material dirtMaterial;
+            public int seconds;
+        }
+        public DirtsForLevel[] dirts;
+    }
+
+    public WaitObjects[] waitObjects;
+
+    public List<WaitObjects.DirtsForLevel> currentDirts = new List<WaitObjects.DirtsForLevel>();
+    public WaitObjects currentDirtObject;
+
+    public void CreatePathForWait()
+    {
+        Path = mapGenerator.allOpenCoords;
+    }
+
+    public void SetDirtInPath()
+    {
+        var levelIndex = gm.currentLevel.levelIndex;
+        var subLevelIndex = gm.currentSubLevel.subLevelIndex;
+
+        var dirtCount = gm.currentSubLevel.dirtCount;
+
+        currentDirtObject = waitObjects[gm.currentLevel.levelIndex - 1];
+
+        var selectedDirtIndex = UnityEngine.Random.Range(0, currentDirtObject.dirts.Length);
+        
+        for (int i = 0; i < dirtCount; )
+        {
+            currentDirts.Add(currentDirtObject.dirts[selectedDirtIndex]);
+            var whichPathHaveObject = UnityEngine.Random.Range(1, PathLength - 1);
+            var selectedPath = Path[whichPathHaveObject];
+
+            if (selectedPath.whichDirt == null)
+            {
+                selectedPath.whichDirt = currentDirtObject.dirts[selectedDirtIndex];
+            
+                var PathIndex = mapGenerator.allTileCoords.FindIndex(v =>
+                    (v.x == selectedPath.x) && (v.y == selectedPath.y));
+
+                var selectedTile = mapGenerator.allTileGameObject[PathIndex].gameObject;
+                selectedTile.GetComponent<Renderer>().material = currentDirtObject.dirts[selectedDirtIndex].dirtMaterial;
+                i++;
+            }
+        }
+        
+    }
+
+    public void SetDirtForLoad()
+    {
+        var levelIndex = gm.currentLevel.levelIndex;
+        var subLevelIndex = gm.currentSubLevel.subLevelIndex;
+
+        var dirtCount = gm.currentLevel.subLevels[subLevelIndex - 1].dirtCount;
+
+        currentDirtObject = waitObjects[gm.currentLevel.levelIndex - 1];
+
+       var allDirtCoords = gm.gameDatas[gm.gameDatas.Count - 1].Path.FindAll(v => v.whichDirt != null);
+
+        for (int i = 0; i < allDirtCoords.Count; i++)
+        {
+            var PathIndex = mapGenerator.allTileCoords.FindIndex(v =>
+                (v.x == allDirtCoords[i].x) && (v.y == allDirtCoords[i].y));
+
+            currentDirts.Add(allDirtCoords[i].whichDirt);
+
+            mapGenerator.allTileGameObject[PathIndex].gameObject.GetComponent<Renderer>().material = allDirtCoords[i].whichDirt.dirtMaterial;
+        }
+    }
+    
+    #endregion
     public Coord GetRandomOpenCoord()
     {
+        print(mapGenerator.allOpenCoords.Count);
         var rnd = UnityEngine.Random.Range(0, mapGenerator.allOpenCoords.Count);
+        print(mapGenerator.allOpenCoords.ListPrint());
         return new Coord(mapGenerator.allOpenCoords[rnd].x, mapGenerator.allOpenCoords[rnd].y);
     }
 
@@ -397,4 +543,6 @@ public class PathGenarator : MonoBehaviour
     }
 
     private Vector2 FindMinusTwoCoord(Coord c1, Coord c2) => new Vector2(c1.x - c2.x, c1.y - c2.y);
+
+   
 }
