@@ -332,74 +332,74 @@ MonoBehaviour:
       - subLevelName: 1
         subLevelIndex: 1
         pathLenght: 2
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 2
+        ifObjectCount: 1
+        dirtCount: 1
         passed: 0
       - subLevelName: 2
         subLevelIndex: 2
         pathLenght: 3
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 2
+        ifObjectCount: 2
+        dirtCount: 1
         passed: 0
       - subLevelName: 3
         subLevelIndex: 3
         pathLenght: 4
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 2
+        ifObjectCount: 2
+        dirtCount: 2
         passed: 0
-      mapSize: 0
+      mapSize: 5
       levelComplated: 0
     - levelIndex: 2
       subLevels:
       - subLevelName: 1
         subLevelIndex: 1
         pathLenght: 5
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 2
+        ifObjectCount: 2
+        dirtCount: 2
         passed: 0
       - subLevelName: 2
         subLevelIndex: 2
         pathLenght: 6
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 3
+        ifObjectCount: 2
+        dirtCount: 2
         passed: 0
       - subLevelName: 3
         subLevelIndex: 3
         pathLenght: 7
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 3
+        ifObjectCount: 3
+        dirtCount: 3
         passed: 0
-      mapSize: 0
+      mapSize: 7
       levelComplated: 0
     - levelIndex: 3
       subLevels:
       - subLevelName: 1
         subLevelIndex: 1
         pathLenght: 8
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 4
+        ifObjectCount: 3
+        dirtCount: 3
         passed: 0
       - subLevelName: 2
         subLevelIndex: 2
         pathLenght: 9
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 4
+        ifObjectCount: 4
+        dirtCount: 3
         passed: 0
       - subLevelName: 3
         subLevelIndex: 3
         pathLenght: 10
-        maxIfObjectCount: 0
-        ifObjectCount: 0
-        dirtCount: 0
+        maxIfObjectCount: 4
+        ifObjectCount: 4
+        dirtCount: 4
         passed: 0
-      mapSize: 0
+      mapSize: 9
       levelComplated: 0
     senarioComplated: 0

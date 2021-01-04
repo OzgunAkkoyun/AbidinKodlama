@@ -18,7 +18,7 @@ public class GetInputs : MonoBehaviour
     public bool waitingMoveCommand;
 
     public int forLoopCount;
-    public int seconds;
+    public List<int> seconds = new List<int>();
 
     public Commander commander;
 
@@ -116,7 +116,7 @@ public class GetInputs : MonoBehaviour
         var currentSecond =
                 int.Parse(EventSystem.current.currentSelectedGameObject.GetComponent<TMP_InputField>().text);
             commander.AddWaitCommand(currentSecond);
-            seconds = currentSecond;
+            seconds.Add(currentSecond);
             uh.waitInput.gameObject.SetActive(false);
     }
 

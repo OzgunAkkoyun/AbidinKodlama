@@ -329,7 +329,6 @@ public class GameManager : MonoBehaviour
         {
             TypeNameHandling = TypeNameHandling.Auto
         });
-
         //string gameDataString = JsonHelper.ToJson<SavedGameData>(gameDatas, true);
         PlayerPrefs.SetString("gameDatas", gameDataString);
     }

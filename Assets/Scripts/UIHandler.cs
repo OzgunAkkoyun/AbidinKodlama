@@ -40,6 +40,7 @@ public class UIHandler : MonoBehaviour
     public GameObject gameOverReplay;
 
     public TextMeshProUGUI codeString;
+    public TextMeshProUGUI countDownText;
 
     public int commandIndex = 0;
     public Sprite[] gameOverScoreImages;
@@ -443,5 +444,28 @@ public class UIHandler : MonoBehaviour
         if (i != 0)
             codeInputsObjects[i - 1].GetComponent<Image>().color = Color.white;
     }
-    
+
+    public void StartCleaningCountDown(MapGenerator.Coord realCoord, int seconds)
+    {
+        countDownText.color = Color.white;
+        countDownText.gameObject.SetActive(true);
+        var expectedSeconds = realCoord.whichDirt.seconds;
+        StartCoroutine(CountDownStart(seconds, expectedSeconds));
+    }
+
+    public IEnumerator CountDownStart(int expectedSeconds, int seconds)
+    {
+        var diffrenceSeconds = Mathf.Abs(expectedSeconds - seconds);
+        for (int i = seconds; i >= diffrenceSeconds; i--)
+        {
+            countDownText.text = i.ToString();
+            if ( i == diffrenceSeconds && diffrenceSeconds != 0)
+            {
+                countDownText.color = Color.red;
+            }
+            yield return new WaitForSeconds(1);
+        }
+
+        countDownText.gameObject.SetActive(false);
+    }
 }

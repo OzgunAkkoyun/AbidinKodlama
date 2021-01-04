@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,22 +11,28 @@ public class CharacterMovement : MonoBehaviour
     bool isAnimStarted = false;
     public bool isPlayerReachedTarget = false;
    
-    private MapGenerator mapGenerate;
-    private PathGenarator pathGenarator;
+    public MapGenerator mapGenerate;
+    public PathGenarator pathGenarator;
     public CameraMovementForSS cameraMovementForSs;
     UIHandler uh;
-    GameManager gm;
+    [HideInInspector]
+    public GameManager gm;
+    [HideInInspector]
+    public CheckTargetReached checkTargetReached;
     GetInputs getInputs;
-    WaitObjectsAnimation waitObjectsAnimation;
+    [HideInInspector]
+    public WaitObjectsAnimation waitObjectsAnimation;
     public GameObjectsAnimationController animController;
 
     public float animationSpeed = 1f;
     public float scaleFactor = 1f;
-    
-    Vector3 inputVector;
+    [HideInInspector]
+    public Vector3 inputVector;
     private Animator anim;
-    Coord currentPath;
-    GameObject currentAnimal;
+    public Coord currentPath;
+    public GameObject currentAnimal;
+    public GameObject currentMushroom;
+
     void Start()
     {
         mapGenerate = FindObjectOfType<MapGenerator>();
@@ -35,6 +42,7 @@ public class CharacterMovement : MonoBehaviour
         getInputs = FindObjectOfType<GetInputs>();
         waitObjectsAnimation = FindObjectOfType<WaitObjectsAnimation>();
         cameraMovementForSs = FindObjectOfType<CameraMovementForSS>();
+        checkTargetReached = FindObjectOfType<CheckTargetReached>();
         inputVector = transform.position;
         anim = GetComponent<Animator>();
         scaleFactor = mapGenerate.tileSize;
@@ -48,51 +56,20 @@ public class CharacterMovement : MonoBehaviour
 
         yield return StartCoroutine(PlayMoveAnimation(isLastCommand));
 
-        CheckIfReachedTarget(isLastCommand);
+        checkTargetReached.CheckIfReachedTarget(isLastCommand, this);
     }
 
     public IEnumerator ApplyIfCommand(string ifObjectName, bool isLastCommand)
     {
-        if (currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord)
+        if (gm.currentSenario.senarioIndex == 3)
         {
-            var currentAnimal = pathGenarator.animals.Find(v =>
-                (v.transform.position.x == inputVector.Vector3toXZ().x) &&
-                (v.transform.position.z == inputVector.Vector3toXZ().z));
-
-            if (pathGenarator.selectedAnimals[0].ifName == pathGenarator.currentAnimal.ifName)
-            {
-                pathGenarator.selectedAnimals.RemoveAt(0);
-                cameraMovementForSs.OpenSSLayout();
-                yield return new WaitUntil(() => ScreenShotHandler.instance.isSSTaken);
-                yield return new WaitForSeconds(1f);
-                IfObjectAnimations.instance.AnimalMoveFromPath(currentAnimal);
-                yield return new WaitForSeconds(1f);
-                yield return CompleteHalfWay();
-            }
-            else
-            {
-                yield return new WaitForSeconds(1f);
-                isPlayerReachedTarget = false;
-
-                gm.EndGame();
-            }
-            
+            yield return IfObjectAnimations.instance.SenarioTreeIfCheck(isLastCommand, this);
         }
-        else if (currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord)
+        else if(gm.currentSenario.senarioIndex == 5)
         {
-            yield return new WaitForSeconds(1f);
-            yield return CompleteHalfWay();
+            yield return IfObjectAnimations.instance.SenarioFiveIfCheck(isLastCommand, this);
         }
-        else
-        {
-            yield return new WaitForSeconds(1f);
-            isPlayerReachedTarget = false;
-
-            gm.EndGame();
-        }
-
-        CheckIfReachedTarget(isLastCommand);
-
+         
     }
 
     public IEnumerator ApplyWaitCommand(int seconds, bool isLastCommand, int i)
@@ -102,102 +79,18 @@ public class CharacterMovement : MonoBehaviour
 
         yield return StartCoroutine(PlayMoveAnimation(isLastCommand));
 
-        yield return StartCoroutine(StartCleaningTheTile(seconds));
+        yield return StartCoroutine(WaitObjectsAnimation.instance.StartCleaningTheTile(seconds,inputVector,this));
 
-        CheckIfReachedTarget(isLastCommand);
+        checkTargetReached.CheckIfReachedTarget(isLastCommand, this);
     }
 
-    private int dirtCount;
-    private IEnumerator StartCleaningTheTile(int seconds)
-    {
-        var currentCoord = new Coord((int)(inputVector.x / mapGenerate.tileSize), (int)(inputVector.z / mapGenerate.tileSize));
-
-        var realCoord = pathGenarator.Path.Find(v => v.x == currentCoord.x && v.y == currentCoord.y);
-
-        if (realCoord.whichDirt != null)
-        {
-            if (pathGenarator.currentDirts[dirtCount].seconds == getInputs.seconds)
-            {
-                yield return WaitObjectsAnimation.instance.CleanTile(currentCoord, seconds);
-            }
-            else
-            {
-                yield return new WaitForSeconds(1f);
-                isPlayerReachedTarget = false;
-
-                gm.EndGame();
-            }
-            dirtCount++;
-        }
-        else
-        {
-            yield return new WaitForSeconds(1f);
-            isPlayerReachedTarget = false;
-
-            gm.EndGame();
-        }
-
-    }
-
-    private object CompleteHalfWay()
+    public object CompleteHalfWay()
     {
         transform.DOMove(inputVector, .5f);
         return new WaitForSeconds(.5f);
     }
 
-    private void CheckIfReachedTarget(bool isLastCommand)
-    {
-        var currentCoord = new Coord((int)(inputVector.x / mapGenerate.tileSize), (int)(inputVector.z / mapGenerate.tileSize));
-
-        if (pathGenarator.Path.Contains(currentCoord))
-        {
-            if (mapGenerate.CoordToPosition(mapGenerate.currentMap.targetPoint.x, mapGenerate.currentMap.targetPoint.y) == inputVector.Vector3toXZ())
-            {
-                if (gm.currentSenario.senarioIndex == 1 || gm.currentSenario.senarioIndex == 2)
-                {
-                    isPlayerReachedTarget = true;
-                    CharacterAnimationPlay();
-                }
-                else if (gm.currentSenario.senarioIndex == 3)
-                {
-                    CheckIfObjectCount();
-                }
-                else if (gm.currentSenario.senarioIndex == 4)
-                {
-                    CheckWaitObjectsCount();
-                }
-            }
-            else
-            {
-                if (isLastCommand)
-                {
-                    isPlayerReachedTarget = false;
-                    gm.EndGame();
-                }
-            }
-        }
-        else
-        {
-            isPlayerReachedTarget = false;
-            gm.EndGame();
-        }
-    }
-
-    private void CheckWaitObjectsCount()
-    {
-        if (waitObjectsAnimation.howManyDirtCleaned == gm.currentSubLevel.dirtCount)
-        {
-            isPlayerReachedTarget = true;
-            CharacterAnimationPlay();
-        }
-        else
-        {
-            isPlayerReachedTarget = false;
-            gm.EndGame();
-        }
-    }
-
-    private void CheckIfObjectCount()
+    public void CheckIfObjectCount()
     {
         if (ScreenShotHandler.instance.collectedAnimalPhoto == gm.currentSubLevel.ifObjectCount)
         {
@@ -216,6 +109,102 @@ public class CharacterMovement : MonoBehaviour
         if (isAnimStarted) yield break; // exit function
         isAnimStarted = true;
         
+        yield return Turn();
+
+        if (!isLastCommand)
+        {
+            if (gm.currentSenario.senarioIndex == 1 || gm.currentSenario.senarioIndex == 2 || gm.currentSenario.senarioIndex == 4 )
+            {
+                yield return Move();
+            }
+            else if (gm.currentSenario.senarioIndex == 3)
+            {
+                yield return SenarioTreeMove();
+            }
+            else
+            {
+                yield return SenarioFiveMove();
+            }
+           
+        }
+        else
+        {
+            HalfWayMove();
+            yield return null;
+        }
+        isAnimStarted = false;
+    }
+
+    private object SenarioTreeMove()
+    {
+        currentPath = pathGenarator.Path.Find(v =>
+            (v.x * 2 == inputVector.Vector3toXZ().x) && (v.y * 2 == inputVector.Vector3toXZ().z));
+
+        if (currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord && !currentPath.isVisited)
+        {
+            currentPath.isVisited = true;
+            currentAnimal = pathGenarator.animals.Find(v =>
+                (v.transform.position.x == inputVector.Vector3toXZ().x) &&
+                (v.transform.position.z == inputVector.Vector3toXZ().z));
+            QuarterWayMove();
+            var Direction = inputVector - transform.position;
+            var halfVector = inputVector - (Direction - Direction / 4);
+            IfObjectAnimations.instance.RemoveSmokeInAnimal(currentAnimal, halfVector);
+            return null;
+        }
+        else if (currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord && !currentPath.isVisited)
+        {
+            currentPath.isVisited = true;
+            var currentSmoke = pathGenarator.justSmoke.Find(v =>
+                (v.transform.position.x == inputVector.Vector3toXZ().x) &&
+                (v.transform.position.z == inputVector.Vector3toXZ().z));
+            HalfWayMove();
+
+            IfObjectAnimations.instance.RemoveOnlySmoke(currentSmoke);
+            return null;
+        }
+        else
+        {
+            return Move();
+        }
+    }
+    private object SenarioFiveMove()
+    {
+        currentPath = pathGenarator.Path.Find(v =>
+            (v.x * 2 == inputVector.Vector3toXZ().x) && (v.y * 2 == inputVector.Vector3toXZ().z));
+        var Direction = inputVector - transform.position;
+        var halfVector = inputVector - (Direction - Direction / 4);
+        if (currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord && !currentPath.isVisited)
+        {
+            currentPath.isVisited = true;
+            currentMushroom = pathGenarator.wholeIfObjectsList.Find(v =>
+                (v.transform.position.x == inputVector.Vector3toXZ().x) &&
+                (v.transform.position.z == inputVector.Vector3toXZ().z));
+            Debug.Log(currentMushroom.name);
+            QuarterWayMove();
+            
+            IfObjectAnimations.instance.ChangeMetarialInMushroom(currentMushroom, halfVector,true);
+            return null;
+        }
+        else if (currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord && !currentPath.isVisited)
+        {
+            currentPath.isVisited = true;
+            currentMushroom = pathGenarator.wholeIfObjectsList.Find(v =>
+                (v.transform.position.x == inputVector.Vector3toXZ().x) &&
+                (v.transform.position.z == inputVector.Vector3toXZ().z));
+            HalfWayMove();
+
+            IfObjectAnimations.instance.ChangeMetarialInMushroom(currentMushroom, halfVector, false);
+            return null;
+        }
+        else
+        {
+            return Move();
+        }
+    }
+
+    private IEnumerator Turn()
+    {
         var relativePos = new Vector3(inputVector.x, transform.position.y, inputVector.z) - transform.position;
         var targetRotation = Quaternion.LookRotation(relativePos);
 
@@ -224,51 +213,17 @@ public class CharacterMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, t);
             yield return null;
         }
+    }
 
-        if (!isLastCommand)
+    private IEnumerator Move()
+    {
+        for (float t = 0f; t < 1f; t += Time.deltaTime * animationSpeed)
         {
-            currentPath = pathGenarator.Path.Find(v =>
-                (v.x * 2 == inputVector.Vector3toXZ().x) && (v.y * 2 == inputVector.Vector3toXZ().z));
-
-            if (currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord && !currentPath.isVisited)
-            {
-                currentPath.isVisited = true;
-                currentAnimal = pathGenarator.animals.Find(v =>
-                    (v.transform.position.x == inputVector.Vector3toXZ().x) &&
-                    (v.transform.position.z == inputVector.Vector3toXZ().z));
-                QuarterWayMove();
-                var Direction = inputVector - transform.position;
-                var halfVector = inputVector - (Direction - Direction / 4);
-                IfObjectAnimations.instance.RemoveSmokeInAnimal(currentAnimal, halfVector);
-                yield return null;
-            }
-            else if (currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord && !currentPath.isVisited)
-            {
-                currentPath.isVisited = true;
-                var currentSmoke = pathGenarator.justSmoke.Find(v =>
-                    (v.transform.position.x == inputVector.Vector3toXZ().x) &&
-                    (v.transform.position.z == inputVector.Vector3toXZ().z));
-                HalfWayMove();
-              
-                IfObjectAnimations.instance.RemoveOnlySmoke(currentSmoke);
-                yield return null;
-            }
-            else
-            {
-                for (float t = 0f; t < 1f; t += Time.deltaTime * animationSpeed)
-                {
-                    transform.position = Vector3.Lerp(transform.position, inputVector, t);
-                    yield return null;
-                }
-                transform.position = inputVector;
-            }
-        }
-        else
-        {
-            HalfWayMove();
+            transform.position = Vector3.Lerp(transform.position, inputVector, t);
             yield return null;
         }
-        isAnimStarted = false;
+
+        transform.position = inputVector;
     }
 
     private void HalfWayMove()
@@ -313,7 +268,7 @@ public class CharacterMovement : MonoBehaviour
         animController.GameObjectAnimationPlay();
     }
 
-    void CharacterAnimationPlay()
+    public void CharacterAnimationPlay()
     {
         if (anim != null)
         {

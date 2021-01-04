@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class UiMiniMapController : MonoBehaviour
@@ -23,6 +24,10 @@ public class UiMiniMapController : MonoBehaviour
 
     private float screenW;
     private float screenH;
+
+    private float textureSize;
+
+    public GameObject miniMapCloseButton;
     void Start()
     {
         screenW = Screen.width;
@@ -56,6 +61,12 @@ public class UiMiniMapController : MonoBehaviour
 
         miniMapCamera.orthographicSize = miniMapCamera.transform.position.x + 4;
     }
+
+    public void MiniMapCloseButton()
+    {
+        gm.EndGame();
+        minimap.SetActive(false);
+    }
     void MiniMapSizeSet()
     {
         miniMapGraphicsRect.sizeDelta = new Vector2(screenH, screenH);
@@ -64,10 +75,33 @@ public class UiMiniMapController : MonoBehaviour
 
     void RatiosForMiniMap()
     {
-        var textureSize = (float)(miniMapGraphicsRect.sizeDelta.y - miniMapGraphicsRect.sizeDelta.y * 0.2);
+        textureSize = (float)(miniMapGraphicsRect.sizeDelta.y - miniMapGraphicsRect.sizeDelta.y * 0.2);
         minimapTextureRect.sizeDelta = new Vector2(textureSize, textureSize);
     }
 
+    public void MiniMapFullSize()
+    {
+        miniMapCloseButton.SetActive(true);
+        var miniMapRectTransform = minimap.GetComponent<RectTransform>();
+
+        miniMapRectTransform.SetAnchor(AnchorPresets.StretchAll);
+        miniMapRectTransform.SetPivot(PivotPresets.MiddleCenter);
+
+        miniMapRectTransform.SetLeft(0);
+        miniMapRectTransform.SetRight(0);
+        miniMapRectTransform.SetTop(0);
+        miniMapRectTransform.SetBottom(0);
+
+        miniMapGraphicsRect.GetComponent<RectTransform>().SetAnchor(AnchorPresets.StretchAll);
+        miniMapGraphicsRect.GetComponent<RectTransform>().SetPivot(PivotPresets.MiddleCenter);
+
+        miniMapGraphicsRect.SetLeft(0);
+        miniMapGraphicsRect.SetRight(0);
+        miniMapGraphicsRect.SetTop(0);
+        miniMapGraphicsRect.SetBottom(0);
+
+        minimapTextureRect.sizeDelta = new Vector2(textureSize, textureSize);
+    }
     public void MiniMapZoom()
     {
         if (gm.is3DStarted)

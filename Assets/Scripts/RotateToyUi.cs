@@ -92,6 +92,7 @@ public class RotateToyUi : MonoBehaviour
         {
             var child = wheelContainer.transform.GetChild(i);
             var childImage = child.Find("Image");
+            Debug.Log("if wheel");
             if (i < objectCount)
             {
                 var getRandomIfObject = animals[i];
@@ -107,6 +108,57 @@ public class RotateToyUi : MonoBehaviour
                 childImage.gameObject.SetActive(false);
             }
         }
+    }
+
+    public Sprite[] mushroomsImages;
+    public void SetWholeIfObjectsInWheel(int objectCount)
+    {
+        var animals = pathGenarator.wholeMetarials[gm.currentLevel.levelIndex -1];
+        //int[] animalsIndexs = new []{0,1,2};
+        for (int i = 0; i < 8; i++)
+        {
+            var child = wheelContainer.transform.GetChild(i);
+            var childImage = child.Find("Image");
+            if (i < objectCount)
+            {
+                Debug.Log(i);
+                childImage.GetComponent<Image>().sprite = mushroomsImages[i];
+
+                
+
+                if (i==0)
+                {
+                    child.GetComponent<Button>().onClick.AddListener(() => CloseWholeIfObjectWheel("0"));
+                    child.GetComponent<Button>().onClick.AddListener(() => getInputs.GetIfInput("purpleMushrom"));
+                }
+                else
+                {
+                    child.GetComponent<Button>().onClick.AddListener(() => CloseWholeIfObjectWheel("1"));
+                    child.GetComponent<Button>().onClick.AddListener(() => getInputs.GetIfInput("redMushrom"));
+                }
+                
+            }
+            else
+            {
+                child.GetComponent<Button>().interactable = false;
+                childImage.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void CloseWholeIfObjectWheel(string i)
+    {
+        Debug.Log(i);
+        wheelContainer.SetActive(false);
+        if (i=="0")
+        {
+            pathGenarator.selectedMushrooms.Add(AnimalsInIfPath.isAnimalCoord);
+        }
+        else
+        {
+            pathGenarator.selectedMushrooms.Add(AnimalsInIfPath.isEmptyAnimalCoord);
+        }
+        
     }
 
     private void SetIfObjectsImage(GameObject ifObjectChildInstantiated,
