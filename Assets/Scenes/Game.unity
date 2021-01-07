@@ -12615,63 +12615,16 @@ MonoBehaviour:
   right: 0
   up: 0
   down: 0
-  ifObjects:
-  - animals:
-    - ifName: "K\u0131rm\u0131z\u0131 Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: 382e3d9a0de6dc341b78a767d6d25bad,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 19c8564f25cc98447b8682818c3b1dde,
-        type: 3}
-    - ifName: "Ye\u015Fil Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: a466af101e0e5db44bc7bc8da21b382c,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 749697668e8e2a4428504a7a9087d262,
-        type: 3}
-    - ifName: "Mavi Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: d97a112d540b49d47b6f294d7bdf0339,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 2c4712dfd0e25e84dbd9012437995c6a,
-        type: 3}
-  - animals:
-    - ifName: "K\u0131rm\u0131z\u0131 Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: 382e3d9a0de6dc341b78a767d6d25bad,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 19c8564f25cc98447b8682818c3b1dde,
-        type: 3}
-    - ifName: "Ye\u015Fil Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: a466af101e0e5db44bc7bc8da21b382c,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 749697668e8e2a4428504a7a9087d262,
-        type: 3}
-    - ifName: "Mavi Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: d97a112d540b49d47b6f294d7bdf0339,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 2c4712dfd0e25e84dbd9012437995c6a,
-        type: 3}
-  - animals:
-    - ifName: "K\u0131rm\u0131z\u0131 Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: 382e3d9a0de6dc341b78a767d6d25bad,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 19c8564f25cc98447b8682818c3b1dde,
-        type: 3}
-    - ifName: "Ye\u015Fil Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: a466af101e0e5db44bc7bc8da21b382c,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 749697668e8e2a4428504a7a9087d262,
-        type: 3}
-    - ifName: "Mavi Ku\u015F"
-      animalsGameObjects: {fileID: 3206463483138593332, guid: d97a112d540b49d47b6f294d7bdf0339,
-        type: 3}
-      animalsGameObjectsImage: {fileID: 21300000, guid: 2c4712dfd0e25e84dbd9012437995c6a,
-        type: 3}
+  ifObjectsScriptable: {fileID: 11400000, guid: bf64d1fd681abb241991a2339aea7b0c,
+    type: 2}
   smoke: {fileID: 3172589036138429611, guid: 442e6a507511a4545b16a1ca00aa09da, type: 3}
-  currentAnimal:
+  currentIfObject:
     ifName: 
-    animalsGameObjects: {fileID: 0}
-    animalsGameObjectsImage: {fileID: 0}
+    ifGameObjects: {fileID: 0}
+    ifGameObjectsImage: {fileID: 0}
   selectedAnimals: []
-  currentAnimals:
-    animals: []
+  allIfObjects:
+    ifObjectsForLevels: []
   rotateToyUi: {fileID: 592687736}
   animals: []
   justSmoke: []

@@ -68,7 +68,7 @@ public class IfObjectAnimations : MonoBehaviour
                 (v.transform.position.x == characterMovement.inputVector.Vector3toXZ().x) &&
                 (v.transform.position.z == characterMovement.inputVector.Vector3toXZ().z));
 
-            if (pathGenarator.selectedAnimals[0].ifName == pathGenarator.currentAnimal.ifName)
+            if (pathGenarator.selectedAnimals[0].ifName == pathGenarator.currentIfObject.ifName)
             {
                 pathGenarator.selectedAnimals.RemoveAt(0);
                 characterMovement.cameraMovementForSs.OpenSSLayout();
@@ -116,7 +116,7 @@ public class IfObjectAnimations : MonoBehaviour
                 //characterMovement.cameraMovementForSs.OpenSSLayout();
                 //yield return new WaitUntil(() => ScreenShotHandler.instance.isSSTaken);
                 yield return new WaitForSeconds(1f);
-                //AnimalMoveFromPath(currentAnimal);
+                //AnimalMoveFromPath(currentIfObject);
                 yield return new WaitForSeconds(1f);
                 yield return characterMovement.CompleteHalfWay();
             }

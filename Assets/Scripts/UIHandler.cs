@@ -193,7 +193,7 @@ public class UIHandler : MonoBehaviour
 
         var image = codeInput.transform.Find("Image").GetComponent<Image>();
 
-        image.sprite = pathGenarator.currentAnimals.animals.ToList().Find(v => v.ifName == ifCommandAnimalName).animalsGameObjectsImage;
+        image.sprite = pathGenarator.allIfObjects.ifObjectsForLevels.ToList().Find(v => v.ifName == ifCommandAnimalName).ifGameObjectsImage;
         GameObject.Find("CodePanel").GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 0);
         
     }

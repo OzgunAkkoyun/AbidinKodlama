@@ -72,7 +72,7 @@ public class RotateToyUi : MonoBehaviour
 
     public void SetAllIfObjectsInContainer(int objectCount)
     {
-        var animals = pathGenarator.currentAnimals.animals;
+        var animals = pathGenarator.allIfObjects.ifObjectsForLevels;
         //int[] animalsIndexs = new []{0,1,2};
         for (int i = 0; i < objectCount; i++)
         {
@@ -86,7 +86,7 @@ public class RotateToyUi : MonoBehaviour
 
     public void SetAllIfObjectsInWheel(int objectCount)
     {
-        var animals = pathGenarator.currentAnimals.animals;
+        var animals = pathGenarator.allIfObjects.ifObjectsForLevels;
         //int[] animalsIndexs = new []{0,1,2};
         for (int i = 0; i < 8; i++)
         {
@@ -96,7 +96,7 @@ public class RotateToyUi : MonoBehaviour
             if (i < objectCount)
             {
                 var getRandomIfObject = animals[i];
-                childImage.GetComponent<Image>().sprite = animals[i].animalsGameObjectsImage;
+                childImage.GetComponent<Image>().sprite = animals[i].ifGameObjectsImage;
 
                 child.GetComponent<Button>().onClick.AddListener(() => CloseIfObjectWheel(getRandomIfObject));
 
@@ -162,14 +162,14 @@ public class RotateToyUi : MonoBehaviour
     }
 
     private void SetIfObjectsImage(GameObject ifObjectChildInstantiated,
-        ref PathGenarator.IfObjects.AnimalForLevel[] animals, int i)
+        ref IfObjectsScriptable.IfObjects.IfObjectsForLevel[] animals, int i)
     {
         //var index = Random.Range(0, animalsIndexs.Length);
 
         var getRandomIfObject = animals[i];
 
         ifObjectChildInstantiated.GetComponent<Image>().sprite =
-            getRandomIfObject.animalsGameObjectsImage;
+            getRandomIfObject.ifGameObjectsImage;
 
         ifObjectChildInstantiated.GetComponent<Button>().onClick.AddListener(() => CloseIfObjectContainer(getRandomIfObject));
 
@@ -177,13 +177,13 @@ public class RotateToyUi : MonoBehaviour
 
         //RemoveAt(ref animalsIndexs, index);
     }
-    private void CloseIfObjectWheel(PathGenarator.IfObjects.AnimalForLevel getRandomIfObject)
+    private void CloseIfObjectWheel(IfObjectsScriptable.IfObjects.IfObjectsForLevel getRandomIfObject)
     {
         wheelContainer.SetActive(false);
         pathGenarator.selectedAnimals.Add(getRandomIfObject);
     }
 
-    private void CloseIfObjectContainer(PathGenarator.IfObjects.AnimalForLevel getRandomIfObject)
+    private void CloseIfObjectContainer(IfObjectsScriptable.IfObjects.IfObjectsForLevel getRandomIfObject)
     {
         ifObjectContainer.SetActive(false);
         pathGenarator.selectedAnimals.Add(getRandomIfObject);

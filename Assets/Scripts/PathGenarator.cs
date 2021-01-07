@@ -320,40 +320,41 @@ public class PathGenarator : MonoBehaviour
     #endregion
 
     #region IfPathGenerate
-    [Serializable]
-    public class IfObjects
-    {
-        [Serializable]
-        public class AnimalForLevel
-        {
-            public string ifName;
-            public GameObject animalsGameObjects;
-            public Sprite animalsGameObjectsImage;
-        }
-        public AnimalForLevel[] animals;
+    //[Serializable]
+    //public class IfObjects
+    //{
+    //    [Serializable]
+    //    public class IfObjectsForLevel
+    //    {
+    //        public string ifName;
+    //        public GameObject ifGameObjects;
+    //        public Sprite ifGameObjectsImage;
+    //    }
+    //    public IfObjectsForLevel[] ifObjectsForLevels;
 
-    }
-    [Space(15f)]
-    [Header("If Objects")]
-    public IfObjects[] ifObjects;
+    //}
+    //[Space(15f)]
+    //[Header("If Objects")]
+    //public IfObjects[] ifObjects;
 
+    public IfObjectsScriptable ifObjectsScriptable;
     public GameObject smoke;
 
-    public IfObjects.AnimalForLevel currentAnimal;
-    public List<IfObjects.AnimalForLevel> selectedAnimals = new List<IfObjects.AnimalForLevel>();
-    public IfObjects currentAnimals;
+    public IfObjectsScriptable.IfObjects.IfObjectsForLevel currentIfObject;
+    public IfObjectsScriptable.IfObjects allIfObjects;
+
+    public List<IfObjectsScriptable.IfObjects.IfObjectsForLevel> selectedAnimals = new List<IfObjectsScriptable.IfObjects.IfObjectsForLevel>();
     public RotateToyUi rotateToyUi;
     public List<GameObject> animals = new List<GameObject>();
     public List<GameObject> justSmoke = new List<GameObject>();
     
     public void PrepareAnimals()
     {
-        currentAnimal = ifObjects[gm.currentLevel.levelIndex - 1].animals[gm.currentSubLevel.subLevelIndex-1];
-        currentAnimals = ifObjects[gm.currentLevel.levelIndex - 1];
+        currentIfObject = ifObjectsScriptable.GetCurrentIfObjects(gm.currentLevel.levelIndex, gm.currentSubLevel.subLevelIndex);
+        allIfObjects = ifObjectsScriptable.GetAllIfObjects(gm.currentLevel.levelIndex);
     }
     public void CreatePathWithIfStatement()
     {
-        //CreatePath();
         Path = mapGenerator.allOpenCoords;
         PrepareAnimals();
         //rotateToyUi.SetAllIfObjectsInContainer(3);
@@ -388,13 +389,13 @@ public class PathGenarator : MonoBehaviour
 
             var selectedPath = Path[whichPathHaveObject];
 
-            var selectedAnimal = ifObjects[levelIndex-1].animals[subLevelIndex-1];
+            var selectedAnimal = currentIfObject;
 
             if (selectedPath.whichCoord == AnimalsInIfPath.Empty)
             {
                 Path[whichPathHaveObject].whichCoord = AnimalsInIfPath.isAnimalCoord;
                 var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
-                var animal = Instantiate(selectedAnimal.animalsGameObjects, spawnPosition, Quaternion.identity);
+                var animal = Instantiate(selectedAnimal.ifGameObjects, spawnPosition, Quaternion.identity);
                 animals.Add(animal);
                 i++;
             }
@@ -419,9 +420,9 @@ public class PathGenarator : MonoBehaviour
             {
                 var levelIndex = gm.currentLevel.levelIndex;
                 var subLevelIndex = gm.currentSubLevel.subLevelIndex;
-                var selectedAnimal = ifObjects[levelIndex - 1].animals[subLevelIndex - 1];
+                var selectedAnimal = currentIfObject;
                 var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
-                var animal = Instantiate(selectedAnimal.animalsGameObjects, spawnPosition, Quaternion.identity);
+                var animal = Instantiate(selectedAnimal.ifGameObjects, spawnPosition, Quaternion.identity);
                 animals.Add(animal);
             }
         }
