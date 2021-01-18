@@ -21,7 +21,6 @@ public class IfObjectsScriptable : ScriptableObject
 
     public IfObjects[] ifObjects;
 
-
     public IfObjects.IfObjectsForLevel GetCurrentIfObjects(int currentLevelLevelIndex, int subLevelIndex)
     {
         return ifObjects[currentLevelLevelIndex - 1].ifObjectsForLevels[subLevelIndex - 1];

@@ -286,7 +286,7 @@ public class GameManager : MonoBehaviour
                     {
                         playerDatas.lastMapSize += 2;
                     }
-                    else//New Senario
+                    else //New Senario
                     {
                         playerDatas.whichScenario++;
                         playerDatas.whichLevel = 1;
@@ -306,10 +306,12 @@ public class GameManager : MonoBehaviour
                 playerDatas.failededLevelCount++;
                 playerDatas.score = playerDatas.score > 0 ? (playerDatas.score - 1) : 0;
             }
+
             levelLoader.SaveLevelStats();
-            
+
             PlayerDataSave();
         }
+
         GameDataSave();
     }
 

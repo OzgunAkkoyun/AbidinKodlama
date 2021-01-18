@@ -5,15 +5,19 @@ using static MapGenerator;
 
 public class CheckTargetReached : MonoBehaviour
 {
-   public void CheckIfReachedTarget(bool isLastCommand, CharacterMovement characterMovement)
+    public void CheckIfReachedTarget(bool isLastCommand, CharacterMovement characterMovement)
     {
-        var currentCoord = new Coord((int)(characterMovement.inputVector.x / characterMovement.mapGenerate.tileSize), (int)(characterMovement.inputVector.z / characterMovement.mapGenerate.tileSize));
+        var currentCoord = new Coord((int) (characterMovement.inputVector.x / characterMovement.mapGenerate.tileSize),
+            (int) (characterMovement.inputVector.z / characterMovement.mapGenerate.tileSize));
 
         if (characterMovement.pathGenarator.Path.Contains(currentCoord))
         {
-            if (characterMovement.mapGenerate.CoordToPosition(characterMovement.mapGenerate.currentMap.targetPoint.x, characterMovement.mapGenerate.currentMap.targetPoint.y) == characterMovement.inputVector.Vector3toXZ())
+            if (characterMovement.mapGenerate.CoordToPosition(characterMovement.mapGenerate.currentMap.targetPoint.x,
+                    characterMovement.mapGenerate.currentMap.targetPoint.y) ==
+                characterMovement.inputVector.Vector3toXZ())
             {
-                if (characterMovement.gm.currentSenario.senarioIndex == 1 || characterMovement.gm.currentSenario.senarioIndex == 2)
+                if (characterMovement.gm.currentSenario.senarioIndex == 1 ||
+                    characterMovement.gm.currentSenario.senarioIndex == 2)
                 {
                     characterMovement.isPlayerReachedTarget = true;
                     characterMovement.CharacterAnimationPlay();
@@ -43,7 +47,7 @@ public class CheckTargetReached : MonoBehaviour
         }
     }
 
-   public void CheckWaitObjectsCount(CharacterMovement characterMovement)
+    public void CheckWaitObjectsCount(CharacterMovement characterMovement)
    {
        if (characterMovement.waitObjectsAnimation.howManyDirtCleaned == characterMovement.gm.currentSubLevel.dirtCount )
        {
