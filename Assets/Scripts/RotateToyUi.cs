@@ -72,7 +72,7 @@ public class RotateToyUi : MonoBehaviour
 
     public void SetAllIfObjectsInContainer(int objectCount)
     {
-        var animals = pathGenarator.allIfObjects.ifObjectsForLevels;
+        var animals = pathGenarator.allIfObjects;
         //int[] animalsIndexs = new []{0,1,2};
         for (int i = 0; i < objectCount; i++)
         {
@@ -80,19 +80,18 @@ public class RotateToyUi : MonoBehaviour
             ifObjectChildInstantiated.transform.SetParent(ifObjectBg);
 
             SetIfObjectsImage(ifObjectChildInstantiated, ref animals,i);
-            
         }
     }
 
     public void SetAllIfObjectsInWheel(int objectCount)
     {
-        var animals = pathGenarator.allIfObjects.ifObjectsForLevels;
-        //int[] animalsIndexs = new []{0,1,2};
+        var animals = pathGenarator.allIfObjects;
+        
         for (int i = 0; i < 8; i++)
         {
             var child = wheelContainer.transform.GetChild(i);
             var childImage = child.Find("Image");
-            Debug.Log("if wheel");
+
             if (i < objectCount)
             {
                 var getRandomIfObject = animals[i];
@@ -109,60 +108,9 @@ public class RotateToyUi : MonoBehaviour
             }
         }
     }
-
-    public Sprite[] mushroomsImages;
-    public void SetWholeIfObjectsInWheel(int objectCount)
-    {
-        var animals = pathGenarator.wholeMetarials[gm.currentLevel.levelIndex -1];
-        //int[] animalsIndexs = new []{0,1,2};
-        for (int i = 0; i < 8; i++)
-        {
-            var child = wheelContainer.transform.GetChild(i);
-            var childImage = child.Find("Image");
-            if (i < objectCount)
-            {
-                Debug.Log(i);
-                childImage.GetComponent<Image>().sprite = mushroomsImages[i];
-
-                
-
-                if (i==0)
-                {
-                    child.GetComponent<Button>().onClick.AddListener(() => CloseWholeIfObjectWheel("0"));
-                    child.GetComponent<Button>().onClick.AddListener(() => getInputs.GetIfInput("purpleMushrom"));
-                }
-                else
-                {
-                    child.GetComponent<Button>().onClick.AddListener(() => CloseWholeIfObjectWheel("1"));
-                    child.GetComponent<Button>().onClick.AddListener(() => getInputs.GetIfInput("redMushrom"));
-                }
-                
-            }
-            else
-            {
-                child.GetComponent<Button>().interactable = false;
-                childImage.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    private void CloseWholeIfObjectWheel(string i)
-    {
-        Debug.Log(i);
-        wheelContainer.SetActive(false);
-        if (i=="0")
-        {
-            pathGenarator.selectedMushrooms.Add(AnimalsInIfPath.isAnimalCoord);
-        }
-        else
-        {
-            pathGenarator.selectedMushrooms.Add(AnimalsInIfPath.isEmptyAnimalCoord);
-        }
-        
-    }
-
+    
     private void SetIfObjectsImage(GameObject ifObjectChildInstantiated,
-        ref IfObjectsScriptable.IfObjects.IfObjectsForLevel[] animals, int i)
+        ref IfObjectsScriptable.IfObjects[] animals, int i)
     {
         //var index = Random.Range(0, animalsIndexs.Length);
 
@@ -177,13 +125,13 @@ public class RotateToyUi : MonoBehaviour
 
         //RemoveAt(ref animalsIndexs, index);
     }
-    private void CloseIfObjectWheel(IfObjectsScriptable.IfObjects.IfObjectsForLevel getRandomIfObject)
+    private void CloseIfObjectWheel(IfObjectsScriptable.IfObjects getRandomIfObject)
     {
         wheelContainer.SetActive(false);
         pathGenarator.selectedAnimals.Add(getRandomIfObject);
     }
 
-    private void CloseIfObjectContainer(IfObjectsScriptable.IfObjects.IfObjectsForLevel getRandomIfObject)
+    private void CloseIfObjectContainer(IfObjectsScriptable.IfObjects getRandomIfObject)
     {
         ifObjectContainer.SetActive(false);
         pathGenarator.selectedAnimals.Add(getRandomIfObject);

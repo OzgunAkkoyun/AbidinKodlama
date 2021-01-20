@@ -336,22 +336,36 @@ public class PathGenarator : MonoBehaviour
     //[Space(15f)]
     //[Header("If Objects")]
     //public IfObjects[] ifObjects;
-
+    [HideInInspector]
+    public IfObjectsScriptable currentIfObjectsScriptable;
     public IfObjectsScriptable ifObjectsScriptable;
     public GameObject smoke;
 
-    public IfObjectsScriptable.IfObjects.IfObjectsForLevel currentIfObject;
-    public IfObjectsScriptable.IfObjects allIfObjects;
+    public IfObjectsScriptable.IfObjects currentIfObject;
+    public IfObjectsScriptable.IfObjects[] allIfObjects;
 
-    public List<IfObjectsScriptable.IfObjects.IfObjectsForLevel> selectedAnimals = new List<IfObjectsScriptable.IfObjects.IfObjectsForLevel>();
+    public List<IfObjectsScriptable.IfObjects> selectedAnimals = new List<IfObjectsScriptable.IfObjects>();
     public RotateToyUi rotateToyUi;
     public List<GameObject> animals = new List<GameObject>();
-    public List<GameObject> justSmoke = new List<GameObject>();
-    
+    public List<GameObject> justEmtyQuestionMarks = new List<GameObject>();
+
+    public void LikeStart()
+    {
+        if (gm.currentSenario.senarioIndex == 3)
+        {
+            currentIfObjectsScriptable = ifObjectsScriptable;
+        }
+        else if (gm.currentSenario.senarioIndex == 5)
+        {
+            currentIfObjectsScriptable = wholeIfObjectsScriptable;
+        }
+        
+    }
     public void PrepareAnimals()
     {
-        currentIfObject = ifObjectsScriptable.GetCurrentIfObjects(gm.currentLevel.levelIndex, gm.currentSubLevel.subLevelIndex);
-        allIfObjects = ifObjectsScriptable.GetAllIfObjects(gm.currentLevel.levelIndex);
+        LikeStart();
+        currentIfObject = currentIfObjectsScriptable.GetCurrentIfObjects(gm.currentLevel.levelIndex, gm.currentSubLevel.subLevelIndex);
+        allIfObjects = currentIfObjectsScriptable.GetAllIfObjects(gm.currentLevel.levelIndex);
     }
     public void CreatePathWithIfStatement()
     {
@@ -379,7 +393,7 @@ public class PathGenarator : MonoBehaviour
                 Path[whichPathHaveObject].whichCoord = AnimalsInIfPath.isEmptyAnimalCoord;
                 var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
                 var onlySmoke = Instantiate(smoke, spawnPosition+Vector3.up, Quaternion.identity);
-                justSmoke.Add(onlySmoke);
+                justEmtyQuestionMarks.Add(onlySmoke);
             }
         }
         
@@ -414,7 +428,7 @@ public class PathGenarator : MonoBehaviour
             {
                 var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
                 var onlySmoke = Instantiate(smoke, spawnPosition + Vector3.up, Quaternion.identity);
-                justSmoke.Add(onlySmoke);
+                justEmtyQuestionMarks.Add(onlySmoke);
             }
             else if (Path[i].whichCoord == AnimalsInIfPath.isAnimalCoord)
             {
@@ -547,6 +561,8 @@ public class PathGenarator : MonoBehaviour
 
     #region WholePathGenerate
 
+    /*
+     #region OldWholePathGenerate
     [Serializable]
     public class WholeObjects
     {
@@ -610,11 +626,11 @@ public class PathGenarator : MonoBehaviour
     {
         Path = mapGenerator.allOpenCoords;
 
-        currentWholeIfObjects = wholeObjects[gm.currentLevel.levelIndex-1].ifObjects[gm.currentSubLevel.subLevelIndex-1];
-        currentWholeIfMaterials = wholeMetarials[gm.currentLevel.levelIndex-1].ifMetarials[gm.currentSubLevel.subLevelIndex-1];
+        currentWholeIfObjects = wholeObjects[gm.currentLevel.levelIndex - 1].ifObjects[gm.currentSubLevel.subLevelIndex - 1];
+        currentWholeIfMaterials = wholeMetarials[gm.currentLevel.levelIndex - 1].ifMetarials[gm.currentSubLevel.subLevelIndex - 1];
 
-        currentWholeWaitObjects = wholeObjects[gm.currentLevel.levelIndex-1].waitObjects[gm.currentSubLevel.subLevelIndex-1];
-        currentWholeWaitMaterials = wholeMetarials[gm.currentLevel.levelIndex-1].waitMetarials[gm.currentSubLevel.subLevelIndex-1];
+        currentWholeWaitObjects = wholeObjects[gm.currentLevel.levelIndex - 1].waitObjects[gm.currentSubLevel.subLevelIndex - 1];
+        currentWholeWaitMaterials = wholeMetarials[gm.currentLevel.levelIndex - 1].waitMetarials[gm.currentSubLevel.subLevelIndex - 1];
 
         rotateToyUi.SetWholeIfObjectsInWheel(2);
     }
@@ -689,6 +705,17 @@ public class PathGenarator : MonoBehaviour
                 i++;
             }
         }
+    }
+
+
+    #endregion*/
+
+    public IfObjectsScriptable wholeIfObjectsScriptable;
+
+   
+    public void PrepareWholeSenarioObjects()
+    {
+        CreatePathWithIfStatement();
     }
 
     #endregion

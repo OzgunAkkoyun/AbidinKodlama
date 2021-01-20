@@ -220,8 +220,9 @@ public class MapGenerator : MonoBehaviour {
         else if (gm.currentSenario.senarioIndex == 5)
         {
             currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
-            pathGenarator.CreatePathWithWhole();
-            pathGenarator.SetWholeObjectsInPath();
+            //pathGenarator.CreatePathWithWhole();
+            pathGenarator.PrepareWholeSenarioObjects();
+            //pathGenarator.SetWholeObjectsInPath();
             currentMap.targetPoint = pathGenarator.Path[pathGenarator.Path.Count - 1];
         }
     }
@@ -449,7 +450,6 @@ public class MapGenerator : MonoBehaviour {
         public Direction pathDirection;
         public AnimalsInIfPath whichCoord;
         public PathGenarator.WaitObjects.DirtsForLevel whichDirt;
-        public PathGenarator.WholeObjects.WaitObjects whichWaitObject;
         public bool isVisited;
 
         public List<Coord> GetNeighbours()
@@ -477,7 +477,6 @@ public class MapGenerator : MonoBehaviour {
             whichCoord = AnimalsInIfPath.Empty;
             isVisited = false;
             whichDirt = null;
-            whichWaitObject = null;
         }
 
         public static bool operator ==(Coord c1, Coord c2)

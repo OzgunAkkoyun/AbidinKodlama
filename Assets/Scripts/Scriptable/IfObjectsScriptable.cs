@@ -9,25 +9,20 @@ public class IfObjectsScriptable : ScriptableObject
     [Serializable]
     public class IfObjects
     {
-        [Serializable]
-        public class IfObjectsForLevel
-        {
-            public string ifName;
-            public GameObject ifGameObjects;
-            public Sprite ifGameObjectsImage;
-        }
-        public IfObjectsForLevel[] ifObjectsForLevels;
+        public string ifName;
+        public GameObject ifGameObjects;
+        public Sprite ifGameObjectsImage;
     }
 
     public IfObjects[] ifObjects;
 
-    public IfObjects.IfObjectsForLevel GetCurrentIfObjects(int currentLevelLevelIndex, int subLevelIndex)
-    {
-        return ifObjects[currentLevelLevelIndex - 1].ifObjectsForLevels[subLevelIndex - 1];
-    }
-
-    public IfObjects GetAllIfObjects(int currentLevelLevelIndex)
+    public IfObjects GetCurrentIfObjects(int currentLevelLevelIndex, int subLevelIndex)
     {
         return ifObjects[currentLevelLevelIndex - 1];
+    }
+
+    public IfObjects[] GetAllIfObjects(int currentLevelLevelIndex)
+    {
+        return ifObjects;
     }
 }

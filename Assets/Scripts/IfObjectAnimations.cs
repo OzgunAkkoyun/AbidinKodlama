@@ -16,18 +16,20 @@ public class IfObjectAnimations : MonoBehaviour
         smokeScaleVector = new Vector3(5,5,5);
     }
 
-    public void RemoveSmokeInAnimal(GameObject currentObject, Vector3 halfVector)
+    public void RemoveQuestionObjectInAnimal(GameObject currentObject, Vector3 halfVector)
     {
-        var smoke = currentObject.transform.Find("SmokeEffectIfObjects");
+        var questionMark = currentObject.transform.Find("EmtyQuestionMark");
 
         var character = pathGenarator.gm.character;
         var characterCam = Camera.main;
 
         character.transform.DOMoveY(0.3f, .9f).OnComplete(() =>
         {
-            smoke.DOScale(smokeScaleVector, .9f).OnComplete(() =>
+            var transformPosition = questionMark.transform.position;
+            var targetPos = new Vector3(transformPosition.x, transformPosition.y + 15, transformPosition.z);
+            questionMark.transform.DOMove(targetPos, 2).OnComplete(() =>
             {
-                smoke.gameObject.SetActive(false);
+                questionMark.gameObject.SetActive(false);
                 var lookPos = new Vector3(halfVector.x, currentObject.transform.position.y, halfVector.z);
                 currentObject.transform.DOLookAt(lookPos, 1f);
             });
@@ -42,11 +44,13 @@ public class IfObjectAnimations : MonoBehaviour
         characterCam.transform.DOMove(cameraMovePos, 1);
     }
 
-    public void RemoveOnlySmoke(GameObject currentSmoke)
+    public void RemoveOnlyQuestionMark(GameObject currentQuestionMark)
     {
-        currentSmoke.transform.DOScale(smokeScaleVector, .9f).OnComplete(() =>
+        var transformPosition = currentQuestionMark.transform.position;
+        var targetPos = new Vector3(transformPosition.x, transformPosition.y + 15, transformPosition.z);
+        currentQuestionMark.transform.DOMove(targetPos, 2).OnComplete(() =>
         {
-            currentSmoke.SetActive(false);
+            currentQuestionMark.SetActive(false);
         });
     }
 
@@ -109,20 +113,14 @@ public class IfObjectAnimations : MonoBehaviour
                 (v.transform.position.x == characterMovement.inputVector.Vector3toXZ().x) &&
                 (v.transform.position.z == characterMovement.inputVector.Vector3toXZ().z));
 
-            if (pathGenarator.selectedMushrooms[0] == AnimalsInIfPath.isAnimalCoord)
+            if (pathGenarator.selectedAnimals[0].ifName == pathGenarator.currentIfObject.ifName)
             {
-                Debug.Log("first if if");
-                pathGenarator.selectedMushrooms.RemoveAt(0);
-                //characterMovement.cameraMovementForSs.OpenSSLayout();
-                //yield return new WaitUntil(() => ScreenShotHandler.instance.isSSTaken);
-                yield return new WaitForSeconds(1f);
-                //AnimalMoveFromPath(currentIfObject);
-                yield return new WaitForSeconds(1f);
+                pathGenarator.selectedAnimals.RemoveAt(0);
+                yield return new WaitUntil(() => characterMovement.currentAnimal.activeSelf == false);
                 yield return characterMovement.CompleteHalfWay();
             }
             else
             {
-                Debug.Log("first else");
                 yield return new WaitForSeconds(1f);
                 characterMovement.isPlayerReachedTarget = false;
 
@@ -131,14 +129,11 @@ public class IfObjectAnimations : MonoBehaviour
         }
         else if (characterMovement.currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord)
         {
-            Debug.Log("second if");
-            pathGenarator.selectedMushrooms.RemoveAt(0);
             yield return new WaitForSeconds(1f);
             yield return characterMovement.CompleteHalfWay();
         }
         else
         {
-            Debug.Log("third if");
             yield return new WaitForSeconds(1f);
             characterMovement.isPlayerReachedTarget = false;
 
@@ -146,17 +141,29 @@ public class IfObjectAnimations : MonoBehaviour
         }
         characterMovement.checkTargetReached.CheckIfReachedTarget(isLastCommand, characterMovement);
     }
-
-    public void ChangeMetarialInMushroom(GameObject currentMushroom, Vector3 halfVector, bool b)
+    public void ShowIfObjectAnimation(GameObject currentObject, Vector3 halfVector)
     {
-        if (b)
+        var questionMark = currentObject.transform.Find("EmtyQuestionMark");
+
+        var character = pathGenarator.gm.character;
+        var characterCam = Camera.main;
+
+        var transformPosition = questionMark.transform.position;
+        var targetPos = new Vector3(transformPosition.x, transformPosition.y + 15, transformPosition.z);
+
+        questionMark.transform.DOMove(targetPos, 2).OnComplete(() =>
         {
-            currentMushroom.transform.Find("GFX/amanita_a").GetComponent<MeshRenderer>().material = mushroomMetarials[0];
-        }
-        else
-        {
-            currentMushroom.transform.Find("GFX/amanita_a").GetComponent<MeshRenderer>().material = mushroomMetarials[1];
-        }
-        
+            questionMark.gameObject.SetActive(false);
+
+            var transformPosition1 = currentObject.transform.position;
+            var targetPos1 = new Vector3(transformPosition1.x, transformPosition1.y + 1, transformPosition1.z);
+
+            var sparkle = currentObject.transform.Find("GFX/Fx_PlantSparkle/Particle System");
+            sparkle.GetComponent<ParticleSystem>().Play();
+            currentObject.transform.DOMove(targetPos1, 4).OnComplete(() =>
+            {
+                currentObject.SetActive(false);
+            });
+        });
     }
 }

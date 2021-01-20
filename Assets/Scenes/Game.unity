@@ -2893,9 +2893,6 @@ MonoBehaviour:
     type: 3}
   r: 200
   howManyObject: 2
-  mushroomsImages:
-  - {fileID: 21300000, guid: 7a7d84eeb6826434798c4481207c700f, type: 3}
-  - {fileID: 21300000, guid: c8ba7cf5518883145bfc5fdcf3fb1fc7, type: 3}
 --- !u!1 &600894160
 GameObject:
   m_ObjectHideFlags: 0
@@ -3339,9 +3336,6 @@ MonoBehaviour:
     pathDirection: 0
     whichCoord: 0
     whichDirt:
-      waitName: 
-      seconds: 0
-    whichWaitObject:
       waitName: 
       seconds: 0
     isVisited: 0
@@ -7041,9 +7035,6 @@ MonoBehaviour:
     pathDirection: 0
     whichCoord: 0
     whichDirt:
-      waitName: 
-      seconds: 0
-    whichWaitObject:
       waitName: 
       seconds: 0
     isVisited: 0
@@ -12459,9 +12450,6 @@ MonoBehaviour:
       whichDirt:
         waitName: 
         seconds: 0
-      whichWaitObject:
-        waitName: 
-        seconds: 0
       isVisited: 0
     obstaclePercent: 0.531
     seed: 3
@@ -12476,9 +12464,6 @@ MonoBehaviour:
       whichDirt:
         waitName: 
         seconds: 0
-      whichWaitObject:
-        waitName: 
-        seconds: 0
       isVisited: 0
     targetPoint:
       x: 6
@@ -12487,9 +12472,6 @@ MonoBehaviour:
       pathDirection: 0
       whichCoord: 0
       whichDirt:
-        waitName: 
-        seconds: 0
-      whichWaitObject:
         waitName: 
         seconds: 0
       isVisited: 0
@@ -12517,9 +12499,6 @@ MonoBehaviour:
       whichDirt:
         waitName: 
         seconds: 0
-      whichWaitObject:
-        waitName: 
-        seconds: 0
       isVisited: 0
     obstaclePercent: 0
     seed: 79
@@ -12534,9 +12513,6 @@ MonoBehaviour:
       whichDirt:
         waitName: 
         seconds: 0
-      whichWaitObject:
-        waitName: 
-        seconds: 0
       isVisited: 0
     targetPoint:
       x: 0
@@ -12545,9 +12521,6 @@ MonoBehaviour:
       pathDirection: 0
       whichCoord: 0
       whichDirt:
-        waitName: 
-        seconds: 0
-      whichWaitObject:
         waitName: 
         seconds: 0
       isVisited: 0
@@ -12615,19 +12588,19 @@ MonoBehaviour:
   right: 0
   up: 0
   down: 0
+  currentIfObjectsScriptable: {fileID: 0}
   ifObjectsScriptable: {fileID: 11400000, guid: bf64d1fd681abb241991a2339aea7b0c,
     type: 2}
-  smoke: {fileID: 3172589036138429611, guid: 442e6a507511a4545b16a1ca00aa09da, type: 3}
+  smoke: {fileID: 5007173992387544447, guid: e063bcc3bb705d54bae4bdf5cdf9fc07, type: 3}
   currentIfObject:
     ifName: 
     ifGameObjects: {fileID: 0}
     ifGameObjectsImage: {fileID: 0}
+  allIfObjects: []
   selectedAnimals: []
-  allIfObjects:
-    ifObjectsForLevels: []
   rotateToyUi: {fileID: 592687736}
   animals: []
-  justSmoke: []
+  justEmtyQuestionMarks: []
   waitObjects:
   - dirts:
     - waitName: coffe
@@ -12656,60 +12629,8 @@ MonoBehaviour:
     dirtMaterial: {fileID: 2100000, guid: 1b48ba2cfcb7f754899a42c615fd49c1, type: 2}
   - waitName: milk
     dirtMaterial: {fileID: 2100000, guid: afa3f752c6035024eb3a6dfc93f36cf8, type: 2}
-  wholeObjects:
-  - ifObjects:
-    - ifName: Papatya
-      gameObjectIndex: 0
-    - ifName: Rose
-      gameObjectIndex: 1
-    - ifName: Lily
-      gameObjectIndex: 2
-    waitObjects:
-    - waitName: Leaf
-      seconds: 2
-    - waitName: Leaf1
-      seconds: 3
-    - waitName: Leaf2
-      seconds: 1
-  - ifObjects: []
-    waitObjects: []
-  - ifObjects: []
-    waitObjects: []
-  wholeMetarials:
-  - ifMetarials:
-    - ifName: mushroom
-      ifGameObject: {fileID: 7704162704117217466, guid: 46c22e5ae0f81924a9b707892be3e208,
-        type: 3}
-      ifImages: {fileID: -6449702336915408398, guid: 6a60daa6af2966746be22dfed4f3a597,
-        type: 3}
-    waitMetarials:
-    - waitName: Leaf
-      waitMaterial: {fileID: 2100000, guid: 4bdde3a91570f304ca92a7f48c04c8ba, type: 2}
-    - waitName: 
-      waitMaterial: {fileID: 0}
-    - waitName: 
-      waitMaterial: {fileID: 0}
-  - ifMetarials: []
-    waitMetarials: []
-  - ifMetarials: []
-    waitMetarials: []
-  currentWholeIfObjects:
-    ifName: 
-    gameObjectIndex: 0
-  currentWholeIfMaterials:
-    ifName: 
-    ifGameObject: {fileID: 0}
-    ifImages: {fileID: 0}
-  currentWholeWaitObjects:
-    waitName: 
-    seconds: 0
-  currentWholeWaitMaterials:
-    waitName: 
-    waitMaterial: {fileID: 0}
-  emtyMushroomPrefab: {fileID: 7704162704117217466, guid: 46c22e5ae0f81924a9b707892be3e208,
-    type: 3}
-  wholeIfObjectsList: []
-  selectedMushrooms: 
+  wholeIfObjectsScriptable: {fileID: 11400000, guid: f32c5a7b2be20084f8dca6af9083a4be,
+    type: 2}
 --- !u!1 &2052145859
 GameObject:
   m_ObjectHideFlags: 0

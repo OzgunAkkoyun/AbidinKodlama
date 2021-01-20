@@ -65,11 +65,11 @@ public class CharacterMovement : MonoBehaviour
         {
             yield return IfObjectAnimations.instance.SenarioTreeIfCheck(isLastCommand, this);
         }
-        else if(gm.currentSenario.senarioIndex == 5)
+        else if (gm.currentSenario.senarioIndex == 5)
         {
             yield return IfObjectAnimations.instance.SenarioFiveIfCheck(isLastCommand, this);
         }
-         
+        //yield return IfObjectAnimations.instance.SenarioTreeIfCheck(isLastCommand, this);
     }
 
     public IEnumerator ApplyWaitCommand(int seconds, bool isLastCommand, int i)
@@ -125,7 +125,7 @@ public class CharacterMovement : MonoBehaviour
             {
                 yield return SenarioFiveMove();
             }
-           
+
         }
         else
         {
@@ -149,18 +149,17 @@ public class CharacterMovement : MonoBehaviour
             QuarterWayMove();
             var Direction = inputVector - transform.position;
             var halfVector = inputVector - (Direction - Direction / 4);
-            IfObjectAnimations.instance.RemoveSmokeInAnimal(currentAnimal, halfVector);
+            IfObjectAnimations.instance.RemoveQuestionObjectInAnimal(currentAnimal, halfVector);
             return null;
         }
         else if (currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord && !currentPath.isVisited)
         {
             currentPath.isVisited = true;
-            var currentSmoke = pathGenarator.justSmoke.Find(v =>
-                (v.transform.position.x == inputVector.Vector3toXZ().x) &&
-                (v.transform.position.z == inputVector.Vector3toXZ().z));
+            var currentQuestionMark = pathGenarator.justEmtyQuestionMarks.Find(v =>
+                (v.transform.position.x == inputVector.Vector3toXZ().x) && (v.transform.position.z == inputVector.Vector3toXZ().z));
             HalfWayMove();
 
-            IfObjectAnimations.instance.RemoveOnlySmoke(currentSmoke);
+            IfObjectAnimations.instance.RemoveOnlyQuestionMark(currentQuestionMark);
             return null;
         }
         else
@@ -177,24 +176,23 @@ public class CharacterMovement : MonoBehaviour
         if (currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord && !currentPath.isVisited)
         {
             currentPath.isVisited = true;
-            currentMushroom = pathGenarator.wholeIfObjectsList.Find(v =>
+            currentAnimal = pathGenarator.animals.Find(v =>
                 (v.transform.position.x == inputVector.Vector3toXZ().x) &&
                 (v.transform.position.z == inputVector.Vector3toXZ().z));
-            Debug.Log(currentMushroom.name);
             QuarterWayMove();
-            
-            IfObjectAnimations.instance.ChangeMetarialInMushroom(currentMushroom, halfVector,true);
+            Debug.Log(currentAnimal);
+            IfObjectAnimations.instance.ShowIfObjectAnimation(currentAnimal, halfVector);
             return null;
         }
         else if (currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord && !currentPath.isVisited)
         {
             currentPath.isVisited = true;
-            currentMushroom = pathGenarator.wholeIfObjectsList.Find(v =>
+            var currentQuestionMark = pathGenarator.justEmtyQuestionMarks.Find(v =>
                 (v.transform.position.x == inputVector.Vector3toXZ().x) &&
                 (v.transform.position.z == inputVector.Vector3toXZ().z));
             HalfWayMove();
-
-            IfObjectAnimations.instance.ChangeMetarialInMushroom(currentMushroom, halfVector, false);
+            IfObjectAnimations.instance.RemoveOnlyQuestionMark(currentQuestionMark);
+            //IfObjectAnimations.instance.ShowIfObjectAnimation(currentMushroom, halfVector, false);
             return null;
         }
         else
