@@ -63,11 +63,11 @@ public class CharacterMovement : MonoBehaviour
     {
         if (gm.currentSenario.senarioIndex == 3)
         {
-            yield return IfObjectAnimations.instance.SenarioTreeIfCheck(isLastCommand, this);
+            yield return IfObjectAnimations.instance.SenarioTreeIfCheck(isLastCommand, this, inputVector);
         }
         else if (gm.currentSenario.senarioIndex == 5)
         {
-            yield return IfObjectAnimations.instance.SenarioFiveIfCheck(isLastCommand, this);
+            yield return IfObjectAnimations.instance.SenarioFiveIfCheck(isLastCommand, this, inputVector);
         }
         //yield return IfObjectAnimations.instance.SenarioTreeIfCheck(isLastCommand, this);
     }
@@ -88,20 +88,6 @@ public class CharacterMovement : MonoBehaviour
     {
         transform.DOMove(inputVector, .5f);
         return new WaitForSeconds(.5f);
-    }
-
-    public void CheckIfObjectCount()
-    {
-        if (ScreenShotHandler.instance.collectedAnimalPhoto == gm.currentSubLevel.ifObjectCount)
-        {
-            isPlayerReachedTarget = true;
-            CharacterAnimationPlay();
-        }
-        else
-        {
-            isPlayerReachedTarget = false;
-            gm.EndGame();
-        }
     }
 
     private IEnumerator PlayMoveAnimation(bool isLastCommand)
@@ -173,6 +159,7 @@ public class CharacterMovement : MonoBehaviour
             (v.x * 2 == inputVector.Vector3toXZ().x) && (v.y * 2 == inputVector.Vector3toXZ().z));
         var Direction = inputVector - transform.position;
         var halfVector = inputVector - (Direction - Direction / 4);
+
         if (currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord && !currentPath.isVisited)
         {
             currentPath.isVisited = true;
@@ -180,7 +167,6 @@ public class CharacterMovement : MonoBehaviour
                 (v.transform.position.x == inputVector.Vector3toXZ().x) &&
                 (v.transform.position.z == inputVector.Vector3toXZ().z));
             QuarterWayMove();
-            Debug.Log(currentAnimal);
             IfObjectAnimations.instance.ShowIfObjectAnimation(currentAnimal, halfVector);
             return null;
         }
@@ -190,9 +176,9 @@ public class CharacterMovement : MonoBehaviour
             var currentQuestionMark = pathGenarator.justEmtyQuestionMarks.Find(v =>
                 (v.transform.position.x == inputVector.Vector3toXZ().x) &&
                 (v.transform.position.z == inputVector.Vector3toXZ().z));
+
             HalfWayMove();
             IfObjectAnimations.instance.RemoveOnlyQuestionMark(currentQuestionMark);
-            //IfObjectAnimations.instance.ShowIfObjectAnimation(currentMushroom, halfVector, false);
             return null;
         }
         else

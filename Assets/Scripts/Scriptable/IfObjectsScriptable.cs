@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abidin/IfObjects", order = 1)]
@@ -16,12 +14,12 @@ public class IfObjectsScriptable : ScriptableObject
 
     public IfObjects[] ifObjects;
 
-    public IfObjects GetCurrentIfObjects(int currentLevelLevelIndex, int subLevelIndex)
+    public IfObjects GetCurrentIfObjects(int currentLevelLevelIndex)
     {
         return ifObjects[currentLevelLevelIndex - 1];
     }
 
-    public IfObjects[] GetAllIfObjects(int currentLevelLevelIndex)
+    public IfObjects[] GetAllIfObjects()
     {
         return ifObjects;
     }

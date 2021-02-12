@@ -12601,35 +12601,15 @@ MonoBehaviour:
   rotateToyUi: {fileID: 592687736}
   animals: []
   justEmtyQuestionMarks: []
-  waitObjects:
-  - dirts:
-    - waitName: coffe
-      seconds: 2
-  - dirts:
-    - waitName: water
-      seconds: 1
-    - waitName: domato
-      seconds: 3
-  - dirts:
-    - waitName: coffe
-      seconds: 2
-    - waitName: water
-      seconds: 1
-    - waitName: water
-      seconds: 1
+  currentWaitObjectsScriptable: {fileID: 0}
+  waitObjectsScriptable: {fileID: 11400000, guid: 32733420376913a49b057f33739bf76c,
+    type: 2}
   currentDirts: []
   currentDirtObject:
     dirts: []
-  waitMetarials:
-  - waitName: coffe
-    dirtMaterial: {fileID: 2100000, guid: 1eab269fe0856e74fb90ee7455230eb6, type: 2}
-  - waitName: water
-    dirtMaterial: {fileID: 2100000, guid: b66ac0dbf0b1624429e2536e7c3585bc, type: 2}
-  - waitName: domato
-    dirtMaterial: {fileID: 2100000, guid: 1b48ba2cfcb7f754899a42c615fd49c1, type: 2}
-  - waitName: milk
-    dirtMaterial: {fileID: 2100000, guid: afa3f752c6035024eb3a6dfc93f36cf8, type: 2}
   wholeIfObjectsScriptable: {fileID: 11400000, guid: f32c5a7b2be20084f8dca6af9083a4be,
+    type: 2}
+  wholeWaitObjectsScriptable: {fileID: 11400000, guid: dd1d415b7bf750043b39cd9130cd167f,
     type: 2}
 --- !u!1 &2052145859
 GameObject:

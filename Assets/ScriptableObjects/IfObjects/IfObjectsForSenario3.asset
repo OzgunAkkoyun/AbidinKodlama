@@ -28,3 +28,13 @@ MonoBehaviour:
       type: 3}
     ifGameObjectsImage: {fileID: 21300000, guid: 749697668e8e2a4428504a7a9087d262,
       type: 3}
+  - ifName: "siyah Ku\u015F"
+    ifGameObjects: {fileID: 3206463483138593332, guid: a466af101e0e5db44bc7bc8da21b382c,
+      type: 3}
+    ifGameObjectsImage: {fileID: 21300000, guid: cabc69f6b9e1d1745b93ed6331158ac7,
+      type: 3}
+  - ifName: "Mor Ku\u015F"
+    ifGameObjects: {fileID: 3206463483138593332, guid: a466af101e0e5db44bc7bc8da21b382c,
+      type: 3}
+    ifGameObjectsImage: {fileID: 21300000, guid: 1ac89a81125499b459c92f09cb345644,
+      type: 3}

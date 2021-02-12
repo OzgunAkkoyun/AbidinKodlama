@@ -19,7 +19,7 @@ public class WaitObjectsAnimation : MonoBehaviour
         instance = this;
     }
 
-    public IEnumerator CleanTile(Coord currentCoord, int seconds, bool currectSecond)
+    public IEnumerator CleanTile(Coord currentCoord,Coord realCoord, int seconds, bool currectSecond)
     {
         var currentCoordPos = pathGenarator.mapGenerator.CoordToPosition(currentCoord.x, currentCoord.y);
         GameObject currentSparkle;
@@ -36,8 +36,10 @@ public class WaitObjectsAnimation : MonoBehaviour
             currentTile.gameObject.GetComponent<Renderer>().material = currentTileMetarial;
             howManyDirtCleaned++;
         }
-        
-        yield return new WaitForSeconds(seconds);
+
+        var expectedSecond = realCoord.whichDirt.seconds;
+        var waitSecond = (expectedSecond - seconds) >= 0 ? expectedSecond : seconds;
+        yield return new WaitForSeconds(waitSecond + 0.5f);
         Destroy(currentSparkle);
     }
 
@@ -49,16 +51,17 @@ public class WaitObjectsAnimation : MonoBehaviour
 
         if (realCoord.whichDirt != null)
         {
-            if (pathGenarator.currentDirts[dirtCount].seconds == getInputs.seconds[dirtCount])
+            var expectedSecond = pathGenarator.currentDirts[dirtCount].seconds;
+            if (expectedSecond == getInputs.seconds[dirtCount])
             {
                 uiHandler.StartCleaningCountDown(realCoord,seconds);
-                yield return CleanTile(currentCoord, seconds,true);
+                yield return CleanTile(currentCoord, realCoord, seconds,true);
             }
             else
             {
                 uiHandler.StartCleaningCountDown(realCoord, seconds);
-                yield return CleanTile(currentCoord, seconds,false);
-                ShowWrongCleaningTile.instance.wrongCleaningTiles.Add(realCoord);
+                yield return CleanTile(currentCoord, realCoord, seconds,false);
+                ShowWrongCleaningTile.instance.wrongWaitTiles.Add(realCoord);
             }
             dirtCount++;
         }

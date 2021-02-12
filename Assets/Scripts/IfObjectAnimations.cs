@@ -23,25 +23,42 @@ public class IfObjectAnimations : MonoBehaviour
         var character = pathGenarator.gm.character;
         var characterCam = Camera.main;
 
-        character.transform.DOMoveY(0.3f, .9f).OnComplete(() =>
+        var transformPosition = questionMark.transform.position;
+        var targetPos = new Vector3(transformPosition.x, transformPosition.y + 15, transformPosition.z);
+
+        if (pathGenarator.selectedAnimals[0].ifName == pathGenarator.currentIfObject.ifName)
         {
-            var transformPosition = questionMark.transform.position;
-            var targetPos = new Vector3(transformPosition.x, transformPosition.y + 15, transformPosition.z);
-            questionMark.transform.DOMove(targetPos, 2).OnComplete(() =>
+            character.transform.DOMoveY(0.3f, .9f).OnComplete(() =>
             {
-                questionMark.gameObject.SetActive(false);
-                var lookPos = new Vector3(halfVector.x, currentObject.transform.position.y, halfVector.z);
-                currentObject.transform.DOLookAt(lookPos, 1f);
+                questionMark.transform.DOMove(targetPos, 2).OnComplete(() =>
+                {
+                    questionMark.gameObject.SetActive(false);
+                    var lookPos = new Vector3(halfVector.x, currentObject.transform.position.y, halfVector.z);
+                    currentObject.transform.DOLookAt(lookPos, 1f);
+                });
             });
-        });
 
-        var cameraMovePosDirection = currentObject.transform.position - character.transform.position;
+            var cameraMovePosDirection = currentObject.transform.position - character.transform.position;
 
-        var cameraMovePosTemp = characterCam.transform.position + cameraMovePosDirection*1.3f;
+            var cameraMovePosTemp = characterCam.transform.position + cameraMovePosDirection * 1.3f;
 
-        var cameraMovePos = new Vector3(cameraMovePosTemp.x,3, cameraMovePosTemp.z);
+            var cameraMovePos = new Vector3(cameraMovePosTemp.x, 3, cameraMovePosTemp.z);
 
-        characterCam.transform.DOMove(cameraMovePos, 1);
+            characterCam.transform.DOMove(cameraMovePos, 1);
+        }
+        else
+        {
+            character.transform.DOMoveY(0.3f, .9f).OnComplete(() =>
+            {
+                questionMark.transform.DOMove(targetPos, 2).OnComplete(() =>
+                {
+                    questionMark.gameObject.SetActive(false);
+                    var lookPos = new Vector3(halfVector.x, currentObject.transform.position.y, halfVector.z);
+                    currentObject.transform.DOLookAt(lookPos, 1f);
+                });
+            });
+        }
+
     }
 
     public void RemoveOnlyQuestionMark(GameObject currentQuestionMark)
@@ -64,7 +81,17 @@ public class IfObjectAnimations : MonoBehaviour
         });
     }
 
-    public IEnumerator SenarioTreeIfCheck(bool isLastCommand, CharacterMovement characterMovement)
+    public void WrongAnimalMoveFromPath(GameObject currentAnimal)
+    {
+        var transformPosition = currentAnimal.transform.position;
+        var targetPos = new Vector3(transformPosition.x, transformPosition.y + 15, transformPosition.z);
+        currentAnimal.transform.DOMove(targetPos, 2).OnComplete(() =>
+        {
+            currentAnimal.SetActive(false);
+        });
+    }
+
+    public IEnumerator SenarioTreeIfCheck(bool isLastCommand, CharacterMovement characterMovement, Vector3 inputVector)
     {
         if (characterMovement.currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord)
         {
@@ -84,10 +111,17 @@ public class IfObjectAnimations : MonoBehaviour
             }
             else
             {
-                yield return new WaitForSeconds(1f);
-                characterMovement.isPlayerReachedTarget = false;
+                var currentCoord = new MapGenerator.Coord((int)(inputVector.x / pathGenarator.mapGenerator.tileSize), (int)(inputVector.z / pathGenarator.mapGenerator.tileSize));
 
-                characterMovement.gm.EndGame();
+                var realCoord = pathGenarator.Path.Find(v => v.x == currentCoord.x && v.y == currentCoord.y);
+
+                ShowWrongCleaningTile.instance.wrongIfTiles.Add(realCoord);
+                yield return new WaitForSeconds(3f);
+                AnimalMoveFromPath(currentAnimal);
+                //yield return new WaitForSeconds(1f);
+                //characterMovement.isPlayerReachedTarget = false;
+
+                //characterMovement.gm.EndGame();
             }
         }
         else if (characterMovement.currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord)
@@ -105,7 +139,7 @@ public class IfObjectAnimations : MonoBehaviour
         characterMovement.checkTargetReached.CheckIfReachedTarget(isLastCommand, characterMovement);
     }
 
-    public IEnumerator SenarioFiveIfCheck(bool isLastCommand, CharacterMovement characterMovement)
+    public IEnumerator SenarioFiveIfCheck(bool isLastCommand, CharacterMovement characterMovement, Vector3 inputVector)
     {
         if (characterMovement.currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord)
         {

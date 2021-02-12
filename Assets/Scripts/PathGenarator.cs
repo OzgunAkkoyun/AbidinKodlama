@@ -338,6 +338,8 @@ public class PathGenarator : MonoBehaviour
     //public IfObjects[] ifObjects;
     [HideInInspector]
     public IfObjectsScriptable currentIfObjectsScriptable;
+    [Space(10f)]
+    [Header("If Scriptable")]
     public IfObjectsScriptable ifObjectsScriptable;
     public GameObject smoke;
 
@@ -359,20 +361,19 @@ public class PathGenarator : MonoBehaviour
         {
             currentIfObjectsScriptable = wholeIfObjectsScriptable;
         }
-        
     }
     public void PrepareAnimals()
     {
         LikeStart();
-        currentIfObject = currentIfObjectsScriptable.GetCurrentIfObjects(gm.currentLevel.levelIndex, gm.currentSubLevel.subLevelIndex);
-        allIfObjects = currentIfObjectsScriptable.GetAllIfObjects(gm.currentLevel.levelIndex);
+        currentIfObject = currentIfObjectsScriptable.GetCurrentIfObjects(gm.currentLevel.levelIndex);
+        allIfObjects = currentIfObjectsScriptable.GetAllIfObjects();
     }
     public void CreatePathWithIfStatement()
     {
         Path = mapGenerator.allOpenCoords;
         PrepareAnimals();
         //rotateToyUi.SetAllIfObjectsInContainer(3);
-        rotateToyUi.SetAllIfObjectsInWheel(3);
+        rotateToyUi.SetAllIfObjectsInWheel(5);
         SetIfObjects();
     }
 
@@ -392,7 +393,7 @@ public class PathGenarator : MonoBehaviour
             {
                 Path[whichPathHaveObject].whichCoord = AnimalsInIfPath.isEmptyAnimalCoord;
                 var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
-                var onlySmoke = Instantiate(smoke, spawnPosition+Vector3.up, Quaternion.identity);
+                var onlySmoke = Instantiate(smoke, spawnPosition + Vector3.up, Quaternion.identity);
                 justEmtyQuestionMarks.Add(onlySmoke);
             }
         }
@@ -420,7 +421,7 @@ public class PathGenarator : MonoBehaviour
     {
         PrepareAnimals();
         //rotateToyUi.SetAllIfObjectsInContainer(3);
-        rotateToyUi.SetAllIfObjectsInWheel(3);
+        rotateToyUi.SetAllIfObjectsInWheel(5);
         for (int i = 0; i < PathLength; i++)
         {
             var selectedPath = Path[i];
@@ -445,55 +446,74 @@ public class PathGenarator : MonoBehaviour
     #endregion
 
     #region WaitPathGenerate
-    
-    [Serializable]
-    public class WaitObjects
-    {
-        [Serializable]
-        public class DirtsForLevel
-        {
-            public string waitName;
-            public int seconds;
-        }
-        public DirtsForLevel[] dirts;
-    }
-    [Space(15f)]
-    [Header("Wait Objects")]
-    public WaitObjects[] waitObjects;
 
-    public List<WaitObjects.DirtsForLevel> currentDirts = new List<WaitObjects.DirtsForLevel>();
-    public WaitObjects currentDirtObject;
+    //[Serializable]
+    //public class WaitObjects
+    //{
+    //    [Serializable]
+    //    public class DirtsForLevel
+    //    {
+    //        public string waitName;
+    //        public int seconds;
+    //    }
+    //    public DirtsForLevel[] dirts;
+    //}
+    //[Space(15f)]
+    //[Header("Wait Objects")]
+    //public WaitObjects[] waitObjects;
+    [Space(10f)]
+    [Header("Wait Scriptable")]
+    public WaitObjectsScriptable currentWaitObjectsScriptable;
+    public WaitObjectsScriptable waitObjectsScriptable;
 
-    [Serializable]
-    public class WaitMetarials
-    {
-        public string waitName;
-        public Material dirtMaterial;
+    public List<WaitObjectsScriptable.WaitObjects.DirtsForLevel> currentDirts = new List<WaitObjectsScriptable.WaitObjects.DirtsForLevel>();
+    public WaitObjectsScriptable.WaitObjects currentDirtObject;
+
+    //[Serializable]
+    //public class WaitMetarials
+    //{
+    //    public string waitName;
+    //    public Material dirtMaterial;
         
-    }
-    [Space(5f)]
-    [Header("Wait Metarials")]
-    public WaitMetarials[] waitMetarials;
+    //}
+    //[Space(5f)]
+    //[Header("Wait Metarials")]
+    //public WaitMetarials[] waitMetarials;
+
     public void CreatePathForWait()
     {
         Path = mapGenerator.allOpenCoords;
     }
 
-    public void SetDirtInPath()
+    public void SetWaitScriptable()
     {
+        if (gm.currentSenario.senarioIndex == 4)
+        {
+            currentWaitObjectsScriptable = waitObjectsScriptable;
+        }
+        else if (gm.currentSenario.senarioIndex == 5)
+        {
+            currentWaitObjectsScriptable = wholeWaitObjectsScriptable;
+        }
+    }
+
+    public void SetWaitObjectsInPath()
+    {
+        SetWaitScriptable();
         var levelIndex = gm.currentLevel.levelIndex;
         var subLevelIndex = gm.currentSubLevel.subLevelIndex;
 
         var dirtCount = gm.currentSubLevel.dirtCount;
 
-        currentDirtObject = waitObjects[gm.currentLevel.levelIndex - 1];
+        currentDirtObject = currentWaitObjectsScriptable.GetCurrentWaitObject(levelIndex);
+
         var selectedDirtIndex = -1;
 
         for (int i = 0; i < dirtCount; )
         {
-            selectedDirtIndex = GetDirtMetarialIndex();
+            selectedDirtIndex = currentWaitObjectsScriptable.GetDirtMetarialIndex(levelIndex);
 
-            var selectedDirtObject = currentDirtObject.dirts.ToList().Find(v => v.waitName == waitMetarials[selectedDirtIndex].waitName);
+            var selectedDirtObject = currentDirtObject.dirts.ToList().Find(v => v.waitName == currentWaitObjectsScriptable.waitMetarials[selectedDirtIndex].waitName);
             
             currentDirts.Add(selectedDirtObject);
 
@@ -509,43 +529,23 @@ public class PathGenarator : MonoBehaviour
 
                 var selectedTile = mapGenerator.allTileGameObject[PathIndex].gameObject;
 
-               selectedTile.GetComponent<Renderer>().material = waitMetarials[selectedDirtIndex].dirtMaterial;
+               selectedTile.GetComponent<Renderer>().material = currentWaitObjectsScriptable.waitMetarials[selectedDirtIndex].dirtMaterial;
                 i++;
             }
         }
-        
-    }
-
-    private int GetDirtMetarialIndex()
-    {
-        var index = -1;
-
-        if (gm.currentLevel.levelIndex == 1)
-        {
-            index = 0;
-        }
-        else if (gm.currentLevel.levelIndex == 2)
-        {
-            index = UnityEngine.Random.Range(1, 3);
-        }
-        else if (gm.currentLevel.levelIndex == 3)
-        {
-            index = UnityEngine.Random.Range(3, 6);
-        }
-
-        return index;
     }
 
     public void SetDirtForLoad()
     {
+        SetWaitScriptable();
         var levelIndex = gm.currentLevel.levelIndex;
         var subLevelIndex = gm.currentSubLevel.subLevelIndex;
 
         var dirtCount = gm.currentLevel.subLevels[subLevelIndex - 1].dirtCount;
 
-        currentDirtObject = waitObjects[gm.currentLevel.levelIndex - 1];
+        currentDirtObject = currentWaitObjectsScriptable.GetCurrentWaitObject(levelIndex);
 
-       var allDirtCoords = gm.gameDatas[gm.gameDatas.Count - 1].Path.FindAll(v => v.whichDirt != null);
+        var allDirtCoords = gm.gameDatas[gm.gameDatas.Count - 1].Path.FindAll(v => v.whichDirt != null);
 
         for (int i = 0; i < allDirtCoords.Count; i++)
         {
@@ -553,7 +553,7 @@ public class PathGenarator : MonoBehaviour
                 (v.x == allDirtCoords[i].x) && (v.y == allDirtCoords[i].y));
 
             currentDirts.Add(allDirtCoords[i].whichDirt);
-            mapGenerator.allTileGameObject[PathIndex].gameObject.GetComponent<Renderer>().material = waitMetarials.ToList().Find(v => v.waitName == allDirtCoords[i].whichDirt.waitName).dirtMaterial;
+            mapGenerator.allTileGameObject[PathIndex].gameObject.GetComponent<Renderer>().material = currentWaitObjectsScriptable.waitMetarials.ToList().Find(v => v.waitName == allDirtCoords[i].whichDirt.waitName).dirtMaterial;
         }
     }
 
@@ -711,13 +711,52 @@ public class PathGenarator : MonoBehaviour
     #endregion*/
 
     public IfObjectsScriptable wholeIfObjectsScriptable;
+    public WaitObjectsScriptable wholeWaitObjectsScriptable;
 
    
     public void PrepareWholeSenarioObjects()
     {
         CreatePathWithIfStatement();
+        SetWholeWaitObjectsInPath();
     }
+    public void SetWholeWaitObjectsInPath()
+    {
+        SetWaitScriptable();
+        var levelIndex = gm.currentLevel.levelIndex;
+        var subLevelIndex = gm.currentSubLevel.subLevelIndex;
 
+        var dirtCount = gm.currentSubLevel.dirtCount;
+
+        currentDirtObject = currentWaitObjectsScriptable.GetCurrentWaitObject(levelIndex);
+
+        var selectedDirtIndex = -1;
+
+        for (int i = 0; i < dirtCount;)
+        {
+            selectedDirtIndex = currentWaitObjectsScriptable.GetDirtMetarialIndex(levelIndex);
+
+            var selectedDirtObject = currentDirtObject.dirts.ToList().Find(v => v.waitName == currentWaitObjectsScriptable.waitMetarials[selectedDirtIndex].waitName);
+
+            currentDirts.Add(selectedDirtObject);
+
+            var whichPathHaveObject = UnityEngine.Random.Range(1, PathLength - 1);
+            var selectedPath = Path[whichPathHaveObject];
+
+            if (selectedPath.whichDirt == null)
+            {
+                selectedPath.whichDirt = selectedDirtObject;
+                var spawnPos = new Vector3(selectedPath.x * mapGenerator.tileSize, 0,selectedPath.y * mapGenerator.tileSize);
+                var insWaitObject = Instantiate(currentWaitObjectsScriptable.waitMetarials[selectedDirtIndex].dirtGameObject, spawnPos, Quaternion.identity);
+                //var PathIndex = mapGenerator.allTileCoords.FindIndex(v =>
+                //    (v.x == selectedPath.x) && (v.y == selectedPath.y));
+
+                //var selectedTile = mapGenerator.allTileGameObject[PathIndex].gameObject;
+
+                //selectedTile.GetComponent<Renderer>().material = currentWaitObjectsScriptable.waitMetarials[selectedDirtIndex].dirtMaterial;
+                i++;
+            }
+        }
+    }
     #endregion
     public Coord GetRandomOpenCoord()
     {

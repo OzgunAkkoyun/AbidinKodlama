@@ -12,9 +12,10 @@ public class CheckTargetReached : MonoBehaviour
 
         if (characterMovement.pathGenarator.Path.Contains(currentCoord))
         {
-            if (characterMovement.mapGenerate.CoordToPosition(characterMovement.mapGenerate.currentMap.targetPoint.x,
-                    characterMovement.mapGenerate.currentMap.targetPoint.y) ==
-                characterMovement.inputVector.Vector3toXZ())
+            var targetVec3 = characterMovement.mapGenerate.CoordToPosition(characterMovement.mapGenerate.currentMap.targetPoint.x,
+                characterMovement.mapGenerate.currentMap.targetPoint.y);
+            
+            if (targetVec3 == characterMovement.inputVector.Vector3toXZ() && isLastCommand)
             {
                 if (characterMovement.gm.currentSenario.senarioIndex == 1 ||
                     characterMovement.gm.currentSenario.senarioIndex == 2)
@@ -24,7 +25,7 @@ public class CheckTargetReached : MonoBehaviour
                 }
                 else if (characterMovement.gm.currentSenario.senarioIndex == 3)
                 {
-                    characterMovement.CheckIfObjectCount();
+                    CheckIfObjectCount(characterMovement);
                 }
                 else if (characterMovement.gm.currentSenario.senarioIndex == 4)
                 {
@@ -46,7 +47,28 @@ public class CheckTargetReached : MonoBehaviour
             characterMovement.gm.EndGame();
         }
     }
-
+    public void CheckIfObjectCount(CharacterMovement characterMovement)
+    {
+        if (ScreenShotHandler.instance.collectedAnimalPhoto == characterMovement.gm.currentSubLevel.ifObjectCount)
+        {
+            characterMovement.isPlayerReachedTarget = true;
+            characterMovement.CharacterAnimationPlay();
+        }
+        else
+        {
+            if (ShowWrongCleaningTile.instance.wrongIfTiles.Count > 0)
+            {
+                ShowWrongCleaningTile.instance.ShowWrongIfTiles();
+                characterMovement.isPlayerReachedTarget = false;
+            }
+            else
+            {
+                characterMovement.isPlayerReachedTarget = false;
+                characterMovement.gm.EndGame();
+            }
+           
+        }
+    }
     public void CheckWaitObjectsCount(CharacterMovement characterMovement)
    {
        if (characterMovement.waitObjectsAnimation.howManyDirtCleaned == characterMovement.gm.currentSubLevel.dirtCount )
@@ -56,7 +78,7 @@ public class CheckTargetReached : MonoBehaviour
        }
        else
        {
-           if (ShowWrongCleaningTile.instance.wrongCleaningTiles.Count > 0)
+           if (ShowWrongCleaningTile.instance.wrongWaitTiles.Count > 0)
            {
                ShowWrongCleaningTile.instance.ShowWrongCleaningTiles();
                characterMovement.isPlayerReachedTarget = false;

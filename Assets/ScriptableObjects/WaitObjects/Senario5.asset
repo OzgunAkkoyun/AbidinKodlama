@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83a177eb47432944c88de423b87680f4, type: 3}
+  m_Name: Senario5
+  m_EditorClassIdentifier: 
+  waitObjects:
+  - dirts:
+    - waitName: "G\xFCl"
+      seconds: 1
+  - dirts:
+    - waitName: "G\xFCl"
+      seconds: 1
+    - waitName: Papatya
+      seconds: 2
+  - dirts:
+    - waitName: "G\xFCl"
+      seconds: 1
+    - waitName: Papatya
+      seconds: 2
+    - waitName: Lale
+      seconds: 3
+  waitMetarials:
+  - waitName: "G\xFCl"
+    dirtMaterial: {fileID: 0}
+    dirtGameObject: {fileID: 3845018135909871162, guid: 8a76ad0f46d1ab6469bba021b11b55b0,
+      type: 3}
+  - waitName: Papatya
+    dirtMaterial: {fileID: 0}
+    dirtGameObject: {fileID: 8537820210128434152, guid: 881bf3c4b6024fa438c38454252560ca,
+      type: 3}
+  - waitName: Lale
+    dirtMaterial: {fileID: 0}
+    dirtGameObject: {fileID: -927199367670048503, guid: 3c2b526cc8eff314591d1b0fcf157a43,
+      type: 3}

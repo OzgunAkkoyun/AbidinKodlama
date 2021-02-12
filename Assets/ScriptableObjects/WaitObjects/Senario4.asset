@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83a177eb47432944c88de423b87680f4, type: 3}
+  m_Name: Senario4
+  m_EditorClassIdentifier: 
+  waitObjects:
+  - dirts:
+    - waitName: Kahve
+      seconds: 1
+  - dirts:
+    - waitName: Kahve
+      seconds: 1
+    - waitName: Domates
+      seconds: 2
+  - dirts:
+    - waitName: Kahve
+      seconds: 1
+    - waitName: Domates
+      seconds: 2
+    - waitName: "S\xFCt"
+      seconds: 3
+  waitMetarials:
+  - waitName: Kahve
+    dirtMaterial: {fileID: 2100000, guid: 1eab269fe0856e74fb90ee7455230eb6, type: 2}
+    dirtGameObject: {fileID: 0}
+  - waitName: Domates
+    dirtMaterial: {fileID: 2100000, guid: 1b48ba2cfcb7f754899a42c615fd49c1, type: 2}
+    dirtGameObject: {fileID: 0}
+  - waitName: "S\xFCt"
+    dirtMaterial: {fileID: 2100000, guid: afa3f752c6035024eb3a6dfc93f36cf8, type: 2}
+    dirtGameObject: {fileID: 0}

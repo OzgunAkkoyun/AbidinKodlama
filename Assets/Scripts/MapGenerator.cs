@@ -201,25 +201,28 @@ public class MapGenerator : MonoBehaviour {
             {
                 currentMap.startPoint = new Coord(3, 0);
                 currentMap.targetPoint = new Coord(4, 4);
-            }else if (gm.currentLevel.levelIndex == 2)
+            }
+            else if (gm.currentLevel.levelIndex == 2)
             {
                 currentMap.startPoint = new Coord(3, 0);
                 currentMap.targetPoint = new Coord(6, 6);
-            }else if (gm.currentLevel.levelIndex == 3)
+            }
+            else if (gm.currentLevel.levelIndex == 3)
             {
                 currentMap.startPoint = new Coord(3, 0);
                 currentMap.targetPoint = new Coord(8, 8);
             }
 
-            allOpenCoords.Remove(currentMap.startPoint);
-            allOpenCoords.Remove(currentMap.targetPoint);
+            //allOpenCoords.Remove(currentMap.startPoint);
+            //allOpenCoords.Remove(currentMap.targetPoint);
 
             pathGenarator.CreatePathForWait();
-            pathGenarator.SetDirtInPath();
+            pathGenarator.SetWaitObjectsInPath();
         }
         else if (gm.currentSenario.senarioIndex == 5)
         {
             currentMap.startPoint = pathGenarator.GetRandomOpenCoord();
+            allOpenCoords.Remove(currentMap.startPoint);
             //pathGenarator.CreatePathWithWhole();
             pathGenarator.PrepareWholeSenarioObjects();
             //pathGenarator.SetWholeObjectsInPath();
@@ -449,7 +452,7 @@ public class MapGenerator : MonoBehaviour {
 
         public Direction pathDirection;
         public AnimalsInIfPath whichCoord;
-        public PathGenarator.WaitObjects.DirtsForLevel whichDirt;
+        public WaitObjectsScriptable.WaitObjects.DirtsForLevel whichDirt;
         public bool isVisited;
 
         public List<Coord> GetNeighbours()

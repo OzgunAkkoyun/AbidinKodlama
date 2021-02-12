@@ -450,20 +450,36 @@ public class UIHandler : MonoBehaviour
         countDownText.color = Color.white;
         countDownText.gameObject.SetActive(true);
         var expectedSeconds = realCoord.whichDirt.seconds;
-        StartCoroutine(CountDownStart(seconds, expectedSeconds));
+        StartCoroutine(CountDownStart(expectedSeconds, seconds));
     }
 
     public IEnumerator CountDownStart(int expectedSeconds, int seconds)
     {
-        var diffrenceSeconds = Mathf.Abs(expectedSeconds - seconds);
-        for (int i = seconds; i >= diffrenceSeconds; i--)
+        var diffrenceSeconds = expectedSeconds - seconds;
+
+        if (diffrenceSeconds >= 0) //Süre az girilmiş ise
         {
-            countDownText.text = i.ToString();
-            if ( i == diffrenceSeconds && diffrenceSeconds != 0)
+            for (int i = 0; i <= expectedSeconds; i++)
             {
-                countDownText.color = Color.red;
+                countDownText.text = i.ToString();
+                if (i > seconds /*&& diffrenceSeconds != 0*/)
+                {
+                    countDownText.color = Color.red;
+                }
+                yield return new WaitForSeconds(1);
             }
-            yield return new WaitForSeconds(1);
+        }
+        else if (diffrenceSeconds < 0)//Süre çok girilmiş ise
+        {
+            for (int i = 0; i <= seconds; i++)
+            {
+                countDownText.text = i.ToString();
+                if (i > expectedSeconds /*&& diffrenceSeconds != 0*/)
+                {
+                    countDownText.color = Color.cyan;
+                }
+                yield return new WaitForSeconds(1);
+            }
         }
 
         countDownText.gameObject.SetActive(false);
