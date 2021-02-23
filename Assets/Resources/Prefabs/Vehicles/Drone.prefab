@@ -77,10 +77,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerReachedTarget: 0
+  mapGenerate: {fileID: 0}
+  pathGenarator: {fileID: 0}
   cameraMovementForSs: {fileID: 0}
+  gm: {fileID: 0}
+  checkTargetReached: {fileID: 0}
+  waitObjectsAnimation: {fileID: 0}
   animController: {fileID: 0}
   animationSpeed: 1
   scaleFactor: 1
+  inputVector: {x: 0, y: 0, z: 0}
+  currentPath:
+    x: 0
+    y: 0
+    UnavaliableNeighbours: []
+    pathDirection: 0
+    whichCoord: 0
+    whichDirt:
+      waitName: 
+      seconds: 0
+    isVisited: 0
+  currentAnimal: {fileID: 0}
+  currentMushroom: {fileID: 0}
 --- !u!1 &5316178635489320486
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +187,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 2
+  near clip plane: 1
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -219,7 +237,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSSTaken: 0
-  collectedAnimalPhoto: 0
 --- !u!1001 &5316178634406209893
 PrefabInstance:
   m_ObjectHideFlags: 0

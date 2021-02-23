@@ -8,6 +8,7 @@ public class IfObjectAnimations : MonoBehaviour
     public static IfObjectAnimations instance;
     public PathGenarator pathGenarator;
     private Vector3 smokeScaleVector;
+    public int collectedIfObjects;
 
     public Material[] mushroomMetarials;
     void Awake()
@@ -150,6 +151,7 @@ public class IfObjectAnimations : MonoBehaviour
             if (pathGenarator.selectedAnimals[0].ifName == pathGenarator.currentIfObject.ifName)
             {
                 pathGenarator.selectedAnimals.RemoveAt(0);
+                collectedIfObjects++;
                 yield return new WaitUntil(() => characterMovement.currentAnimal.activeSelf == false);
                 yield return characterMovement.CompleteHalfWay();
             }

@@ -78,8 +78,9 @@ public class CharacterMovement : MonoBehaviour
         uh.MarkCurrentCommand(i);
 
         yield return StartCoroutine(PlayMoveAnimation(isLastCommand));
-
-        yield return StartCoroutine(WaitObjectsAnimation.instance.StartCleaningTheTile(seconds,inputVector,this));
+       
+        yield return StartCoroutine(WaitObjectsAnimation.instance.StartCleaningTheTile(seconds, inputVector, this));
+        
 
         checkTargetReached.CheckIfReachedTarget(isLastCommand, this);
     }

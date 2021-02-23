@@ -11,7 +11,7 @@ public class ScreenShotHandler : MonoBehaviour
     private Camera myCamera;
     private bool takeScreenShootOnNextFrame;
     public bool isSSTaken;
-    public int collectedAnimalPhoto;
+    
     void Awake()
     {
         instance = this;
@@ -43,7 +43,7 @@ public class ScreenShotHandler : MonoBehaviour
         //Sprite mySprite = Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f), 100.0f);
         //mySprite.name = "deneme";
         // GameObject.Find("SSImage").GetComponent<Image>().sprite = mySprite;
-        collectedAnimalPhoto++;
+        IfObjectAnimations.instance.collectedIfObjects++;
         isSSTaken = false;
     }
 

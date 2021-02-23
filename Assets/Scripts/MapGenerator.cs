@@ -345,7 +345,10 @@ public class MapGenerator : MonoBehaviour {
 
         Transform newObstacle = Instantiate(obstaclePrefab[UnityEngine.Random.Range(0, obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight, Quaternion.identity) as Transform;
         newObstacle.parent = mapHolder;
-      
+
+        int rand = UnityEngine.Random.Range(1,4);
+        newObstacle.transform.Rotate(new Vector3(0, rand * 90, 0));
+
         obstacleGameObject.Add(newObstacle.gameObject);
         allObstacleCoord.Add(randomCoord);
         allOpenCoords.Remove(randomCoord);

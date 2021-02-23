@@ -22,11 +22,11 @@ MonoBehaviour:
   - {fileID: 8659874756527542646, guid: 1084e8225b3b99347a7bb58b890c94e3, type: 3}
   - {fileID: 8659874756527542646, guid: 1084e8225b3b99347a7bb58b890c94e3, type: 3}
   - {fileID: 8659874756527542646, guid: 1084e8225b3b99347a7bb58b890c94e3, type: 3}
-  tileGameObject: {fileID: 195019098710043781, guid: 1c24baa089a5c2d4896d389fc3cc0697,
+  tileGameObject: {fileID: 195019098710043781, guid: 41002f2e140d2fa4baece902f3dc994c,
     type: 3}
-  pathGameObject: {fileID: 195019098710043781, guid: 1c24baa089a5c2d4896d389fc3cc0697,
+  pathGameObject: {fileID: 195019098710043781, guid: 41002f2e140d2fa4baece902f3dc994c,
     type: 3}
   environmentGameObjects:
-  - {fileID: 4858555618863202324, guid: ccd8e7bf97de2c44b8a6dcf4ed1c9c1a, type: 3}
+  - {fileID: 3045533123998791788, guid: e1f0efec6b7b3ad48a5d6476e84195c3, type: 3}
   vehicleGameObject: {fileID: 5316178634372764424, guid: eda2c2fed11223845ba56c7ead2b769c,
     type: 3}

@@ -31,6 +31,11 @@ public class CheckTargetReached : MonoBehaviour
                 {
                     CheckWaitObjectsCount(characterMovement);
                 }
+                else if (characterMovement.gm.currentSenario.senarioIndex == 5)
+                {
+                    CheckIfObjectCount(characterMovement);
+                    CheckWaitObjectsCount(characterMovement);
+                }
             }
             else
             {
@@ -49,7 +54,7 @@ public class CheckTargetReached : MonoBehaviour
     }
     public void CheckIfObjectCount(CharacterMovement characterMovement)
     {
-        if (ScreenShotHandler.instance.collectedAnimalPhoto == characterMovement.gm.currentSubLevel.ifObjectCount)
+        if (IfObjectAnimations.instance.collectedIfObjects == characterMovement.gm.currentSubLevel.ifObjectCount)
         {
             characterMovement.isPlayerReachedTarget = true;
             characterMovement.CharacterAnimationPlay();

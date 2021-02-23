@@ -18,6 +18,7 @@ public class RotateToyUi : MonoBehaviour
 
     public GameObject wheelContainer;
     public GameObject whellChilds;
+    private int wheelObjectCount = 8;
 
     void Start()
     {
@@ -87,9 +88,9 @@ public class RotateToyUi : MonoBehaviour
     {
         var animals = pathGenarator.allIfObjects;
         
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < wheelObjectCount; i++)
         {
-            var child = wheelContainer.transform.GetChild(i);
+            var child = wheelContainer.transform.GetChild(0).transform.GetChild(i);
             var childImage = child.Find("Image");
 
             if (i < objectCount)
@@ -100,6 +101,8 @@ public class RotateToyUi : MonoBehaviour
                 child.GetComponent<Button>().onClick.AddListener(() => CloseIfObjectWheel(getRandomIfObject));
 
                 child.GetComponent<Button>().onClick.AddListener(() => getInputs.GetIfInput(getRandomIfObject.ifName));
+
+                childImage.transform.Rotate(new Vector3(0,0,360/ wheelObjectCount * i));
             }
             else
             {

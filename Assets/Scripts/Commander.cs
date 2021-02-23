@@ -84,7 +84,7 @@ public class Commander : MonoBehaviour
             else if(type == typeof(PickIfAnyObjectExistsCommand))
             {
                 var commandIf = command as PickIfAnyObjectExistsCommand;
-                yield return StartCoroutine(gm.character.ApplyIfCommand(commandIf.animalName,isLastCommand));
+                yield return StartCoroutine(gm.character.ApplyIfCommand(commandIf.animalName, isLastCommand));
             }
             else if (type == typeof(WaitCommand))
             {

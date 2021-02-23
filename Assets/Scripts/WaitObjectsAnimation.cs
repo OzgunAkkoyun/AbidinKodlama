@@ -55,12 +55,18 @@ public class WaitObjectsAnimation : MonoBehaviour
             if (expectedSecond == getInputs.seconds[dirtCount])
             {
                 uiHandler.StartCleaningCountDown(realCoord,seconds);
-                yield return CleanTile(currentCoord, realCoord, seconds,true);
+                if(pathGenarator.gm.currentSenario.senarioIndex == 4)
+                    yield return CleanTile(currentCoord, realCoord, seconds,true);
+                else if(pathGenarator.gm.currentSenario.senarioIndex == 5)
+                    yield return IrrigateTile(currentCoord, realCoord, seconds, true);
             }
             else
             {
                 uiHandler.StartCleaningCountDown(realCoord, seconds);
-                yield return CleanTile(currentCoord, realCoord, seconds,false);
+                if (pathGenarator.gm.currentSenario.senarioIndex == 4)
+                    yield return CleanTile(currentCoord, realCoord, seconds, true);
+                else if (pathGenarator.gm.currentSenario.senarioIndex == 5)
+                    yield return IrrigateTile(currentCoord, realCoord, seconds, true);
                 ShowWrongCleaningTile.instance.wrongWaitTiles.Add(realCoord);
             }
             dirtCount++;
@@ -71,5 +77,10 @@ public class WaitObjectsAnimation : MonoBehaviour
             characterMovement.isPlayerReachedTarget = false;
             characterMovement.gm.EndGame();
         }
+    }
+
+    private IEnumerator IrrigateTile(Coord currentCoord, Coord realCoord, int seconds, bool b)
+    {
+        throw new System.NotImplementedException();
     }
 }

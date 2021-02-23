@@ -28,3 +28,13 @@ MonoBehaviour:
       type: 3}
     ifGameObjectsImage: {fileID: 21300000, guid: a565e97cfc2ce2d449e6055c6c3e837e,
       type: 3}
+  - ifName: "Havu\xE7"
+    ifGameObjects: {fileID: 3179593219365151647, guid: 1dc5f6dc2e21dd149a67cae17099a996,
+      type: 3}
+    ifGameObjectsImage: {fileID: 21300000, guid: 170302ca2a0ddb34aa5af059dbb7b3c6,
+      type: 3}
+  - ifName: "Havu\xE7"
+    ifGameObjects: {fileID: 3179593219365151647, guid: 1dc5f6dc2e21dd149a67cae17099a996,
+      type: 3}
+    ifGameObjectsImage: {fileID: 21300000, guid: 0347f2fe9043e3d48a4c71b7a0b83f12,
+      type: 3}
