@@ -15,18 +15,21 @@ MonoBehaviour:
   startGameObject: {fileID: 8659874756527542646, guid: 1084e8225b3b99347a7bb58b890c94e3,
     type: 3}
   targetGameObject:
-  - {fileID: 2583607772728183531, guid: abd902b3241869e478fd348dba8f6721, type: 3}
-  - {fileID: 2583607772728183531, guid: abd902b3241869e478fd348dba8f6721, type: 3}
-  - {fileID: 2583607772728183531, guid: abd902b3241869e478fd348dba8f6721, type: 3}
+  - {fileID: 6494151395202852698, guid: 2e4435c817a998f4182fc99d89e8a6f4, type: 3}
+  - {fileID: 6494151395202852698, guid: 2e4435c817a998f4182fc99d89e8a6f4, type: 3}
+  - {fileID: 6494151395202852698, guid: 2e4435c817a998f4182fc99d89e8a6f4, type: 3}
   targetNewGameObject:
   - {fileID: 594363864919193213, guid: f3ec1f77c5d16624fa05f119bc0d53a7, type: 3}
   - {fileID: 594363864919193213, guid: f3ec1f77c5d16624fa05f119bc0d53a7, type: 3}
   - {fileID: 594363864919193213, guid: f3ec1f77c5d16624fa05f119bc0d53a7, type: 3}
   tileGameObject: {fileID: 195019098710043781, guid: 848e2688d9929de42bb54e2c188e15ea,
     type: 3}
+  pathGameObject: {fileID: 0}
   environmentGameObjects:
-  - {fileID: 7663823250004851570, guid: 5e422eb9050960642ad69742519a2686, type: 3}
-  - {fileID: 8449052269137585891, guid: 692e5afea29567547abec4ae3585ee7c, type: 3}
-  - {fileID: 8671417270018687044, guid: 24a4145ad1dee21418efb1f0e399f0c4, type: 3}
+  - {fileID: 4873087547577788532, guid: cd8a6bb7acdc59949948cf38626c2fb3, type: 3}
+  - {fileID: 9019556748665202291, guid: 11f313209d74c054e920f2a7c2dfdbca, type: 3}
+  - {fileID: 8896293352452283074, guid: f831a3b97609f9a44b47ebf9cf49474a, type: 3}
+  - {fileID: 6900239398940623218, guid: 28184eeca5802c049a2599ee30289785, type: 3}
+  - {fileID: 5588774660190644850, guid: 542d64111c76cf14c849cc75c6c3b179, type: 3}
   vehicleGameObject: {fileID: 6894881165646105096, guid: ae6b22571080f60488984d25cafa30d6,
     type: 3}

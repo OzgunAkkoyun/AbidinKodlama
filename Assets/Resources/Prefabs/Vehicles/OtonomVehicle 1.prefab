@@ -69,9 +69,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayerReachedTarget: 0
+  mapGenerate: {fileID: 0}
+  pathGenarator: {fileID: 0}
+  cameraMovementForSs: {fileID: 0}
+  gm: {fileID: 0}
+  checkTargetReached: {fileID: 0}
+  waitObjectsAnimation: {fileID: 0}
   animController: {fileID: 0}
   animationSpeed: 1
   scaleFactor: 1
+  inputVector: {x: 0, y: 0, z: 0}
+  currentPath:
+    x: 0
+    y: 0
+    UnavaliableNeighbours: []
+    pathDirection: 0
+    whichCoord: 0
+    whichDirt:
+      waitName: 
+      seconds: 0
+    isVisited: 0
+  currentAnimal: {fileID: 0}
+  currentMushroom: {fileID: 0}
 --- !u!1 &7051132908528570723
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,7 +115,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7051132908528570723}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.955, y: -0.044, z: 2.172}
+  m_LocalPosition: {x: -0.746, y: -0.044, z: 1.6}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 3477829454125832097}
@@ -239,6 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce52b1c758735b4d996550cc8915274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSSTaken: 0
 --- !u!1 &7584383262499786626
 GameObject:
   m_ObjectHideFlags: 0
