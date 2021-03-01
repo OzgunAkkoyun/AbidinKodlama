@@ -154,7 +154,7 @@ public class CharacterMovement : MonoBehaviour
             return Move();
         }
     }
-    private object SenarioFiveMove()
+    private IEnumerator SenarioFiveMove()
     {
         currentPath = pathGenarator.Path.Find(v =>
             (v.x * 2 == inputVector.Vector3toXZ().x) && (v.y * 2 == inputVector.Vector3toXZ().z));
@@ -169,7 +169,7 @@ public class CharacterMovement : MonoBehaviour
                 (v.transform.position.z == inputVector.Vector3toXZ().z));
             QuarterWayMove();
             IfObjectAnimations.instance.ShowIfObjectAnimation(currentAnimal, halfVector);
-            return null;
+            yield return null;
         }
         else if (currentPath.whichCoord == AnimalsInIfPath.isEmptyAnimalCoord && !currentPath.isVisited)
         {
@@ -180,11 +180,11 @@ public class CharacterMovement : MonoBehaviour
 
             HalfWayMove();
             IfObjectAnimations.instance.RemoveOnlyQuestionMark(currentQuestionMark);
-            return null;
+            yield return null;
         }
         else
         {
-            return Move();
+            yield return Move();
         }
     }
 

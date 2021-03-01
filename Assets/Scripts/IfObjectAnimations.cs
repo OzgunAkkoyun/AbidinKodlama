@@ -152,7 +152,8 @@ public class IfObjectAnimations : MonoBehaviour
             {
                 pathGenarator.selectedAnimals.RemoveAt(0);
                 collectedIfObjects++;
-                yield return new WaitUntil(() => characterMovement.currentAnimal.activeSelf == false);
+                yield return new WaitUntil(() => characterMovement.currentAnimal.transform.Find("Fx_PlantSparkle").gameObject.activeSelf == true);
+                yield return new WaitForSeconds(2);
                 yield return characterMovement.CompleteHalfWay();
             }
             else
@@ -179,27 +180,38 @@ public class IfObjectAnimations : MonoBehaviour
     }
     public void ShowIfObjectAnimation(GameObject currentObject, Vector3 halfVector)
     {
-        var questionMark = currentObject.transform.Find("EmtyQuestionMark");
+        var myAnimator = currentObject.GetComponent<Animator>();
 
-        var character = pathGenarator.gm.character;
-        var characterCam = Camera.main;
+        myAnimator.SetBool("ifAnimStarted",true);
+        Debug.Log("deneme");
+        //AnimatorStateInfo animationState = myAnimator.GetCurrentAnimatorStateInfo(0);
+        //AnimatorClipInfo[] myAnimatorClip = myAnimator.GetCurrentAnimatorClipInfo(0);
 
-        var transformPosition = questionMark.transform.position;
-        var targetPos = new Vector3(transformPosition.x, transformPosition.y + 15, transformPosition.z);
+        //Debug.Log(myAnimatorClip);
+        //float myTime = myAnimatorClip[0].clip.length * animationState.normalizedTime;
+        
+        //var questionMark = currentObject.transform.Find("EmtyQuestionMark");
 
-        questionMark.transform.DOMove(targetPos, 2).OnComplete(() =>
-        {
-            questionMark.gameObject.SetActive(false);
+        //var character = pathGenarator.gm.character;
+        //var characterCam = Camera.main;
 
-            var transformPosition1 = currentObject.transform.position;
-            var targetPos1 = new Vector3(transformPosition1.x, transformPosition1.y + 1, transformPosition1.z);
+        //var transformPosition = questionMark.transform.position;
+        //var targetPos = new Vector3(transformPosition.x, transformPosition.y + 15, transformPosition.z);
 
-            var sparkle = currentObject.transform.Find("GFX/Fx_PlantSparkle/Particle System");
-            sparkle.GetComponent<ParticleSystem>().Play();
-            currentObject.transform.DOMove(targetPos1, 4).OnComplete(() =>
-            {
-                currentObject.SetActive(false);
-            });
-        });
+        //questionMark.transform.DOMove(targetPos, 2).OnComplete(() =>
+        //{
+        //    questionMark.gameObject.SetActive(false);
+
+        //    var transformPosition1 = currentObject.transform.position;
+        //    var targetPos1 = new Vector3(transformPosition1.x, transformPosition1.y + 1, transformPosition1.z);
+
+        //    var sparkle = currentObject.transform.Find("GFX/Fx_PlantSparkle/Particle System");
+        //    sparkle.GetComponent<ParticleSystem>().Play();
+        //    currentObject.transform.DOMove(targetPos1, 4).OnComplete(() =>
+        //    {
+        //        currentObject.SetActive(false);
+        //    });
+        //});
     }
+
 }

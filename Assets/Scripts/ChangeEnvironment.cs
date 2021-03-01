@@ -48,6 +48,9 @@ public class ChangeEnvironment : MonoBehaviour
 
             var rnd = Random.Range(0, forest.Length);
             var forestSpawn = Instantiate(forest[rnd], spawnPosition, Quaternion.identity);
+
+            int rand = UnityEngine.Random.Range(1, 4);
+            forestSpawn.transform.Rotate(new Vector3(0, rand * 90, 0));
         }
     }
 

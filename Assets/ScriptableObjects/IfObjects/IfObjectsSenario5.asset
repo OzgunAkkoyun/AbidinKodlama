@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ifObjects:
   - ifName: Patates
-    ifGameObjects: {fileID: 3179593219365151647, guid: dfce4a6a4e57b334abfd1426f1b949ee,
+    ifGameObjects: {fileID: 3727847657416898085, guid: 21997d3d25cc45c46a259a9c2f4ca8a9,
       type: 3}
     ifGameObjectsImage: {fileID: 21300000, guid: d8adc50d44d98224eb1855023006ccb2,
       type: 3}

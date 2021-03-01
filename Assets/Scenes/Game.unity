@@ -3117,10 +3117,8 @@ MonoBehaviour:
   - {r: 1, g: 0.32156864, b: 0.2901961, a: 0}
   - {r: 1, g: 0.2627451, b: 0.83137256, a: 0}
   forest:
-  - {fileID: 6489550912871152110, guid: 36b27590b9e8c11498323974461b50a9, type: 3}
-  - {fileID: 6489550912871152110, guid: 995d110c0f6ad3b45abf80a2f27d4c7d, type: 3}
-  - {fileID: 6489550912871152110, guid: d2a11414233bea14194718374fa305c2, type: 3}
-  - {fileID: 6489550912871152110, guid: 84a7cb6c63d134c44aa7752f6f067975, type: 3}
+  - {fileID: 5057091684082208150, guid: c8cc058d88f2d4a4ea578dba509cc779, type: 3}
+  - {fileID: 2093710480782538891, guid: 559be3c52ba94ae4499bd540323dd687, type: 3}
   loopMapPathMaterial: {fileID: 2100000, guid: 95d619f934c51724587337faed4b231c, type: 2}
   streetLightPrefab: {fileID: 5665270221304006690, guid: 467a7b953ebbc5244b7f2b24430da612,
     type: 3}
@@ -5143,7 +5141,7 @@ MonoBehaviour:
   currentObstacles:
   - {fileID: 3045533123998791788, guid: e1f0efec6b7b3ad48a5d6476e84195c3, type: 3}
   - {fileID: 4635951673602789003, guid: 9aa466b084ef1c640914b62489c7d168, type: 3}
-  - {fileID: 1141205897123707284, guid: 6b9e82064b3fc4944a84f0f046f0e3f2, type: 3}
+  - {fileID: 3582533172335514619, guid: c153fd8be2987f043b232146297391e1, type: 3}
   places:
   - spawnCoords:
     - coord: {x: 2, y: 2}

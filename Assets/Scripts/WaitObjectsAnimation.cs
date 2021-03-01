@@ -64,9 +64,9 @@ public class WaitObjectsAnimation : MonoBehaviour
             {
                 uiHandler.StartCleaningCountDown(realCoord, seconds);
                 if (pathGenarator.gm.currentSenario.senarioIndex == 4)
-                    yield return CleanTile(currentCoord, realCoord, seconds, true);
+                    yield return CleanTile(currentCoord, realCoord, seconds, false);
                 else if (pathGenarator.gm.currentSenario.senarioIndex == 5)
-                    yield return IrrigateTile(currentCoord, realCoord, seconds, true);
+                    yield return IrrigateTile(currentCoord, realCoord, seconds, false);
                 ShowWrongCleaningTile.instance.wrongWaitTiles.Add(realCoord);
             }
             dirtCount++;
@@ -79,8 +79,28 @@ public class WaitObjectsAnimation : MonoBehaviour
         }
     }
 
-    private IEnumerator IrrigateTile(Coord currentCoord, Coord realCoord, int seconds, bool b)
+    private IEnumerator IrrigateTile(Coord currentCoord, Coord realCoord, int seconds, bool currectSecond)
     {
-        throw new System.NotImplementedException();
+        var currentCoordPos = pathGenarator.mapGenerator.CoordToPosition(currentCoord.x, currentCoord.y);
+        GameObject currentSparkle;
+
+        if (currectSecond)
+            currentSparkle = Instantiate(sparkle, currentCoordPos, Quaternion.identity);
+        else
+            currentSparkle = Instantiate(wrongSparkle, currentCoordPos, Quaternion.identity);
+
+        var currentTile =
+            pathGenarator.mapGenerator.allTileGameObject.Find(v => v.transform.position == currentCoordPos);
+
+        //if (currectSecond)
+        //{
+        //    currentTile.gameObject.GetComponent<Renderer>().material = currentTileMetarial;
+        //    howManyDirtCleaned++;
+        //}
+
+        var expectedSecond = realCoord.whichDirt.seconds;
+        var waitSecond = (expectedSecond - seconds) >= 0 ? expectedSecond : seconds;
+        yield return new WaitForSeconds(waitSecond + 0.5f);
+        Destroy(currentSparkle);
     }
 }
