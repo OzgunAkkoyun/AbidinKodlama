@@ -92,6 +92,7 @@ public class IfObjectAnimations : MonoBehaviour
         });
     }
 
+    private int selectedIfObjectIndex = 0;
     public IEnumerator SenarioTreeIfCheck(bool isLastCommand, CharacterMovement characterMovement, Vector3 inputVector)
     {
         if (characterMovement.currentPath.whichCoord == AnimalsInIfPath.isAnimalCoord)
@@ -100,9 +101,8 @@ public class IfObjectAnimations : MonoBehaviour
                 (v.transform.position.x == characterMovement.inputVector.Vector3toXZ().x) &&
                 (v.transform.position.z == characterMovement.inputVector.Vector3toXZ().z));
 
-            if (pathGenarator.selectedAnimals[0].ifName == pathGenarator.currentIfObject.ifName)
+            if (pathGenarator.selectedAnimals[selectedIfObjectIndex].ifName == pathGenarator.currentIfObject.ifName)
             {
-                pathGenarator.selectedAnimals.RemoveAt(0);
                 characterMovement.cameraMovementForSs.OpenSSLayout();
                 yield return new WaitUntil(() => ScreenShotHandler.instance.isSSTaken);
                 yield return new WaitForSeconds(1f);
@@ -137,6 +137,8 @@ public class IfObjectAnimations : MonoBehaviour
 
             characterMovement.gm.EndGame();
         }
+
+        selectedIfObjectIndex++;
         characterMovement.checkTargetReached.CheckIfReachedTarget(isLastCommand, characterMovement);
     }
 

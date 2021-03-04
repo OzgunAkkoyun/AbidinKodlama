@@ -128,7 +128,14 @@ public class MapGenerator : MonoBehaviour {
         var start = currentMap.startPoint;
         var target = pathGenarator.Path[pathGenarator.Path.Count - 1];
 
-        pathGenarator.SetIfAnimalsForLoad();
+        if (gm.currentSenario.senarioIndex == 3)
+        {
+            pathGenarator.SetIfAnimalsForLoad();
+            pathGenarator.ConvertIfObjectsStringToObject(gm.gameDatas[gm.gameDatas.Count - 1].selectedIfObjects);
+            //pathGenarator.selectedAnimals = gm.gameDatas[gm.gameDatas.Count - 1].selectedIfObjects;
+
+        }
+        
         if (gm.currentSenario.senarioIndex == 2)
         {
             pathGenarator.ChangeEnvironment();
@@ -139,7 +146,6 @@ public class MapGenerator : MonoBehaviour {
     }
 	public void GenerateMap()
 	{
-	    Timer timer = new Timer();
         tileMap = new Transform[gm.playerDatas.lastMapSize, gm.playerDatas.lastMapSize];
 
         currentMap.seed = UnityEngine.Random.Range(0,200);
@@ -171,7 +177,6 @@ public class MapGenerator : MonoBehaviour {
 	    CreateStartandTargetPoints();
 	    SpawnVehicle();
         SpawnHouses();
-        timer.Finish(false);
     }
 
     private void CreateStartandTargetPoints()
@@ -510,26 +515,5 @@ public class MapGenerator : MonoBehaviour {
 
         public Coord mapCentre => new Coord(mapSize.x/2,mapSize.y/2);
     }
-
-    public class Timer
-    {
-        private float StartTime;
-        public float Duration;
-
-        public Timer()
-        {
-            StartTime = Time.realtimeSinceStartup;
-        }
-
-        public void Finish(bool log)
-        {
-            var endTime = Time.realtimeSinceStartup;
-            Duration = endTime - StartTime;
-
-            if (log)
-            {
-                Debug.Log($"Calculations took {TimeSpan.FromSeconds(Duration).ToString("g")}");
-            }
-        }
-    }
+    
 }

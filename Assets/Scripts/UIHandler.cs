@@ -285,6 +285,11 @@ public class UIHandler : MonoBehaviour
         }
     }
 
+    //gm.isGameOrLoad for
+    // 0 == Game
+    // 1 == Watch previous game
+    // 2 == RestartGame
+    // 3 == Cliked On The map
     public void RestartOrNewGame(int isGameOrLoad)
     {
         if (gm.isGameOrLoad == 3)
@@ -301,7 +306,8 @@ public class UIHandler : MonoBehaviour
                     {
                         levelsInt[2]++;
                         var senarioAndLevelIndexs = levelsInt[0].ToString() + "-" + levelsInt[1].ToString() + "-" + levelsInt[2].ToString();
-                        PlayerPrefs.SetString("selcetedLevelProps", senarioAndLevelIndexs);
+                        Debug.Log(senarioAndLevelIndexs);
+                        PlayerPrefs.SetString("selectedLevelProps", senarioAndLevelIndexs);
                         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                     }
                     else

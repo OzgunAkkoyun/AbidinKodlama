@@ -19,7 +19,8 @@ public class SavedGameData
     public int scenarioIndex;
     public int levelIndex;
     public int subLevelIndex;
-    public SavedGameData(MapGenerator.Coord mapSize, int seed, float obstaclePercentages, List<Command> commands, MapGenerator.Coord startCoord, MapGenerator.Coord targetCoord, List<Coord> Path,int scenarioIndex, int levelIndex, int subLevelIndex)
+    public List<string> selectedIfObjects;
+    public SavedGameData(MapGenerator.Coord mapSize, int seed, float obstaclePercentages, List<Command> commands, MapGenerator.Coord startCoord, MapGenerator.Coord targetCoord, List<Coord> Path,int scenarioIndex, int levelIndex, int subLevelIndex,List<string> selectedIfObjects)
     {
         this.mapSize = mapSize;
         this.seed = seed;
@@ -31,6 +32,7 @@ public class SavedGameData
         this.scenarioIndex = scenarioIndex;
         this.levelIndex = levelIndex;
         this.subLevelIndex = subLevelIndex;
+        this.selectedIfObjects = selectedIfObjects;
     }
 }
 
@@ -72,6 +74,7 @@ public class GameManager : MonoBehaviour
     public SoundController sc;
     public PathGenarator pathGenarator;
     public LevelLoader levelLoader;
+    public GetInputs getInputs;
 
     public bool is3DStarted = false;
     public bool isGameOver = false;
@@ -95,6 +98,7 @@ public class GameManager : MonoBehaviour
         sc = FindObjectOfType<SoundController>();
         uiVideoController = FindObjectOfType<UiVideoController>();
         levelLoader = FindObjectOfType<LevelLoader>();
+        getInputs = FindObjectOfType<GetInputs>();
 
         if (DeleteAllPlayerPrefs)
         {
@@ -248,6 +252,7 @@ public class GameManager : MonoBehaviour
         map.GameStart();
     }
 
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
@@ -258,6 +263,8 @@ public class GameManager : MonoBehaviour
     public void GameAnimationStart()
     {
         is3DStarted = true;
+        if (isGameOrLoad != 1)//Watch game
+            getInputs.timer.Finish();
         character = FindObjectOfType<CharacterMovement>();
         ShowInputsCode.Instance.ShowCodesString();
         miniMapController.StartCoroutine("MiniMapSetStartPosition");
@@ -267,6 +274,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOverStatSet(bool isSuccess)
     {
+        UserDataSave(isSuccess);
         if ((isGameOrLoad == 0 || isGameOrLoad == 2) && !currentSubLevel.passed)
         {
             if (isSuccess)
@@ -315,6 +323,12 @@ public class GameManager : MonoBehaviour
         GameDataSave();
     }
 
+    public void UserDataSave(bool isSuccess)
+    {
+        if(isSuccess && isGameOrLoad != 1)
+            SaveLoadUserData.instance.SaveUserData(currentSenario.senarioIndex,currentLevel.levelIndex,currentSubLevel.subLevelIndex,getInputs.timer.Duration);
+    }
+
     public void EndGame()
     {
         uh.OpenGameOverPanel(character.isPlayerReachedTarget);
@@ -324,8 +338,13 @@ public class GameManager : MonoBehaviour
 
     public void GameDataSave()
     {
+        List<string> selectedAnimals = new List<string>();
+        if (currentSenario.senarioIndex == 3 )
+        {
+            selectedAnimals = pathGenarator.selectedAnimals.Select(v=>v.ifName).ToList();
+        }
         var current = map.currentMap;
-        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, pathGenarator.Path,currentSenario.senarioIndex,currentLevel.levelIndex,currentSubLevel.subLevelIndex));
+        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, pathGenarator.Path,currentSenario.senarioIndex,currentLevel.levelIndex,currentSubLevel.subLevelIndex, selectedAnimals));
         
         string gameDataString = JsonConvert.SerializeObject(gameDatas, Formatting.Indented, new JsonSerializerSettings
         {

@@ -128,4 +128,10 @@ public class LevelController : MonoBehaviour
         PlayerPrefs.DeleteAll();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public void DeleteGivenPlayerPrefs(string key)
+    {
+        PlayerPrefs.DeleteKey(key);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }

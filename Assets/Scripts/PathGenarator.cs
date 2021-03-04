@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 using static MapGenerator;
@@ -417,6 +418,14 @@ public class PathGenarator : MonoBehaviour
         }
     }
 
+    public void ConvertIfObjectsStringToObject(List<string> selectedIfObjects)
+    {
+        foreach (var ifObjects in selectedIfObjects)
+        {
+            var findSelected = allIfObjects.ToList().Find(v => v.ifName == ifObjects);
+            selectedAnimals.Add(findSelected);
+        }
+    }
     public void SetIfAnimalsForLoad()
     {
         PrepareAnimals();
@@ -427,12 +436,14 @@ public class PathGenarator : MonoBehaviour
             var selectedPath = Path[i];
             if (Path[i].whichCoord == AnimalsInIfPath.isEmptyAnimalCoord)
             {
+                Path[i].isVisited = false;
                 var spawnPosition = mapGenerator.CoordToPosition(selectedPath.x, selectedPath.y);
                 var onlySmoke = Instantiate(smoke, spawnPosition + Vector3.up, Quaternion.identity);
                 justEmtyQuestionMarks.Add(onlySmoke);
             }
             else if (Path[i].whichCoord == AnimalsInIfPath.isAnimalCoord)
             {
+                Path[i].isVisited = false;
                 var levelIndex = gm.currentLevel.levelIndex;
                 var subLevelIndex = gm.currentSubLevel.subLevelIndex;
                 var selectedAnimal = currentIfObject;
@@ -795,6 +806,5 @@ public class PathGenarator : MonoBehaviour
     }
 
     private Vector2 FindMinusTwoCoord(Coord c1, Coord c2) => new Vector2(c1.x - c2.x, c1.y - c2.y);
-
 
 }

@@ -24,6 +24,9 @@ public class GetInputs : MonoBehaviour
 
     public List<Direction> forDirections ;
 
+    private bool isFirstCommand;
+
+    public Timer timer;
     void Update()
     {
         GetKeys();
@@ -31,6 +34,15 @@ public class GetInputs : MonoBehaviour
 
     public void GetKeys()
     {
+
+        if (Input.anyKey)
+        {
+            if (!isFirstCommand)
+            {
+                isFirstCommand = true;
+                timer = new Timer();
+            }
+        }
         if (Input.GetKeyDown(KeyCode.UpArrow) )
         {
             if (!waitingMoveCommand)
@@ -39,9 +51,7 @@ public class GetInputs : MonoBehaviour
             }
             else
             {
-                //commander.AddForCommand(Direction.Forward, forLoopCount);
                 forDirections.Add(Direction.Forward);
-                //waitingMoveCommand = false;
             }
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -52,9 +62,7 @@ public class GetInputs : MonoBehaviour
             }
             else
             {
-                //commander.AddForCommand(Direction.Left, forLoopCount);
                 forDirections.Add(Direction.Left);
-                //waitingMoveCommand = false;
             }
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) )
@@ -65,9 +73,7 @@ public class GetInputs : MonoBehaviour
             }
             else
             {
-                //commander.AddForCommand(Direction.Right, forLoopCount);
                 forDirections.Add(Direction.Right);
-                //waitingMoveCommand = false;
             }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -78,9 +84,7 @@ public class GetInputs : MonoBehaviour
             }
             else
             {
-                //commander.AddForCommand(Direction.Backward, forLoopCount);
                 forDirections.Add(Direction.Backward);
-                //waitingMoveCommand = false;
             }
         }
         else if (Input.GetKeyDown(KeyCode.F))

@@ -2,6 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abidin/IfObjects", order = 1)]
+[Serializable]
 public class IfObjectsScriptable : ScriptableObject
 {
     [Serializable]
