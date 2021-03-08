@@ -114,15 +114,13 @@ public class WindowGraph : MonoBehaviour
 
         int xIndex = 0;
 
-        //LineGraphVisual lineGraphVisual = new LineGraphVisual(graphContainer, circleSprite, Color.cyan, new Color(1, 1, 1, .5f));
-        //BarChartVisual barChartVisual = new BarChartVisual(graphContainer,Color.cyan, .8f);
         GameObject lastCircleGameObject = null;
+
         for (int i = Mathf.Max(valueList.Count - maxVisibleValueAmount, 0); i < valueList.Count; i++)
         {
             float xPosition = xSize + xIndex * xSize;
             float yPosition = ((valueList[i] - yMinimum) / (yMaximum - yMinimum)) * graphHeight;
 
-            //gameObjectList.AddRange(barChartVisual.AddGraphVisual(new Vector2(xPosition, yPosition), xSize));
             gameObjectList.AddRange(graphVisual.AddGraphVisual(new Vector2(xPosition, yPosition), xSize));
 
 
@@ -157,7 +155,6 @@ public class WindowGraph : MonoBehaviour
             labelY.GetComponent<TextMeshProUGUI>().text = getAxisLabelY(yMinimum + (normalizedValue * (yMaximum - yMinimum)));
             gameObjectList.Add(labelY.gameObject);
 
-
             RectTransform dashY = Instantiate(dashTemplateY);
             dashY.SetParent(graphContainer);
             dashY.gameObject.SetActive(true);
@@ -168,7 +165,6 @@ public class WindowGraph : MonoBehaviour
         }
     }
     
-
     private interface IGraphVisual
     {
         List<GameObject> AddGraphVisual(Vector2 graphPosition, float graphPositionWith);

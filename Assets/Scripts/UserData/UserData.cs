@@ -10,12 +10,14 @@ public class UserData
     public int levelIndex;
     public int subLevelIndex;
     public float userTime;
+    public bool levelSuccessed;
 
-    public UserData(int senarioIndex, int levelIndex, int subLevelIndex, float userTime)
+    public UserData(int senarioIndex, int levelIndex, int subLevelIndex, float userTime, bool isSuccess)
     {
         this.senarioIndex = senarioIndex;
         this.levelIndex = levelIndex;
         this.subLevelIndex = subLevelIndex;
         this.userTime = userTime;
+        this.levelSuccessed = isSuccess;
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using DG.Tweening.Plugins.Core.PathCore;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityScript.Steps;
 
 public class DeleteCommand : MonoBehaviour, IPointerClickHandler
 {

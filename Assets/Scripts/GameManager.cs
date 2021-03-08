@@ -325,8 +325,8 @@ public class GameManager : MonoBehaviour
 
     public void UserDataSave(bool isSuccess)
     {
-        if(isSuccess && isGameOrLoad != 1)
-            SaveLoadUserData.instance.SaveUserData(currentSenario.senarioIndex,currentLevel.levelIndex,currentSubLevel.subLevelIndex,getInputs.timer.Duration);
+        if(isGameOrLoad != 1)
+            SaveLoadUserData.instance.SaveUserData(currentSenario.senarioIndex,currentLevel.levelIndex,currentSubLevel.subLevelIndex,getInputs.timer.Duration,isSuccess);
     }
 
     public void EndGame()

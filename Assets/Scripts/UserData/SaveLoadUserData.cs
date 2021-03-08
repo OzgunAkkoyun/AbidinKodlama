@@ -24,9 +24,9 @@ public class SaveLoadUserData : MonoBehaviour
         return getSpesificList;
     }
 
-    public void SaveUserData(int senarioIndex, int levelIndex, int subLevelIndex, float duration)
+    public void SaveUserData(int senarioIndex, int levelIndex, int subLevelIndex, float duration, bool isSuccess)
     {
-        userDataList.Add(new UserData(senarioIndex, levelIndex, subLevelIndex, duration));
+        userDataList.Add(new UserData(senarioIndex, levelIndex, subLevelIndex, duration, isSuccess));
 
         string userDataJson = JsonConvert.SerializeObject(userDataList, Formatting.Indented, new JsonSerializerSettings
         {
