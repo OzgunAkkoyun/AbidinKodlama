@@ -12,6 +12,8 @@ public class WindowGraph : MonoBehaviour
 {
     [SerializeField] private Sprite circleSprite;
     private RectTransform graphContainer;
+    private RectTransform pieContainer;
+    private RectTransform barLineGraphContainer;
     private RectTransform labelTemplateX;
     private RectTransform labelTemplateY;
     private RectTransform dashTemplateX;
@@ -22,15 +24,17 @@ public class WindowGraph : MonoBehaviour
     void Awake()
     {
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
-        labelTemplateX = graphContainer.Find("labelTemplateX").GetComponent<RectTransform>();
-        labelTemplateY = graphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
-        dashTemplateX = graphContainer.Find("dashTemplateX").GetComponent<RectTransform>();
-        dashTemplateY = graphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
+        barLineGraphContainer = graphContainer.Find("BarAndLineGraphContainer").GetComponent<RectTransform>();
+        labelTemplateX = barLineGraphContainer.Find("labelTemplateX").GetComponent<RectTransform>();
+        labelTemplateY = barLineGraphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
+        dashTemplateX = barLineGraphContainer.Find("dashTemplateX").GetComponent<RectTransform>();
+        dashTemplateY = barLineGraphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
+        pieContainer = graphContainer.Find("PieChartArea").GetComponent<RectTransform>();
 
         gameObjectList = new List<GameObject>();
         //List<float> valueList = new List<float>() {5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33};
-
-
+        float[] a = new [] {50f, 65.7f, 89f, 12.55f, 44f};
+        ShowPieGraph(a);
         //IGraphVisual barGraphVisual = new BarChartVisual(graphContainer, Color.cyan, .8f);
 
 
@@ -49,8 +53,10 @@ public class WindowGraph : MonoBehaviour
     public void StartShowGraph(List<float> graphValues)
     {
         valueList = graphValues;
-        IGraphVisual lineGraphVisual = new LineGraphVisual(graphContainer, circleSprite, Color.cyan, new Color(1, 1, 1, .5f));
-        ShowGraph(valueList, lineGraphVisual, -1, (int _i) => (_i + 1).ToString(), (float _f) => ""+ Mathf.Round(_f * 100f) / 100f);
+        //List<float> valueList = new List<float>() { 50.87f };
+        //IGraphVisual graphVisual = new LineGraphVisual(barLineGraphContainer, circleSprite, Color.cyan, new Color(1, 1, 1, .5f));
+        IGraphVisual graphVisual = new BarChartVisual(barLineGraphContainer, Color.cyan, .8f);
+        ShowGraph(valueList, graphVisual, -1, (int _i) => (_i + 1).ToString(), (float _f) => ""+ Mathf.Round(_f * 100f) / 100f);
     }
 
     private void ShowGraph(List<float> valueList,IGraphVisual graphVisual, int maxVisibleValueAmount =-1, Func<int, string> getAxisLabelX = null, Func<float, string> getAxisLabelY = null)
@@ -82,8 +88,8 @@ public class WindowGraph : MonoBehaviour
             return;
         }
 
-        float graphWidth = graphContainer.sizeDelta.x;
-        float graphHeight = graphContainer.sizeDelta.y;
+        float graphWidth = barLineGraphContainer.sizeDelta.x;
+        float graphHeight = barLineGraphContainer.sizeDelta.y;
 
         float yMaximum = valueList[0];
         float yMinimum = valueList[0];
@@ -107,7 +113,8 @@ public class WindowGraph : MonoBehaviour
         {
             yDiffrence = 5;
         }
-        yMaximum = yMaximum + (yDiffrence * 0.2f);
+
+        yMaximum = 100;//yMaximum + (yDiffrence * 0.2f);
         yMinimum = 0;//yMinimum - (yDiffrence * 0.2f);
 
         float xSize = graphWidth / (maxVisibleValueAmount + 1);
@@ -125,7 +132,7 @@ public class WindowGraph : MonoBehaviour
 
 
             RectTransform labelX = Instantiate(labelTemplateX);
-            labelX.SetParent(graphContainer);
+            labelX.SetParent(barLineGraphContainer);
             labelX.gameObject.SetActive(true);
             labelX.anchoredPosition = new Vector2(xPosition - 8f, -7f);
             labelX.localScale = Vector3.one;
@@ -133,7 +140,7 @@ public class WindowGraph : MonoBehaviour
             gameObjectList.Add(labelX.gameObject);
 
             RectTransform dashX = Instantiate(dashTemplateX);
-            dashX.SetParent(graphContainer);
+            dashX.SetParent(barLineGraphContainer);
             dashX.gameObject.SetActive(true);
             dashX.localScale = Vector3.one;
             dashX.anchoredPosition = new Vector2(xPosition, -3f);
@@ -146,7 +153,7 @@ public class WindowGraph : MonoBehaviour
         for (int i = 0; i <= separatorCount; i++)
         {
             RectTransform labelY = Instantiate(labelTemplateY);
-            labelY.SetParent(graphContainer);
+            labelY.SetParent(barLineGraphContainer);
             labelY.gameObject.SetActive(true);
 
             float normalizedValue = i * 1f / separatorCount;
@@ -156,15 +163,21 @@ public class WindowGraph : MonoBehaviour
             gameObjectList.Add(labelY.gameObject);
 
             RectTransform dashY = Instantiate(dashTemplateY);
-            dashY.SetParent(graphContainer);
+            dashY.SetParent(barLineGraphContainer);
             dashY.gameObject.SetActive(true);
+            dashY.sizeDelta = new Vector2(graphWidth, dashY.sizeDelta.y);
             dashY.localScale = Vector3.one;
             dashY.anchoredPosition = new Vector2(-4f, normalizedValue * graphHeight);
             gameObjectList.Add(dashY.gameObject);
 
         }
     }
-    
+
+    public void ShowPieGraph(float[] fillAmount)
+    {
+        PieChartVisual a = new PieChartVisual(pieContainer,Color.black, Color.white);
+        a.SetPiePercent(fillAmount);
+    }
     private interface IGraphVisual
     {
         List<GameObject> AddGraphVisual(Vector2 graphPosition, float graphPositionWith);
@@ -266,6 +279,39 @@ public class WindowGraph : MonoBehaviour
             rectTransform.anchoredPosition = dotPositionA + dir * distance * .5f;
             rectTransform.localEulerAngles = new Vector3(0, 0, UtilsClass.GetAngleFromVectorFloat(dir));
             return gameObject;
+        }
+    }
+
+    private class PieChartVisual
+    {
+        private RectTransform pieContainer;
+        private GameObject[] pieCharts = new GameObject[5];
+        private Color pieBackColor;
+        private Color pieFrontColor;
+
+        public PieChartVisual(RectTransform pieContainer, Color pieBackColor, Color pieFrontColor)
+        {
+            this.pieContainer = pieContainer;
+            this.pieBackColor = pieBackColor;
+            this.pieFrontColor = pieFrontColor;
+            for (int i = 0; i < pieContainer.childCount; i++)
+            {
+                pieCharts[i] = pieContainer.GetChild(i).gameObject;
+            }
+        }
+
+        public void SetPiePercent(float[] fillAmount)
+        {
+            for (int i = 0; i < pieCharts.Length; i++)
+            {
+                pieCharts[i].transform.Find("Image").GetComponent<Image>().color = pieBackColor;
+                var percentImage = pieCharts[i].gameObject.transform.Find("Image/Percent").GetComponent<Image>();
+                var percentText = pieCharts[i].gameObject.transform.Find("PercentText").GetComponent<TextMeshProUGUI>();
+
+                percentImage.color = pieFrontColor;
+                percentImage.fillAmount = fillAmount[i]/100;
+                percentText.text = "%" + fillAmount[i] + " tamamlandı.";
+            }
         }
     }
 }

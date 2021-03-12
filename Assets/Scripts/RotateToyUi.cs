@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -67,8 +68,6 @@ public class RotateToyUi : MonoBehaviour
             var a = Instantiate(whellChilds, pos, Quaternion.identity);
             a.transform.SetParent(wheelContainer.transform);
         }
-
-
     }
 
     public void SetAllIfObjectsInContainer(int objectCount)
@@ -103,6 +102,7 @@ public class RotateToyUi : MonoBehaviour
                 child.GetComponent<Button>().onClick.AddListener(() => getInputs.GetIfInput(getRandomIfObject.ifName));
 
                 childImage.transform.Rotate(new Vector3(0,0,360/ wheelObjectCount * i));
+                getInputs.rotateObjects.Add(child.gameObject);
             }
             else
             {
@@ -111,7 +111,7 @@ public class RotateToyUi : MonoBehaviour
             }
         }
     }
-    
+
     private void SetIfObjectsImage(GameObject ifObjectChildInstantiated,
         ref IfObjectsScriptable.IfObjects[] animals, int i)
     {

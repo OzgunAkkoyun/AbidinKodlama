@@ -69,10 +69,12 @@ public class MapGenerator : MonoBehaviour {
         if (gm.playerDatas.lastMapSize == 5)
         {
             gameObjectIndex = 0;
-        }else if (gm.playerDatas.lastMapSize == 7)
+        }
+        else if (gm.playerDatas.lastMapSize == 7)
         {
             gameObjectIndex = 1;
-        }else if (gm.playerDatas.lastMapSize == 9)
+        }
+        else if (gm.playerDatas.lastMapSize == 9)
         {
             gameObjectIndex = 2;
         }

@@ -263,12 +263,16 @@ public class GameManager : MonoBehaviour
     public void GameAnimationStart()
     {
         is3DStarted = true;
+
         if (isGameOrLoad != 1)//Watch game
             getInputs.timer.Finish();
+
         character = FindObjectOfType<CharacterMovement>();
         ShowInputsCode.Instance.ShowCodesString();
+
         miniMapController.StartCoroutine("MiniMapSetStartPosition");
         uh.StartCoroutine("CameraSmoothMovingToTargetPosition");
+
         commander.ApplyCommands();
     }
 
@@ -343,14 +347,15 @@ public class GameManager : MonoBehaviour
         {
             selectedAnimals = pathGenarator.selectedAnimals.Select(v=>v.ifName).ToList();
         }
+
         var current = map.currentMap;
-        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, pathGenarator.Path,currentSenario.senarioIndex,currentLevel.levelIndex,currentSubLevel.subLevelIndex, selectedAnimals));
+        gameDatas.Add(new SavedGameData(current.mapSize, current.seed, current.obstaclePercent, commander.commands, current.startPoint, current.targetPoint, pathGenarator.Path, currentSenario.senarioIndex, currentLevel.levelIndex, currentSubLevel.subLevelIndex, selectedAnimals));
         
         string gameDataString = JsonConvert.SerializeObject(gameDatas, Formatting.Indented, new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Auto
         });
-        //string gameDataString = JsonHelper.ToJson<SavedGameData>(gameDatas, true);
+
         PlayerPrefs.SetString("gameDatas", gameDataString);
     }
 

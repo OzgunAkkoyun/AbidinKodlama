@@ -320,7 +320,7 @@ public class UIHandler : MonoBehaviour
                 {
                     if (gm.character.isPlayerReachedTarget)
                     {
-                        SceneManager.LoadScene(1);
+                        SceneManager.LoadScene(0);
                     }
                     else
                     {
@@ -340,7 +340,7 @@ public class UIHandler : MonoBehaviour
             if (isGameOrLoad == 0) //In game over panel pressed play button
             {
                 PlayerPrefs.SetInt("isRestart", 0);
-                SceneManager.LoadScene(1); //level maps scene
+                SceneManager.LoadScene(0); //level maps scene
             }
             else
             {
@@ -356,7 +356,7 @@ public class UIHandler : MonoBehaviour
                 {
                     if (gm.character.isPlayerReachedTarget)
                     {
-                        SceneManager.LoadScene(1);//level maps scene
+                        SceneManager.LoadScene(0);//level maps scene
                     }
                     else
                     {
@@ -399,7 +399,7 @@ public class UIHandler : MonoBehaviour
 
     public void HomeButton()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 
     public void ShowWrongCommand(int wrongCommandIndex)

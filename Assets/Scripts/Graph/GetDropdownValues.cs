@@ -14,12 +14,24 @@ public class GetDropdownValues : MonoBehaviour
     [SerializeField] private TMP_Text displaySelectedValue;
     [SerializeField] private TMP_Text noValue;
     public WindowGraph windowGraph;
+    public LevelLoader levelLoader;
     void OnEnable()
     {
         displaySelectedValue.text = SetDisplayText(senarioDropDown.value, levelDropDown.value, subLevelDropDown.value);
-        Invoke("ShowValues",.2f);
+        //Invoke("ShowValues",.2f);
+        Invoke("ShowFullLevelPercent", .2f);
     }
 
+    private void ShowFullLevelPercent()
+    {
+        var allLevels = levelLoader.currentLevelStats;
+        var complatedAllLevelPercent = allLevels.GetComplatedAllLevelPercent();
+        var complatedLevelPercentBySenario = allLevels.GetComplatedLevelPercentBySenario();
+
+        List<float> data = new List<float>(){complatedAllLevelPercent};
+        windowGraph.StartShowGraph(data);
+        windowGraph.ShowPieGraph(complatedLevelPercentBySenario);
+    }
     private void ShowValues()
     {
         var data = SaveLoadUserData.instance.GetSpecificUserData(senarioDropDown.value + 1,

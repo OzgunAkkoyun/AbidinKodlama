@@ -62,6 +62,10 @@ namespace DapperDino.UDCT.Utilities.DeveloperConsole
             
         //}
 
+        public void OpenCloseDevConsole()
+        {
+            uiCanvas.SetActive(!uiCanvas.activeSelf);
+        }
         public void ProcessCommand(string inputValue)
         {
             DeveloperConsole.ProcessCommand(inputValue);

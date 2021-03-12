@@ -19,15 +19,6 @@ public class SoundController : MonoBehaviour
     {
         if (instance == null)
             instance = this;
-        //else
-        //{
-        //    Destroy(gameObject);
-        //    return;
-        //}
-        //DontDestroyOnLoad(gameObject);
-
-      
-
     }
     
     public void Play(string name)
